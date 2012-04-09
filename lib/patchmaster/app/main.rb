@@ -40,13 +40,13 @@ class Main
           ch = getch
           message("ch = #{ch}") if $DEBUG
           case ch
-          when ?j, Patch::DOWN
+          when ?j, Key::DOWN
             @pm.next_patch
-          when ?k, Patch::UP
+          when ?k, Key::UP
             @pm.prev_patch
-          when ?n, Patch::LEFT
+          when ?n, Key::LEFT
             @pm.next_song
-          when ?p, Patch::RIGHT
+          when ?p, Key::RIGHT
             @pm.prev_song
           when ?g
             name = PromptWindow.new('Go To Song', 'Go to song:').gets
@@ -54,7 +54,7 @@ class Main
           when ?t
             name = PromptWindow.new('Go To Song List', 'Go to Song List:').gets
             @pm.goto_song_list(name)
-          when Patch::F1
+          when Key::F1
             help
           when 27               # escape
             @pm.panic
@@ -95,8 +95,8 @@ class Main
   def config_curses
     init_screen
     cbreak                      # unbuffered input
-    noecho                      # do not show typed patchs
-    stdscr.patchpad(true)         # enable arrow patchs
+    noecho                      # do not show typed keys
+    stdscr.keypad(true)         # enable arrow keys
     curs_set(0)                 # cursor: 0 = invisible, 1 = normal
   end
 
