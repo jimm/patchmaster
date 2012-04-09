@@ -6,6 +6,7 @@ require 'rubygems/package_task'
 
 HERE = File.dirname(__FILE__)
 PROJECT_NAME = 'patchmaster'
+VERSION = '0.0.0'
 
 task :default => [:package]
 
@@ -24,7 +25,7 @@ end
 
 spec = Gem::Specification.new do |s|
   s.name        = PROJECT_NAME
-  s.version     = '0.0.0'
+  s.version     = VERSION
   s.date        = '2012-04-09'
   s.summary     = "Realtime MIDI setup configuration and MIDI filtering"
   s.description = <<EOS
@@ -44,13 +45,13 @@ end
 
 # Creates a :package task (also named :gem). Also useful are :clobber_package
 # and :repackage.
-Gem::PackageTask.new(spec) do |pkg|
-    pkg.need_zip = true
-    pkg.need_tar = true
+Gem::PackageTask.new(spec) do |package|
 end
 
+desc "Publish the gem to RubyGems.org"
 task :publish => [:rdoc, :package] do
-  system "gem push"
+  system "gem push pkg/#{PROJECT_NAME}-#{VERSION}.gem"
 end
 
+desc "Clean up rdoc and packages"
 task :clean => [:clobber_rdoc, :clobber_package]
