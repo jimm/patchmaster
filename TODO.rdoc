@@ -1,0 +1,39 @@
+= To Do
+
+* Windows observe contents to minimize redraws. Perhaps only need to observe
+  PatchMaster itself?
+
+* Gemify
+
+* Scrolling in windows
+
+* Listener methods to switch between patches
+
+  * controllers
+  * notes
+
+* Editing. Instead of simply loading/reloading files, allow everything to be
+  edited in the app.
+
+* Handle running bytes in Connection#midi_in. Does UniMIDI take care of
+  that?
+
+* Should each input get its own thread?
+
+* Help screen.
+
+* Documentation. Modify original PatchMaster docs.
+
+* Handle window resizing (SIGWINCH)
+
+* Trap signals like ^C. Don't do work, just set flag to be handled next time
+  through loop.
+
+* "Are you sure?" on quit? --- but I hate that
+
+* Is UniMIDI gets_data blocking?
+
+* Blank area in upper right of screen
+
+  * status?
+  * help?

@@ -1,0 +1,15 @@
+j, down  - next patch
+k, up    - prev patch
+n, left  - next song
+p, right - prev song
+
+g   - goto song
+t   - goto song list
+
+ESC - panic
+F1  - help
+
+l   - load
+s   - save
+
+q   - quit

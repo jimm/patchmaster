@@ -1,0 +1,45 @@
+= PatchMaster
+
+PatchMaster is realtime MIDI performance software that alloweds a musician
+to totally reconfigure a MIDI setup instantaneously and modify the MIDI data
+while it's being sent.
+
+This is a Ruby version of PatchMaster, realtime MIDI performance software.
+It's a rewrite of [http://jimmenard.com/projects/keymaster/].
+
+= Requirements
+
+* {UniMIDI}[https://github.com/arirusso/unimidi] gem.
+* Ruby 1.9 (because UniMIDI requires it).
+
+= Documentation
+
+Point to docs here.
+
+= Patches
+
+At start of patch
+* start bytes sent
+* PC sent
+* connection attached to input device
+
+For each input, when data seen
+* data sent through connection to output
+
+== Filters
+
+Filter gets two args: device and MIDI bytes. It gets connection in case it
+wants to modify it connection (change xpose, zone, --- even the filter)
+
+Filter returns bytes. if bytes is nil or empty nothing sent.
+
+= DSL
+
+TODO write this
+
+= Notes
+
+* http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/index.html
+* http://heather.cs.ucdavis.edu/~matloff/UnixAndC/CLanguage/Curses.pdf
+* http://www.ruby-doc.org/stdlib-1.9.3/libdoc/curses/rdoc/index.html
+* man ncurses
