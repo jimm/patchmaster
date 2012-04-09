@@ -12,6 +12,12 @@ It's a rewrite of [http://jimmenard.com/projects/keymaster/].
 * {UniMIDI}[https://github.com/arirusso/unimidi] gem.
 * Ruby 1.9 (because UniMIDI requires it).
 
+= Installation
+
+To install as a gem, type
+
+  gem install patchmaster
+
 = Documentation
 
 Point to docs here.
@@ -35,7 +41,7 @@ Filter returns bytes. if bytes is nil or empty nothing sent.
 
 = DSL
 
-TODO write this
+TODO write this. In the mean time, see examples/example.rb.
 
 = Notes
 
