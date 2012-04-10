@@ -65,9 +65,18 @@ class PatchMaster
     else
       @curr_patch = nil
     end
+
+    @running = true
+    Thread.new do
+      loop do
+        break unless @running
+        @inputs.values.map(&:gets_data)
+      end
+    end
   end
 
   def stop
+    @running = false
     @curr_patch.stop if @curr_patch
     @inputs.values.each { |instrument| instrument.triggers = [] }
     @curr_song_list = @curr_song = @curr_patch = nil

@@ -24,9 +24,14 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
   end
 
+  def test_running
+    assert @pm.instance_variable_get(:@running)
+  end
+
   def test_stop
     @pm.stop
     assert_nil @pm.curr_patch
+    assert !@pm.instance_variable_get(:@running)
   end
 
   def test_next_song
