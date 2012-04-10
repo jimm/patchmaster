@@ -78,7 +78,6 @@ class PatchMaster
   def stop
     @running = false
     @curr_patch.stop if @curr_patch
-    @inputs.values.each { |instrument| instrument.triggers = [] }
     @curr_song_list = @curr_song = @curr_patch = nil
   end
 

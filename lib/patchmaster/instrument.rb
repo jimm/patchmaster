@@ -37,7 +37,7 @@ class InputInstrument < Instrument
     @port.gets_data.each { |bytes| midi_in(bytes) }
   end
 
-  # Passes MIDI bytes on to each output connection
+  # Passes MIDI bytes on to triggers and to each output connection.
   def midi_in(bytes)
     @triggers.each { |trigger| trigger.signal(bytes) }
     @connections.each { |conn| conn.midi_in(bytes) }
