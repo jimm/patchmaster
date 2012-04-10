@@ -17,10 +17,10 @@ class DSLTest < PMTest
   def test_load
     @dsl.load(EXAMPLE_DSL)
 
-    assert_kind_of PM::InputDevice, @pm.inputs[:mb]
-    assert_kind_of PM::InputDevice, @pm.inputs[:ws]
-    assert_kind_of PM::OutputDevice, @pm.outputs[:kz]
-    assert_kind_of PM::OutputDevice, @pm.outputs[:sj]
+    assert_kind_of PM::InputInstrument, @pm.inputs[:mb]
+    assert_kind_of PM::InputInstrument, @pm.inputs[:ws]
+    assert_kind_of PM::OutputInstrument, @pm.outputs[:kz]
+    assert_kind_of PM::OutputInstrument, @pm.outputs[:sj]
     assert_equal 'sj', @pm.outputs[:sj].name # name from symbol
 
     assert_equal 2, @pm.all_songs.songs.length
@@ -69,7 +69,7 @@ class DSLTest < PMTest
   def test_read_filter_text
     @dsl.load(EXAMPLE_DSL)
     str = <<EOS
-{ |device, bytes|
+{ |connection, bytes|
         if bytes.note_off?
           bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
         end
@@ -78,7 +78,7 @@ EOS
     assert_equal str,
       @pm.all_songs.find('First Song').patches[0].connections[1].filter.text
 
-    assert_equal "{ |d, b| b }       # no-op\n",
+    assert_equal "{ |c, b| b }       # no-op\n",
       @pm.all_songs.find('Second Song').patches[0].connections[1].filter.text
   end
 end

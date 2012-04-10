@@ -22,13 +22,13 @@ class Patch
   # Send start_bytes to each connection, then spawn a new thread that
   # receives input and passes it on to each connection.
   def start
-    input_devices = inputs()
+    input_instruments = inputs()
     @connections.each { |conn| conn.start(@start_bytes) }
     @running = true
     Thread.new do
       loop do
         break unless @running
-        input_devices.map(&:gets_data)
+        input_instruments.map(&:gets_data)
       end
     end
   end

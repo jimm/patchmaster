@@ -32,15 +32,15 @@ class SongListTest < PMTest
   end
 
   def create_patch(n)
-    in_device = PM::InputDevice.new("test_in #{n}", 0, true)
-    out_device = PM::OutputDevice.new("test_out #{n}", 0, true)
+    in_instrument = PM::InputInstrument.new("test_in #{n}", 0, true)
+    out_instrument = PM::OutputInstrument.new("test_out #{n}", 0, true)
     options = {:pc_prog => n, :zone => (40..60), :xpose => 12}
-    conn = PM::Connection.new(in_device, nil, out_device, 2, nil, options)
+    conn = PM::Connection.new(in_instrument, nil, out_instrument, 2, nil, options)
     patch = PM::Patch.new("Untitled #{n}")
     patch << conn
     {
-      :in => in_device,
-      :out => out_device,
+      :in => in_instrument,
+      :out => out_instrument,
       :patch => patch,
       :connection => conn
     }

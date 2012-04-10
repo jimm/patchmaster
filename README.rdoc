@@ -27,15 +27,15 @@ Point to docs here.
 At start of patch
 * start bytes sent
 * PC sent
-* connection attached to input device
+* connection attached to input instrument
 
 For each input, when data seen
 * data sent through connection to output
 
 == Filters
 
-Filter gets two args: device and MIDI bytes. It gets connection in case it
-wants to modify it connection (change xpose, zone, --- even the filter)
+Filter gets two args: connection and MIDI bytes. It gets connection in case
+it wants to modify it (change xpose, zone, --- even the filter)
 
 Filter returns bytes. if bytes is nil or empty nothing sent.
 

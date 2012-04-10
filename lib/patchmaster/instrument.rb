@@ -1,7 +1,7 @@
 # Ports are UniMIDI inputs or outputs.
 module PM
 
-class MIDIDevice
+class Instrument
 
   attr_reader :name, :port_num, :port
 
@@ -11,9 +11,9 @@ class MIDIDevice
 
 end
 
-# When a connection is started, it adds itself to this InputDevice's
+# When a connection is started, it adds itself to this InputInstrument's
 # +@connections+. When it ends, it removes itself.
-class InputDevice < MIDIDevice
+class InputInstrument < Instrument
 
   attr_accessor :connections
 
@@ -53,7 +53,7 @@ class InputDevice < MIDIDevice
 
 end
 
-class OutputDevice < MIDIDevice
+class OutputInstrument < Instrument
 
   def initialize(name, port_num, no_midi=false)
     super(name, port_num, output_port(port_num, no_midi))

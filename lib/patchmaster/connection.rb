@@ -2,9 +2,10 @@ require 'patchmaster/consts'
 
 module PM
 
-# A Connection connects an InputDevice to an OutputDevice. Whenever MIDI
-# data arrives at the InputDevice it is optionally modified or filtered,
-# then the remaining modified data is sent to the OutputDevice.
+# A Connection connects an InputInstrument to an OutputInstrument. Whenever
+# MIDI data arrives at the InputInstrument it is optionally modified or
+# filtered, then the remaining modified data is sent to the
+# OutputInstrument.
 class Connection
 
   attr_accessor :input, :input_chan, :output, :output_chan,
@@ -65,8 +66,8 @@ class Connection
     end
   end
 
-  def midi_out(device, bytes)
-    device.midi_out(bytes)
+  def midi_out(instrument, bytes)
+    instrument.midi_out(bytes)
   end
 
   def pc?

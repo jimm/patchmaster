@@ -15,7 +15,7 @@ song "First Song" do
     connection :ws, 6, :sj, 4 do  # only chan 6 from :ws_kbd, out to chan 4 on :sj
       prog_chg 100
       zone C4, B5
-      filter { |device, bytes|
+      filter { |connection, bytes|
         if bytes.note_off?
           bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
         end
@@ -34,7 +34,7 @@ song "Second Song" do
     end
     c :ws, nil, :ws, 6 do
       zone C4..B5
-      filter { |d, b| b }       # no-op
+      filter { |c, b| b }       # no-op
     end
   end
 end

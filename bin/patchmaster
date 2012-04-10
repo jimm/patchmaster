@@ -5,9 +5,9 @@
 # Starts PatchMaster and optionally loads pm_file.
 #
 # The -n flag tells PatchMaster to not use MIDI. All MIDI errors such as not
-# being able to connect to the MIDI devices speicified in pm_file are
+# being able to connect to the MIDI instruments specified in pm_file are
 # ignored, and no MIDI data is sent/received. That is useful if you want to
-# run PatchMaster without actually talking to any MIDI devices.
+# run PatchMaster without actually talking to any MIDI instruments.
 
 require 'patchmaster'
 
