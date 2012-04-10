@@ -41,7 +41,7 @@ class PatchMaster
     DSL.new(@no_midi).save(file)
     message("saved #{file}")
   rescue => ex
-    raise("error saving #{file}: #{ex}")
+    raise("error saving #{file}: #{ex}" + caller.join("\n"))
   end
 
   def init_data
