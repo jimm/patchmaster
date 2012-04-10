@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class IoTest < PMTest
+class InstrumentTest < PMTest
 
   def setup
     @data = midi_data(1, 2, 3)
@@ -34,5 +34,4 @@ class IoTest < PMTest
     @out_instrument.midi_out(@data.first)
     assert_equal @data.first, @out_instrument.port.buffer
   end
-
 end

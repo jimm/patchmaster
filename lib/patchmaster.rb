@@ -7,6 +7,7 @@ require 'patchmaster/connection'
 require 'patchmaster/filter'
 require 'patchmaster/instrument'
 require 'patchmaster/patchmaster'
+require 'patchmaster/trigger'
 require 'patchmaster/dsl'
 require 'patchmaster/app/main'
 

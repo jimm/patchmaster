@@ -23,6 +23,12 @@ class DSLTest < PMTest
     assert_kind_of PM::OutputInstrument, @pm.outputs[:sj]
     assert_equal 'sj', @pm.outputs[:sj].name # name from symbol
 
+    triggers = @pm.inputs[:mb].triggers
+    assert_equal 4, triggers.length
+    trigger = triggers[0]
+    assert_equal :next_patch, trigger.action_sym
+    assert_equal [PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0], trigger.bytes
+
     assert_equal 2, @pm.all_songs.songs.length
     song = @pm.all_songs.find('First Song')
     assert_kind_of PM::Song, song
@@ -60,16 +66,27 @@ class DSLTest < PMTest
   end
 
   def test_what_saves_is_loadable
+    f = '/tmp/dsl_test_what_saves_is_loadable.rb'
     @dsl.load(EXAMPLE_DSL)
     begin
-      @dsl.save('/tmp/dsl_test_what_saves_is_loadable.rb')
+      @dsl.save(f)
       @pm.init_data
-      @dsl.load('/tmp/dsl_test_what_saves_is_loadable.rb')
+      @dsl.load(f)
     rescue => ex
       fail ex.to_s
     ensure
-      File.delete('/tmp/dsl_test_what_saves_is_loadable.rb')
+      File.delete(f)
     end
+  end
+
+  def test_save_file_contents
+    f = '/tmp/dsl_test_save_file_contents.rb'
+    @dsl.load(EXAMPLE_DSL)
+    @dsl.save('/tmp/dsl_test_save_file_contents.rb')
+    str = IO.read(f)
+    assert_match 'output 6, :ws, "WaveStation"', str
+    assert_match "trigger :next_patch, :mb, [176, 50, 0]", str
+    assert_match 'filter { |c, b| b }       # no-op', str
   end
 
   def test_aliases

@@ -12,6 +12,9 @@ module PM
 #   PatchMaster.instance.start
 #   # ...when you're done
 #   PatchMaster.instance.stop
+#
+# A stopped PatchMaster instance can't be restarted. That's mostly because
+# triggers are erased instead of disabled; it wouldn't be too hard
 class PatchMaster
 
   include Singleton
@@ -58,7 +61,7 @@ class PatchMaster
     @curr_song = @curr_song_list.first_song
     if @curr_song
       @curr_patch = @curr_song.first_patch
-      @curr_patch.start
+      @curr_patch.start if @curr_patch
     else
       @curr_patch = nil
     end
@@ -66,6 +69,7 @@ class PatchMaster
 
   def stop
     @curr_patch.stop if @curr_patch
+    @inputs.values.each { |instrument| instrument.triggers = [] }
     @curr_song_list = @curr_song = @curr_patch = nil
   end
 

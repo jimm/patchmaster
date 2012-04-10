@@ -22,16 +22,22 @@ class DSL
   def input(port_num, sym, name=nil)
     @pm.inputs[sym] = InputInstrument.new(name || sym.to_s, port_num, @no_midi)
   rescue => ex
-    raise "error creating input instrument \"#{name}\" on input port #{port_num}: #{ex}"
+    raise "input: error creating input instrument \"#{name}\" on input port #{port_num}: #{ex}"
   end
   alias_method :in, :input
 
   def output(port_num, sym, name=nil)
     @pm.outputs[sym] = OutputInstrument.new(name || sym.to_s, port_num, @no_midi)
   rescue => ex
-    raise "error creating output instrument \"#{name}\" on output port #{port_num}: #{ex}"
+    raise "output: error creating output instrument \"#{name}\" on output port #{port_num}: #{ex}"
   end
   alias_method :out, :output
+
+  def trigger(action_sym, instrument_sym, bytes)
+    instrument = @pm.inputs[instrument_sym]
+    raise "trigger: error finding instrument #{instrument_sym}" unless instrument
+    instrument.triggers << Trigger.new(action_sym, bytes)
+  end
 
   def song(name)
     @song = Song.new(name)      # ctor saves into @pm.all_songs
@@ -50,6 +56,7 @@ class DSL
 
   def connection(in_sym, in_chan, out_sym, out_chan)
     input = @pm.inputs[in_sym]
+    in_chan = nil if in_chan == :all || in_chan == :any
     raise "can't find input instrument #{in_sym}" unless input
     output = @pm.outputs[out_sym]
     raise "can't find outputput instrument #{out_sym}" unless output
@@ -106,18 +113,28 @@ class DSL
   def save(file)
     File.open(file, 'w') { |f|
       save_instruments(f)
+      save_triggers(f)
       save_songs(f)
       save_song_lists(f)
     }
   end
 
   def save_instruments(f)
-    @pm.inputs.each { |sym, instr|
+    @pm.inputs.each do |sym, instr|
       f.puts "input #{instr.port_num}, :#{sym}, #{quoted(instr.name)}"
-    }
-    @pm.outputs.each { |sym, instr|
+    end
+    @pm.outputs.each do |sym, instr|
       f.puts "output #{instr.port_num}, :#{sym}, #{quoted(instr.name)}"
-    }
+    end
+    f.puts
+  end
+
+  def save_triggers(f)
+    @pm.inputs.each do |sym, instrument|
+      instrument.triggers.each do |trigger|
+        f.puts "trigger :#{trigger.action_sym}, :#{sym}, #{trigger.bytes.inspect}"
+      end
+    end
     f.puts
   end
 

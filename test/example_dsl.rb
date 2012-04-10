@@ -4,6 +4,11 @@ output 2, :kz, 'K2000R'
 output 4, :sj                   # name will be "sj"
 output 6, :ws, 'WaveStation'
 
+trigger :next_patch, :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0]
+trigger :prev_patch, :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0]
+trigger :next_song,  :mb, [CONTROLLER, CC_GEN_PURPOSE_7, 0]
+trigger :prev_song,  :mb, [CONTROLLER, CC_GEN_PURPOSE_8, 0]
+
 song "First Song" do
   patch "First Song, First Patch" do
     start_bytes [TUNE_REQUEST]
@@ -28,11 +33,11 @@ end
 
 song "Second Song" do
   patch "Second Song, First Patch" do
-    c :mb, nil, :sj, 4 do
+    c :mb, :any, :sj, 4 do
       pc 22
       z D4
     end
-    c :ws, nil, :ws, 6 do
+    c :ws, :any, :ws, 6 do
       zone C4..B5
       filter { |c, b| b }       # no-op
     end

@@ -15,12 +15,13 @@ end
 # +@connections+. When it ends, it removes itself.
 class InputInstrument < Instrument
 
-  attr_accessor :connections
+  attr_accessor :connections, :triggers
 
   # If +port+ is nil (the normal case), creates either a real or a mock port
   def initialize(name, port_num, no_midi=false)
     super(name, port_num, input_port(port_num, no_midi))
     @connections = []
+    @triggers = []
   end
 
   def add_connection(conn)
@@ -38,6 +39,7 @@ class InputInstrument < Instrument
 
   # Passes MIDI bytes on to each output connection
   def midi_in(bytes)
+    @triggers.each { |trigger| trigger.signal(bytes) }
     @connections.each { |conn| conn.midi_in(bytes) }
   end
 

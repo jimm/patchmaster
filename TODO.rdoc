@@ -1,16 +1,27 @@
 = To Do
 
+* Triggers' instruments need to be listening all the time. However, if
+  they're in a patch then the instrument is already calling #gets and if
+  they're not in a patch then the instrument isn't. I think this means that
+  listening has to be done globally (in PM::PatchMaster). It's OK if inputs
+  are polling for input and don't have anywhere to go.
+
 * Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 
-* Gemify
+* Gemify.
 
-* Scrolling in windows
+* Scrolling in windows.
 
-* Listener methods (triggers) to switch between patches
+* Listener methods (triggers) to switch between patches. Will need to attach
+  a connection to the proper instrument and have that connection remain
+  attached between patch changes. Trigger connection should have same API as
+  connection. Put it on instrument's connection list. Won't be removed when
+  other connections stop because they just remove themselves from the
+  input's list.
 
-  * controllers
-  * notes
+  * Controllers
+  * Notes
 
 * Editing. Instead of simply loading/reloading files, allow everything to be
   edited in the app.
@@ -26,18 +37,13 @@
 
 * Documentation. Modify original PatchMaster docs.
 
-* Handle window resizing (SIGWINCH)
+* Handle window resizing (SIGWINCH).
 
 * Trap signals like ^C. Don't do work, just set flag to be handled next time
   through loop.
 
-* "Are you sure?" on quit? --- but I hate that
+* "Are you sure?" on quit? --- but I hate that.
 
 * Is UniMIDI gets_data blocking?
-
-* Blank area in upper right of screen
-
-  * status?
-  * help?
 
 * Programmable MIDI messages?
