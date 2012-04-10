@@ -7,7 +7,7 @@
 
 * Scrolling in windows
 
-* Listener methods to switch between patches
+* Listener methods (triggers) to switch between patches
 
   * controllers
   * notes
@@ -15,8 +15,10 @@
 * Editing. Instead of simply loading/reloading files, allow everything to be
   edited in the app.
 
-* Handle running bytes in Connection#midi_in. Does UniMIDI take care of
-  that?
+* Display instruments?
+
+* Do I need to handle running bytes in Connection#midi_in, or does UniMIDI
+  take care of that?
 
 * Should each input get its own thread?
 
@@ -37,3 +39,5 @@
 
   * status?
   * help?
+
+* Programmable MIDI messages?

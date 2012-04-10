@@ -19,7 +19,7 @@ end
 
 Rake::RDocTask.new do | rd |
     rd.main = 'README.rdoc'
-    rd.title = PROJECT_NAME
+    rd.title = 'PatchMaster'
     rd.rdoc_files.include('README.rdoc', 'TODO.rdoc', 'lib/**/*.rb')
 end
 

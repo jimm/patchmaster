@@ -1,11 +1,29 @@
-= PatchMaster
-
 PatchMaster is realtime MIDI performance software that alloweds a musician
 to totally reconfigure a MIDI setup instantaneously and modify the MIDI data
 while it's being sent.
 
-This is a Ruby version of PatchMaster, realtime MIDI performance software.
-It's a rewrite of [http://jimmenard.com/projects/keymaster/].
+With PatchMaster a performer can split controlling keyboards, layer MIDI
+channels, transpose them, send program changes and System Exclusive
+messages, limit controller and velocity values, and much more. At the stomp
+of a footswitch (or any other MIDI event), an entire MIDI system can be
+totally reconfigured.
+
+PatchMaster lets you describe _songs_, which are lists of _patches_ that
+connect _instruments_. Those _connections_ can send program changes, set
+keyboard splits, transpose, send volume or other controller changes, and let
+you apply any Ruby code you want to the MIDI stream in realtime.
+
+_Song_ _lists_ let you organize songs into "set lists" for live performance or
+in the studio.
+
+Any MIDI controller can trigger a move to the next or previous _patch_. For
+example, you can tell PatchMaster to move forward or backward based on
+controller values coming from foot switches or an instrument's buttons.
+
+A software panic button turns off any stuck notes.
+
+PatchMaster is by Jim Menard (mailto:jim@jimmenard.com). It is a rewrite of
+KeyMaster[http://jimmenard.com/projects/keymaster/], which I used for years.
 
 = Requirements
 
@@ -18,24 +36,86 @@ To install as a gem, type
 
   gem install patchmaster
 
-= Documentation
+= Running PatchMaster
 
-Point to docs here.
+  patchmaster [patchmaster_file]
+
+See "DSL" below for a description of the PatchMaster file format.
 
 = Patches
 
-At start of patch
-* start bytes sent
-* PC sent
-* connection attached to input instrument
+Patches have connections and an array of start bytes. Each connection links
+an input instrument to a single chanel on an output instrument. It can
 
-For each input, when data seen
-* data sent through connection to output
+When a patch is started (it becomes the current patch), a few things happen:
 
-== Filters
+* Each connection is started (see below)
 
-Filter gets two args: connection and MIDI bytes. It gets connection in case
-it wants to modify it (change xpose, zone, --- even the filter)
+* The input instruments start listening for data and passes the data on to
+  each of the outgoing connections
+
+When a patch is stopped, each connection is stopped (see below).
+
+== Connections
+
+Connections have an input instrument and (optional) channel, output
+instrument and channel, and the following optional settings:
+
+* Program change number (sent on the output instrument's channel)
+* Keyboard zone (low/high keys stored as a Ruby Range)
+* Transpose
+* Filter (see "Connection Filters" below)
+
+=== Start
+
+When a connection is started:
+
+* The start bytes from the patch, if any, are sent to the output instrument as-is
+
+* The program change is sent
+
+* The connection is added to its input instrument's list of outgoing
+  connections
+
+=== Running
+
+While a patch is running, incoming data on each input is sent through one or
+more connections to the proper outputs. Each connection can filter and
+modify the data on the way:
+
+* The data is ignored if it is not on the input instrument's selected
+  channel
+
+* Note messages (note on, note off, and polyphonic pressure) are transposed.
+
+* Channel messages (note on, note off, polyphonic pressure, controller,
+  program change, channel pressure, and pitch bend) have their channel
+  changed to the output instrument's selected channel
+
+* The filter code, if any, is run and the result of that block becomes the
+  output data
+
+* The resulting data, if any, is sent to the output instrument
+
+=== Stop
+
+When a connection is stopped, it detaches itself from its input instrument.
+
+== Connection Filters
+
+When a filter is run it is passed two arguments: the connection and an array
+of MIDI bytes. Whatever the filter returns will be sent to the output
+instrument.
+
+The filter is passed the connection not only so it can read its state (for
+example, the transpose value) but also so that it can modify the connection
+itself. For example, a filter could change the transpose value or keyboard
+zone, or even change the connection's filter itself, allowing for "hot
+swapping" of filter code.
+
+  Note that if a filter does "hot swap" itself for another filter, that
+  other filter will not be saved properly when everything gets saved to a
+  file.
 
 Filter returns bytes. if bytes is nil or empty nothing sent.
 
@@ -49,3 +129,5 @@ TODO write this. In the mean time, see examples/example.rb.
 * http://heather.cs.ucdavis.edu/~matloff/UnixAndC/CLanguage/Curses.pdf
 * http://www.ruby-doc.org/stdlib-1.9.3/libdoc/curses/rdoc/index.html
 * man ncurses
+
+:include:TODO.rdoc
