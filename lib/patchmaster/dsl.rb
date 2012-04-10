@@ -138,11 +138,11 @@ class DSL
   end
 
   def save_connection(f, conn)
-    in_sym = @pm.inputs.patch(conn.input)
+    in_sym = @pm.inputs.key(conn.input)
     in_chan = conn.input_chan ? conn.input_chan + 1 : 'nil'
-    out_sym = @pm.outputs.patch(conn.output)
+    out_sym = @pm.outputs.key(conn.output)
     out_chan = conn.output_chan + 1
-    f.puts "    conn :#{in_sym}, #{in_chan}, #{out_sym}, #{out_chan} do"
+    f.puts "    conn :#{in_sym}, #{in_chan}, :#{out_sym}, #{out_chan} do"
     f.puts "      prog_chg #{conn.pc_prog}" if conn.pc?
     f.puts "      zone #{conn.note_num_to_name(conn.zone.begin)}, #{conn.note_num_to_name(conn.zone.end)}" if conn.zone
     f.puts "      xpose #{conn.xpose}" if conn.xpose

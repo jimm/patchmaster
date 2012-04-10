@@ -47,6 +47,31 @@ class DSLTest < PMTest
     assert_equal conn.xpose, 12
   end
 
+  def test_save
+    @dsl.load(EXAMPLE_DSL)
+    begin
+      @dsl.save('/tmp/dsl_test_save.rb')
+      # TODO write more here
+    rescue => ex
+      fail ex.to_s
+    ensure
+      File.delete('/tmp/dsl_test_save.rb')
+    end
+  end
+
+  def test_what_saves_is_loadable
+    @dsl.load(EXAMPLE_DSL)
+    begin
+      @dsl.save('/tmp/dsl_test_what_saves_is_loadable.rb')
+      @pm.init_data
+      @dsl.load('/tmp/dsl_test_what_saves_is_loadable.rb')
+    rescue => ex
+      fail ex.to_s
+    ensure
+      File.delete('/tmp/dsl_test_what_saves_is_loadable.rb')
+    end
+  end
+
   def test_aliases
     @dsl.load(EXAMPLE_DSL)
     conn = @pm.all_songs.find('Second Song').patches[0].connections[0]
