@@ -109,6 +109,20 @@ class PatchMasterTest < PMTest
     assert_equal @pm.curr_song_list.first_song.first_patch, @pm.curr_patch
   end
 
+  def test_find_nearest_match
+    song = @pm.find_nearest_match(@pm.all_songs.songs, "Frist Song")
+    assert_not_nil song
+    assert_equal 'First Song', song.name
+
+    song = @pm.find_nearest_match(@pm.all_songs.songs, "Second Song")
+    assert_not_nil song
+    assert_equal 'Second Song', song.name
+
+    song = @pm.find_nearest_match(@pm.all_songs.songs, "Second Sing")
+    assert_not_nil song
+    assert_equal 'Second Song', song.name
+  end
+
   def assert_only_curr_patch_running
     @pm.all_songs.songs.each do |song|
       song.patches.each do |patch|
