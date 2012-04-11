@@ -43,7 +43,7 @@ class TestConnection < PM::Connection
   def midi_in(bytes)
     @bytes_received ||= []
     @bytes_received += bytes
-    midi_out(@output, bytes)
+    midi_out(bytes)
   end
 
 end

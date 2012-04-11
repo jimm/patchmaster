@@ -25,13 +25,13 @@ class Connection
   end
 
   def start(start_bytes=nil)
-    midi_out(@output, start_bytes) if start_bytes
-    midi_out(@output, [PROGRAM_CHANGE + @output_chan, @pc_prog]) if pc?
+    midi_out(start_bytes) if start_bytes
+    midi_out([PROGRAM_CHANGE + @output_chan, @pc_prog]) if pc?
     @input.add_connection(self)
   end
 
   def stop(stop_bytes=nil)
-    midi_out(@output, stop_bytes) if stop_bytes
+    midi_out(stop_bytes) if stop_bytes
     @input.remove_connection(self)
   end
 
@@ -63,12 +63,12 @@ class Connection
 
     bytes = @filter.call(self, bytes) if @filter
     if bytes && bytes.size > 0
-      midi_out(@output, bytes)
+      midi_out(bytes)
     end
   end
 
-  def midi_out(instrument, bytes)
-    instrument.midi_out(bytes)
+  def midi_out(bytes)
+    @output.midi_out(bytes)
   end
 
   def pc?

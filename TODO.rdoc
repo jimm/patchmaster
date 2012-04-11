@@ -1,8 +1,5 @@
 = To Do
 
-* Connection#midi_out doesn't need to take instrument arg since it always
-  uses @output.
-
 * Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 
