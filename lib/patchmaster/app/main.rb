@@ -63,6 +63,7 @@ class Main
             file = PromptWindow.new('Load', 'Load file:').gets
             begin
               @pm.load(file)
+              @pm.start(false)
             rescue => ex
               message(ex.to_s)
             end

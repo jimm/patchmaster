@@ -32,12 +32,36 @@ class PatchMaster
     @no_midi = true
   end
 
+  # Stops everything and loads +file+.
   def load(file)
+    curr_pos = curr_position()
     stop
     init_data
     DSL.new(@no_midi).load(file)
+    restore_position(curr_pos)
   rescue => ex
     raise("error loading #{file}: #{ex}\n" + caller.join("\n"))
+  end
+
+  # Returns an array of names of the current song list, song, and patch.
+  # Used by #restore_position.
+  def curr_position
+    [@curr_song_list ? @curr_song_list.name : nil,
+     @curr_song ? @curr_song.name : nil,
+     @curr_patch ? @curr_patch.name : nil]
+  end
+
+  # Given names of a song list, song, and patch, try to find them now.
+  #
+  # Since names can change we use Damerau-Levenshtein distance on lowercase
+  # versions of all strings.
+  def restore_position(curr_pos)
+    song_list_name, song_name, patch_name = curr_pos
+    @curr_song_list = find_nearest_match(@song_lists, song_list_name) || @all_songs
+    @curr_song = find_nearest_match(@curr_song_list.songs, song_name) || @curr_song_list.first_song
+    if @curr_song
+      @curr_patch = find_nearest_match(@curr_song.patches, patch_name) || @curr_song.first_patch
+    end
   end
 
   def save(file)
@@ -47,6 +71,7 @@ class PatchMaster
     raise("error saving #{file}: #{ex}" + caller.join("\n"))
   end
 
+  # Initializes the cursor and all data.
   def init_data
     @curr_song_list = @curr_song = @curr_patch = nil
     @inputs = {}
@@ -56,14 +81,19 @@ class PatchMaster
     @song_lists << @all_songs
   end
 
-  def start
-    @curr_song_list = @song_lists.first # sets cursor in @song_lists
-    @curr_song = @curr_song_list.first_song
-    if @curr_song
-      @curr_patch = @curr_song.first_patch
-      @curr_patch.start if @curr_patch
-    else
-      @curr_patch = nil
+  # If +init_cursor+ is +true+ (the default), initializes current song list,
+  # song, and patch. Starts a new thread that listens for MIDI input and
+  # processes it.
+  def start(init_cursor = true)
+    if init_cursor
+      @curr_song_list = @song_lists.first # sets cursor in @song_lists
+      @curr_song = @curr_song_list.first_song
+      if @curr_song
+        @curr_patch = @curr_song.first_patch
+        @curr_patch.start if @curr_patch
+      else
+        @curr_patch = nil
+      end
     end
 
     @running = true
@@ -75,6 +105,7 @@ class PatchMaster
     end
   end
 
+  # Stops the MIDI input thread and sets the cursor to +nil+.
   def stop
     @running = false
     @curr_patch.stop if @curr_patch
@@ -176,5 +207,34 @@ class PatchMaster
     end
   end
 
+  # List must contain objects that respond to #name. If +str+ is nil or
+  # +list+ is +nil+ or empty then +nil+ is returned.
+  def find_nearest_match(list, str)
+    return nil unless str && list && !list.empty?
+
+    distances = list.collect { |item| dameraulevenshtein(str, item.name) }
+    min_distance = distances.min
+    list[distances.index(distances.min)]
+  end
+
+  # https://gist.github.com/182759 (git://gist.github.com/182759.git)
+  # Referenced from http://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
+  def dameraulevenshtein(seq1, seq2)
+    oneago = nil
+    thisrow = (1..seq2.size).to_a + [0]
+    seq1.size.times do |x|
+      twoago, oneago, thisrow = oneago, thisrow, [0] * seq2.size + [x + 1]
+      seq2.size.times do |y|
+        delcost = oneago[y] + 1
+        addcost = thisrow[y - 1] + 1
+        subcost = oneago[y - 1] + ((seq1[x] != seq2[y]) ? 1 : 0)
+        thisrow[y] = [delcost, addcost, subcost].min
+        if (x > 0 and y > 0 and seq1[x] == seq2[y-1] and seq1[x-1] == seq2[y] and seq1[x] != seq2[y])
+          thisrow[y] = [thisrow[y], twoago[y-2] + 1].min
+        end
+      end
+    end
+    return thisrow[seq2.size - 1]
+  end
 end
 end
