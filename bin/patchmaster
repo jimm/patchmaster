@@ -12,17 +12,12 @@
 require 'optparse'
 require 'patchmaster'
 
-use_midi = true
+pm = PM::Main.instance
 OptionParser.new do |opts|
   opts.banner = "usage: patchmaster [options] [pm_file]"
   opts.on("-d", "--debug", "Turn on debug mode") { $DEBUG = true }
-  opts.on("-n", "--no-midi", "Turn off MIDI processing") { use_midi = false }
+  opts.on("-n", "--no-midi", "Turn off MIDI processing") { pm.no_midi! }
 end.parse!(ARGV)
 
-pm = PM::Main.instance
-if !use_midi
-  pm.no_midi!
-  ARGV.shift
-end
 pm.load(ARGV[0]) if ARGV[0]
 pm.run
