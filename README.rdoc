@@ -22,13 +22,17 @@ controller values coming from foot switches or an instrument's buttons.
 
 A software panic button turns off any stuck notes.
 
+PatchMaster is cross-platform: it should run on MacOS X, Linux, JRuby, and
+Windows.
+
 PatchMaster is by Jim Menard (mailto:jim@jimmenard.com). It is a rewrite of
-KeyMaster[http://jimmenard.com/projects/keymaster/], which I used for years.
+KeyMaster[http://jimmenard.com/projects/keymaster/].
 
 = Requirements
 
 * {UniMIDI}[https://github.com/arirusso/unimidi] gem.
 * Ruby 1.9 (because UniMIDI requires it).
+* Curses (comes with Ruby, but I'm not sure about JRuby)
 
 = Installation
 
@@ -38,23 +42,28 @@ To install as a gem, type
 
 = Running PatchMaster
 
-  patchmaster [patchmaster_file]
+  patchmaster [-n] [-d] [patchmaster_file]
+
+Starts PatchMaster and optionally loads +patchmaster_file+.
+
+The +-n+ flag tells PatchMaster to not use MIDI. All MIDI errors such as not
+being able to connect to the MIDI instruments specified in pm_file are
+ignored, and no MIDI data is sent/received. That is useful if you want to
+run PatchMaster without actually talking to any MIDI instruments.
+
+The +-d+ flag turns on debug mode. The app becomes slightly more verbose and
+logs everything to +/tmp/pm_debug.txt+.
 
 See "DSL" below for a description of the PatchMaster file format.
 
 = Patches
 
-Patches have connections and an array of start bytes. Each connection links
-an input instrument to a single chanel on an output instrument. It can
+Patches have connections and arrays of start and stop bytes. Each connection
+links an input instrument to a single chanel on an output instrument.
 
-When a patch is started (it becomes the current patch), a few things happen:
-
-* Each connection is started (see below)
-
-* The input instruments start listening for data and passes the data on to
-  each of the outgoing connections
-
-When a patch is stopped, each connection is stopped (see below).
+When a patch is started (it becomes the _current_ _patch_), each connection
+is started and passed the patch's start bytes. When a patch is stopped, each
+connection is stopped and passed the stop bytes.
 
 == Connections
 
@@ -66,6 +75,10 @@ instrument and channel, and the following optional settings:
 * Transpose
 * Filter (see "Connection Filters" below)
 
+If the input instrument's channel is not specified then all input from that
+instrument is run through the connection. If the channel is specified then
+any data on other channels is ignored.
+
 === Start
 
 When a connection is started:
@@ -74,7 +87,7 @@ When a connection is started:
 
 * The program change is sent
 
-* The connection is added to its input instrument's list of outgoing
+* The connection adds itslef to its input instrument's list of outgoing
   connections
 
 === Running
@@ -99,7 +112,13 @@ modify the data on the way:
 
 === Stop
 
-When a connection is stopped, it detaches itself from its input instrument.
+When a connection is stopped:
+
+* The stop bytes from the patch, if any, are sent to the output instrument
+  as-is
+
+* The connection removes itself from its input instrument's list of outgoing
+  connections
 
 == Connection Filters
 
@@ -121,7 +140,7 @@ Filter returns bytes. if bytes is nil or empty nothing sent.
 
 = DSL
 
-TODO write this. In the mean time, see examples/example.rb.
+TODO write this. In the mean time, see link:../examples/example.rb .
 
 = Notes
 

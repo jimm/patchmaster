@@ -37,6 +37,14 @@ class PatchTest < PMTest
     assert_equal [1, 2, 3], @out_instrument.port.buffer[0,3]
   end
 
+  def test_stop_sends_stop_bytes
+    @patch.start_bytes = nil
+    @patch.stop_bytes = [1, 2, 3]
+    @patch.start
+    @patch.stop
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[-3..-1]
+  end
+
   def test_inputs
     assert_equal [@in_instrument], @patch.inputs
 

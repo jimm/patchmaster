@@ -2,12 +2,11 @@ module PM
 
 class Patch
 
-  attr_accessor :name, :connections, :start_bytes
+  attr_accessor :name, :connections, :start_bytes, :stop_bytes
 
-  def initialize(name, start_bytes=nil)
-    @name = name
+  def initialize(name, start_bytes=nil, stop_bytes=nil)
+    @name, @start_bytes, @stop_bytes = name, start_bytes, stop_bytes
     @connections = []
-    @start_bytes = start_bytes
     @running = false
   end
 
@@ -19,23 +18,24 @@ class Patch
     @connections.map(&:input).uniq
   end
 
-  # Send start_bytes to each connection, then spawn a new thread that
-  # receives input and passes it on to each connection.
+  # Send start_bytes to each connection.
   def start
-    @connections.each { |conn| conn.start(@start_bytes) }
-    @running = true
+    unless @running
+      @connections.each { |conn| conn.start(@start_bytes) }
+      @running = true
+    end
   end
 
   def running?
     @running
   end
 
+  # Send stop_bytes to each connection, then call #stop on each connection.
   def stop
     if @running
       @running = false
-      @connections.map(&:stop)
+      @connections.each { |conn| conn.stop(@stop_bytes) }
     end
   end
 end
-
-end # PM
+end

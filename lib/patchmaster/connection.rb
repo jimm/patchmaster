@@ -30,7 +30,8 @@ class Connection
     @input.add_connection(self)
   end
 
-  def stop
+  def stop(stop_bytes=nil)
+    midi_out(@output, stop_bytes) if stop_bytes
     @input.remove_connection(self)
   end
 

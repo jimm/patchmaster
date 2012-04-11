@@ -9,17 +9,32 @@ class ConnectionTest < PMTest
     @conn = PM::Connection.new(@in_instrument, nil, @out_instrument, 2, nil, @options)
   end
 
-  def test_connection_start_attaches_self_to_input
+  def test_start_attaches_self_to_input
     assert @in_instrument.connections.empty?
     @conn.start
     assert_equal 1, @in_instrument.connections.size
     assert_equal @conn, @in_instrument.connections.first
   end
 
-  def test_connection_stop_detaches_self_from_input
+  def test_stop_detaches_self_from_input
     @conn.start
     @conn.stop
     assert @in_instrument.connections.empty?
+  end
+
+  def test_start_sends_start_bytes
+    assert_equal [], @out_instrument.port.buffer
+    @conn.start([1, 2, 3])
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[0,3]
+    @conn.stop
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[0,3]
+  end
+
+  def test_stop_sends_stop_bytes
+    assert_equal [], @out_instrument.port.buffer
+    @conn.start
+    @conn.stop([4, 5, 6])
+    assert_equal [4, 5, 6], @out_instrument.port.buffer[-3..-1]
   end
 
   def test_inside_zone
