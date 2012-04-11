@@ -18,5 +18,9 @@ class Trigger
       PatchMaster.instance.send(action_sym)
     end
   end
+
+  def to_s
+    "#{@bytes.inspect} => :#{@action_sym}"
+  end
 end
 end

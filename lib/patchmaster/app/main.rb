@@ -1,6 +1,6 @@
 require 'curses'
 require 'singleton'
-%w(list patch info prompt).each { |w| require "patchmaster/app/#{w}_window" }
+%w(list patch info trigger prompt).each { |w| require "patchmaster/app/#{w}_window" }
 
 module PM
 
@@ -115,8 +115,16 @@ class Main
     @patch_win = PatchWindow.new(bot_height, cols(), top_height, 0, 'Patch')
     @message_win = Window.new(1, cols(), lines()-1, 0)
 
-    @info_win = InfoWindow.new(top_height, cols() - (top_width * 2) - 1, 0, top_width * 2 + 1)
+    third_height = top_height / 3
+    width = cols() - (top_width * 2) - 1
+    left = top_width * 2 + 1
+
+    @trigger_win = TriggerWindow.new(third_height, width, third_height * 2, left)
+    @trigger_win.draw
+
+    @info_win = InfoWindow.new(third_height * 2, width, 0, left)
     @info_win.draw
+
   end
 
   def help
@@ -140,7 +148,7 @@ class Main
   def refresh_all
     set_window_data
     [@song_lists_win, @song_list_win, @song_win, @patch_win].map(&:draw)
-    [stdscr, @song_lists_win, @song_list_win, @song_win, @info_win, @patch_win, @message_win].map(&:refresh)
+    [stdscr, @song_lists_win, @song_list_win, @song_win, @info_win, @patch_win, @trigger_win].map(&:refresh)
   end
 
   def set_window_data
