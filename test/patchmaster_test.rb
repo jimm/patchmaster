@@ -110,17 +110,29 @@ class PatchMasterTest < PMTest
   end
 
   def test_find_nearest_match
-    song = @pm.find_nearest_match(@pm.all_songs.songs, "Frist Song")
+    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, "Frist Song")
     assert_not_nil song
     assert_equal 'First Song', song.name
 
-    song = @pm.find_nearest_match(@pm.all_songs.songs, "Second Song")
+    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, "Second Song")
     assert_not_nil song
     assert_equal 'Second Song', song.name
 
-    song = @pm.find_nearest_match(@pm.all_songs.songs, "Second Sing")
+    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, "Second Sing")
     assert_not_nil song
     assert_equal 'Second Song', song.name
+  end
+
+  def test_load_restores_position
+    @pm.next_song
+    @pm.load(DSLTest::EXAMPLE_DSL)
+
+    assert_equal 'All Songs', @pm.curr_song_list.name
+    assert_equal 'Second Song', @pm.curr_song.name
+    assert_equal 'Second Song, First Patch', @pm.curr_patch.name
+
+    # so assert_only_curr_patch_running in teardown succeeds
+    @pm.start                   
   end
 
   def assert_only_curr_patch_running

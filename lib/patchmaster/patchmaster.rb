@@ -32,7 +32,8 @@ class PatchMaster
     @no_midi = true
   end
 
-  # Stops everything and loads +file+.
+  # Stops everything and loads +file+. Does its best to restore the current
+  # song list, song, and patch.
   def load(file)
     curr_pos = curr_position()
     stop
@@ -41,27 +42,6 @@ class PatchMaster
     restore_position(curr_pos)
   rescue => ex
     raise("error loading #{file}: #{ex}\n" + caller.join("\n"))
-  end
-
-  # Returns an array of names of the current song list, song, and patch.
-  # Used by #restore_position.
-  def curr_position
-    [@curr_song_list ? @curr_song_list.name : nil,
-     @curr_song ? @curr_song.name : nil,
-     @curr_patch ? @curr_patch.name : nil]
-  end
-
-  # Given names of a song list, song, and patch, try to find them now.
-  #
-  # Since names can change we use Damerau-Levenshtein distance on lowercase
-  # versions of all strings.
-  def restore_position(curr_pos)
-    song_list_name, song_name, patch_name = curr_pos
-    @curr_song_list = find_nearest_match(@song_lists, song_list_name) || @all_songs
-    @curr_song = find_nearest_match(@curr_song_list.songs, song_name) || @curr_song_list.first_song
-    if @curr_song
-      @curr_patch = find_nearest_match(@curr_song.patches, patch_name) || @curr_song.first_patch
-    end
   end
 
   def save(file)
@@ -204,6 +184,31 @@ class PatchMaster
       MIDI_CHANNELS.times do |chan|
         out.midi_out([CONTROLLER + chan, CM_ALL_NOTES_OFF, 0])
       end
+    end
+  end
+
+  # ****************************************************************
+
+  private
+
+  # Returns an array of names of the current song list, song, and patch.
+  # Used by #restore_position.
+  def curr_position
+    [@curr_song_list ? @curr_song_list.name : nil,
+     @curr_song ? @curr_song.name : nil,
+     @curr_patch ? @curr_patch.name : nil]
+  end
+
+  # Given names of a song list, song, and patch, try to find them now.
+  #
+  # Since names can change we use Damerau-Levenshtein distance on lowercase
+  # versions of all strings.
+  def restore_position(curr_pos)
+    song_list_name, song_name, patch_name = curr_pos
+    @curr_song_list = find_nearest_match(@song_lists, song_list_name) || @all_songs
+    @curr_song = find_nearest_match(@curr_song_list.songs, song_name) || @curr_song_list.first_song
+    if @curr_song
+      @curr_patch = find_nearest_match(@curr_song.patches, patch_name) || @curr_song.first_patch
     end
   end
 
