@@ -1,7 +1,5 @@
 = To Do
 
-* Write tests for code that restores current position after file load.
-
 * Editing. Can we simply call $EDITOR instead of simply loading/reloading
   files, allow everything to be edited in the app.
 
