@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# usage: patchmaster [-i] [pm_file]
+# usage: patchmaster [-n] [-d] [pm_file]
 #
 # Starts PatchMaster and optionally loads pm_file.
 #
@@ -9,10 +9,18 @@
 # ignored, and no MIDI data is sent/received. That is useful if you want to
 # run PatchMaster without actually talking to any MIDI instruments.
 
+require 'optparse'
 require 'patchmaster'
 
+use_midi = true
+OptionParser.new do |opts|
+  opts.banner = "usage: patchmaster [options] [pm_file]"
+  opts.on("-d", "--debug", "Turn on debug mode") { $DEBUG = true }
+  opts.on("-n", "--no-midi", "Turn off MIDI processing") { use_midi = false }
+end.parse!(ARGV)
+
 pm = PM::Main.instance
-if ARGV[0] == '-n'
+if !use_midi
   pm.no_midi!
   ARGV.shift
 end
