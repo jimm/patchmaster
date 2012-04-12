@@ -6,8 +6,6 @@ module PM
 
 class Main
 
-  DEBUG_FILE = '/tmp/pm_debug.txt'
-
   include Singleton
   include Curses
 
@@ -25,9 +23,6 @@ class Main
   end
 
   def run
-    if $DEBUG
-      @debug_file = File.open(DEBUG_FILE, 'a')
-    end
     @pm.start
     begin
       config_curses
@@ -54,6 +49,8 @@ class Main
           when ?t
             name = PromptWindow.new('Go To Song List', 'Go to Song List:').gets
             @pm.goto_song_list(name)
+          when ?e
+            @pm.edit
           when Key::F1
             help
           when 27               # escape
@@ -79,17 +76,13 @@ class Main
           end
         rescue => ex
           message(ex.to_s)
-          if $DEBUG
-            @debug_file.puts caller.join("\n")
-          end
+          @pm.debug caller.join("\n")
         end
       end
     ensure
       close_screen
       @pm.stop
-      if $DEBUG
-        @debug_file.close
-      end
+      @pm.close_debug_file
     end
   end
 
@@ -110,7 +103,6 @@ class Main
     sl_height = top_height - sls_height
     
     @song_lists_win = ListWindow.new(sls_height, top_width, 0, 0, nil)
-    @song_lists_win.set_contents('Song Lists', @pm.song_lists)
     @song_list_win = ListWindow.new(sl_height, top_width, sls_height, 0, 'Song List')
     @song_win = ListWindow.new(top_height, top_width, 0, top_width, 'Song')
     @patch_win = PatchWindow.new(bot_height, cols(), top_height, 0, 'Patch')
@@ -140,10 +132,7 @@ class Main
     else
       $stderr.puts str
     end
-    if $DEBUG
-      @debug_file.puts "#{Time.now} #{str}"
-      @debug_file.flush
-    end
+    @pm.debug "#{Time.now} #{str}"
   end
 
   def refresh_all
@@ -153,8 +142,11 @@ class Main
   end
 
   def set_window_data
+    @song_lists_win.set_contents('Song Lists', @pm.song_lists)
+
     song_list = @pm.curr_song_list
     @song_list_win.set_contents(song_list.name, song_list.songs)
+
     song = song_list.curr_song
     if song
       @song_win.set_contents(song.name, song.patches)

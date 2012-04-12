@@ -54,14 +54,15 @@ class DSLTest < PMTest
   end
 
   def test_save
+    f = '/tmp/dsl_test_save.rb'
     @dsl.load(EXAMPLE_DSL)
     begin
-      @dsl.save('/tmp/dsl_test_save.rb')
+      @dsl.save(f)
       # TODO write more here
     rescue => ex
       fail ex.to_s
     ensure
-      File.delete('/tmp/dsl_test_save.rb')
+      File.delete(f)
     end
   end
 
@@ -87,6 +88,10 @@ class DSLTest < PMTest
     assert_match 'output 6, :ws, "WaveStation"', str
     assert_match "trigger :next_patch, :mb, [176, 50, 0]", str
     assert_match 'filter { |c, b| b }       # no-op', str
+  rescue => ex
+    fail ex.to_s
+  ensure
+    File.delete(f)
   end
 
   def test_aliases

@@ -17,12 +17,18 @@ module PM
 # triggers are erased instead of disabled; it wouldn't be too hard
 class PatchMaster
 
+  DEBUG_FILE = '/tmp/pm_debug.txt'
+
   include Singleton
 
   attr_reader :inputs, :outputs, :all_songs, :song_lists, :no_midi
   attr_reader :curr_song_list, :curr_song, :curr_patch
+  attr_reader :debug_file
 
   def initialize
+    if $DEBUG
+      @debug_file = File.open(DEBUG_FILE, 'a')
+    end
     init_data
     @no_midi = false
     @curr_song_list = @curr_song = @curr_patch = nil
@@ -39,6 +45,7 @@ class PatchMaster
     stop
     init_data
     DSL.new(@no_midi).load(file)
+    @loaded_file = file
     restore_position(curr_pos)
   rescue => ex
     raise("error loading #{file}: #{ex}\n" + caller.join("\n"))
@@ -187,6 +194,28 @@ class PatchMaster
     end
   end
 
+  def edit
+    cmd = "#{ENV['VISUAL'] || ENV['EDITOR'] || 'vi'} #{@loaded_file}"
+    message(cmd) if $DEBUG
+    system(cmd)
+    load(@loaded_file)
+  end
+
+  def debug(str)
+    if $DEBUG
+      if @debug_file
+        @debug_file.puts str
+        @debug_file.flush
+      else
+        $stderr.puts str
+      end
+    end
+  end
+
+  def close_debug_file
+    @debug_file.close if @debug_file
+  end
+
   # ****************************************************************
 
   private
@@ -204,6 +233,8 @@ class PatchMaster
   # Since names can change we use Damerau-Levenshtein distance on lowercase
   # versions of all strings.
   def restore_position(curr_pos)
+    return unless curr_pos[0]   # will be nil on initial load
+
     song_list_name, song_name, patch_name = curr_pos
     @curr_song_list = find_nearest_match(@song_lists, song_list_name) || @all_songs
     @curr_song = find_nearest_match(@curr_song_list.songs, song_name) || @curr_song_list.first_song
