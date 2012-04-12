@@ -47,6 +47,7 @@ class PatchMaster
     DSL.new(@no_midi).load(file)
     @loaded_file = file
     restore_position(curr_pos)
+    @curr_patch.start if @curr_patch
   rescue => ex
     raise("error loading #{file}: #{ex}\n" + caller.join("\n"))
   end
@@ -77,11 +78,11 @@ class PatchMaster
       @curr_song = @curr_song_list.first_song
       if @curr_song
         @curr_patch = @curr_song.first_patch
-        @curr_patch.start if @curr_patch
       else
         @curr_patch = nil
       end
     end
+    @curr_patch.start if @curr_patch
 
     @running = true
     Thread.new do

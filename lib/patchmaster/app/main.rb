@@ -60,7 +60,6 @@ class Main
             file = PromptWindow.new('Load', 'Load file:').gets
             begin
               @pm.load(file)
-              @pm.start(false)
             rescue => ex
               message(ex.to_s)
             end
@@ -70,6 +69,13 @@ class Main
               @pm.save(file)
             rescue => ex
               message(ex.to_s)
+            end
+          when ??
+            if $DEBUG
+              require 'pp'
+              out = ''
+              str = pp(@pm, out)
+              message("pm = #{out}")
             end
           when ?q
             break
@@ -147,10 +153,10 @@ class Main
     song_list = @pm.curr_song_list
     @song_list_win.set_contents(song_list.name, song_list.songs)
 
-    song = song_list.curr_song
+    song = @pm.curr_song
     if song
       @song_win.set_contents(song.name, song.patches)
-      patch = song.curr_patch
+      patch = @pm.curr_patch
       @patch_win.patch = patch
     else
       @song_win.set_contents(nil, nil)
