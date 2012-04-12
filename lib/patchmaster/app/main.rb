@@ -50,6 +50,7 @@ class Main
             name = PromptWindow.new('Go To Song List', 'Go to Song List:').gets
             @pm.goto_song_list(name)
           when ?e
+            close_screen
             @pm.edit
           when Key::F1
             help
@@ -86,6 +87,8 @@ class Main
         end
       end
     ensure
+      clear
+      refresh
       close_screen
       @pm.stop
       @pm.close_debug_file

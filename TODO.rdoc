@@ -1,8 +1,5 @@
 = To Do
 
-* On load after edit, restore position doesn't work or window refresh
-  doesn't work.
-
 * Remove cursor from List? PM::PatchMaster is now responsible for cursor.
 
 * Windows observe contents to minimize redraws. Perhaps only need to observe
