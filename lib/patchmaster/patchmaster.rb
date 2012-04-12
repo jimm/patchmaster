@@ -237,10 +237,15 @@ class PatchMaster
     return unless curr_pos[0]   # will be nil on initial load
 
     song_list_name, song_name, patch_name = curr_pos
+
     @curr_song_list = find_nearest_match(@song_lists, song_list_name) || @all_songs
+    @song_lists.curr = @curr_song_list
+
     @curr_song = find_nearest_match(@curr_song_list.songs, song_name) || @curr_song_list.first_song
     if @curr_song
+      @curr_song_list.curr_song = @curr_song
       @curr_patch = find_nearest_match(@curr_song.patches, patch_name) || @curr_song.first_patch
+      @curr_song.curr_patch = @curr_patch if @curr_song
     end
   end
 
