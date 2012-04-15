@@ -30,10 +30,5 @@ class SongList
   %w(first prev curr next last).each do |dir|
     instance_eval("def #{dir}_patch; @songs.curr.#{dir}_patch; end")
   end
-
-  # Called when moving out of this song list to another
-  def stop_current_song
-    @songs.stop_current
-  end
 end
 end
