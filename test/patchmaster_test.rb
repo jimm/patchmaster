@@ -2,9 +2,11 @@ require 'test_helper'
 
 class PatchMasterTest < PMTest
 
+  EXAMPLE_DSL = File.join(File.dirname(__FILE__), 'example_dsl.rb')
+
   def setup
     @pm = PM::PatchMaster.instance
-    @pm.load(DSLTest::EXAMPLE_DSL)
+    @pm.load(EXAMPLE_DSL)
     @pm.start
 
     # We can assume the DSL loader worked properly, since that's tested in
@@ -32,6 +34,12 @@ class PatchMasterTest < PMTest
     @pm.stop
     assert_nil @pm.curr_patch
     assert !@pm.instance_variable_get(:@running)
+
+    @pm.all_songs.songs.each do |song|
+      song.patches.each do |patch|
+        assert !patch.running?, "patch #{patch.name} should not be running"
+      end
+    end
   end
 
   def test_next_song
@@ -99,14 +107,14 @@ class PatchMasterTest < PMTest
     @pm.goto_song('First')
     song = @pm.all_songs.find('First')
     assert_equal song, @pm.curr_song
-    assert_equal song.curr_patch, @pm.curr_patch
+    assert_equal song.patches.first, @pm.curr_patch
   end
 
   def test_goto_song_list
     @pm.goto_song_list('Tonight')
     assert_equal "Tonight's Song List", @pm.curr_song_list.name
-    assert_equal @pm.curr_song_list.first_song, @pm.curr_song
-    assert_equal @pm.curr_song_list.first_song.first_patch, @pm.curr_patch
+    assert_equal @pm.curr_song_list.songs.first, @pm.curr_song
+    assert_equal @pm.curr_song_list.songs.first.patches.first, @pm.curr_patch
   end
 
   def test_find_nearest_match
@@ -125,7 +133,7 @@ class PatchMasterTest < PMTest
 
   def test_load_restores_position
     @pm.next_song
-    @pm.load(DSLTest::EXAMPLE_DSL)
+    @pm.load(EXAMPLE_DSL)
 
     assert_equal 'All Songs', @pm.curr_song_list.name
     assert_equal 'Second Song', @pm.curr_song.name

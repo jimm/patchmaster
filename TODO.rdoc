@@ -1,7 +1,5 @@
 = To Do
 
-* Remove cursor from List? PM::PatchMaster is now responsible for cursor.
-
 * Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 
@@ -10,6 +8,7 @@
 * Display instruments?
 
 * Alternate display that only shows song and patch names and little else?
+  This might be useful during performance.
 
 * Do I need to handle running bytes in Connection#midi_in, or does UniMIDI
   take care of that?
@@ -34,3 +33,8 @@
 * Programmable MIDI messages?
 
 * See list of features at http://jimmenard.com/projects/keymaster/
+
+* Sysex for displaying song and patch name. This would get sent out whenever
+  patch changes, and could be used to display song/patch in a synth's
+  display, for example.
+

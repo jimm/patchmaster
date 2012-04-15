@@ -14,8 +14,8 @@ class TriggerTest < PMTest
   end
 
   def test_trigger_sends_when_bytes_match
-    song = @pm.all_songs.first_song
-    first_patch = song.first_patch
+    song = @pm.all_songs.songs.first
+    first_patch = song.patches.first
     second_patch = song.patches[1]
 
     trigger = PM::Trigger.new(:next_patch, [1, 2, 3])

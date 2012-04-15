@@ -151,18 +151,18 @@ class Main
   end
 
   def set_window_data
-    @song_lists_win.set_contents('Song Lists', @pm.song_lists)
+    @song_lists_win.set_contents('Song Lists', @pm.song_lists, :curr_song_list)
 
     song_list = @pm.curr_song_list
-    @song_list_win.set_contents(song_list.name, song_list.songs)
+    @song_list_win.set_contents(song_list.name, song_list.songs, :curr_song)
 
     song = @pm.curr_song
     if song
-      @song_win.set_contents(song.name, song.patches)
+      @song_win.set_contents(song.name, song.patches, :curr_patch)
       patch = @pm.curr_patch
       @patch_win.patch = patch
     else
-      @song_win.set_contents(nil, nil)
+      @song_win.set_contents(nil, nil, :curr_patch)
       @patch_win.patch = nil
     end
   end

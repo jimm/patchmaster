@@ -1,6 +1,3 @@
-require 'patchmaster/list'
-require 'patchmaster/list_container'
-
 module PM
 
 # A SongList is a list of Songs with a cursor.
@@ -8,11 +5,9 @@ class SongList
 
   attr_accessor :name, :songs
 
-  include ListContainer
-
   def initialize(name)
     @name = name
-    @songs = List.new
+    @songs = []
   end
 
   def <<(song)

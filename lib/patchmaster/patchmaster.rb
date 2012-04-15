@@ -47,7 +47,7 @@ class PatchMaster
     DSL.new(@no_midi).load(file)
     @loaded_file = file
     restore_position(curr_pos)
-    @curr_patch.start if @curr_patch
+    @curr_patch.start if @curr_patch && @running
   rescue => ex
     raise("error loading #{file}: #{ex}\n" + caller.join("\n"))
   end
@@ -64,7 +64,7 @@ class PatchMaster
     @curr_song_list = @curr_song = @curr_patch = nil
     @inputs = {}
     @outputs = {}
-    @song_lists = List.new
+    @song_lists = []
     @all_songs = SortedSongList.new('All Songs')
     @song_lists << @all_songs
   end
@@ -75,9 +75,9 @@ class PatchMaster
   def start(init_cursor = true)
     if init_cursor
       @curr_song_list = @song_lists.first # sets cursor in @song_lists
-      @curr_song = @curr_song_list.first_song
+      @curr_song = @curr_song_list.songs.first
       if @curr_song
-        @curr_patch = @curr_song.first_patch
+        @curr_patch = @curr_song.patches.first
       else
         @curr_patch = nil
       end
@@ -102,42 +102,42 @@ class PatchMaster
 
   def next_song
     return unless @curr_song_list
-    return if @curr_song_list.last_song?
+    return if @curr_song_list.songs.last == @curr_song
 
     @curr_patch.stop if @curr_patch
-    @curr_song = @curr_song_list.next_song
-    @curr_patch = @curr_song.first_patch
+    @curr_song = @curr_song_list.songs[@curr_song_list.songs.index(@curr_song) + 1]
+    @curr_patch = @curr_song.patches.first
     @curr_patch.start
   end
 
   def prev_song
     return unless @curr_song_list
-    return if @curr_song_list.first_song?
+    return if @curr_song_list.songs.first == @curr_song
 
     @curr_patch.stop if @curr_patch
-    @curr_song = @curr_song_list.prev_song
-    @curr_patch = @curr_song.first_patch
+    @curr_song = @curr_song_list.songs[@curr_song_list.songs.index(@curr_song) - 1]
+    @curr_patch = @curr_song.patches.first
     @curr_patch.start
   end
 
   def next_patch
     return unless @curr_song
-    if @curr_song.last_patch?
+    if @curr_song.patches.last == @curr_patch
       next_song
     elsif @curr_patch
       @curr_patch.stop
-      @curr_patch = @curr_song.next_patch
+      @curr_patch = @curr_song.patches[@curr_song.patches.index(@curr_patch) + 1]
       @curr_patch.start
     end
   end
 
   def prev_patch
     return unless @curr_song
-    if @curr_song.first_patch?
+    if @curr_song.patches.first == @curr_patch
       prev_song
     elsif @curr_patch
       @curr_patch.stop
-      @curr_patch = @curr_song.prev_patch
+      @curr_patch = @curr_song.patches[@curr_song.patches.index(@curr_patch) - 1]
       @curr_patch.start
     end
   end
@@ -146,7 +146,7 @@ class PatchMaster
     new_song_list = new_song = new_patch = nil
     new_song = @curr_song_list.find(name_regex) if @curr_song_list
     new_song = @all_songs.find(name_regex) unless new_song
-    new_patch = new_song ? new_song.first_patch : nil
+    new_patch = new_song ? new_song.patches.first : nil
 
     if (new_song && new_song != @curr_song) || # moved to new song
         (new_song == @curr_song && @curr_patch != new_patch) # same song but not at same first patch
@@ -159,7 +159,6 @@ class PatchMaster
         # Not found in current song list. Switch to all_songs list.
         new_song_list = @all_songs
       end
-      new_song_list.curr_song = new_song # move to that song in selected song list
 
       @curr_song_list = new_song_list
       @curr_song = new_song
@@ -174,10 +173,9 @@ class PatchMaster
     return unless new_song_list
 
     @curr_song_list = new_song_list
-    @song_lists.curr = new_song_list # set cursor
 
-    new_song = @curr_song_list.first_song
-    new_patch = new_song ? new_song.first_patch : nil
+    new_song = @curr_song_list.songs.first
+    new_patch = new_song ? new_song.patches.first : nil
 
     if new_patch != @curr_patch
       @curr_patch.stop if @curr_patch
@@ -239,13 +237,10 @@ class PatchMaster
     song_list_name, song_name, patch_name = curr_pos
 
     @curr_song_list = find_nearest_match(@song_lists, song_list_name) || @all_songs
-    @song_lists.curr = @curr_song_list
 
-    @curr_song = find_nearest_match(@curr_song_list.songs, song_name) || @curr_song_list.first_song
+    @curr_song = find_nearest_match(@curr_song_list.songs, song_name) || @curr_song_list.songs.first
     if @curr_song
-      @curr_song_list.curr_song = @curr_song
-      @curr_patch = find_nearest_match(@curr_song.patches, patch_name) || @curr_song.first_patch
-      @curr_song.curr_patch = @curr_patch if @curr_song
+      @curr_patch = find_nearest_match(@curr_song.patches, patch_name) || @curr_song.patches.first
     end
   end
 
