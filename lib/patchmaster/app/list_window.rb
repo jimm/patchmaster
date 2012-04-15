@@ -5,6 +5,8 @@ class ListWindow < PmWindow
 
   attr_reader :list
 
+  # +curr_item_method_sym+ is a method symbol that is sent to
+  # PM::PatchMaster to obtain the current item so we can highlight it.
   def set_contents(title, list, curr_item_method_sym)
     @title, @list, @curr_item_method_sym = title, list, curr_item_method_sym
     draw
