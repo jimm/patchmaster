@@ -13,8 +13,6 @@
 * Do I need to handle running bytes in Connection#midi_in, or does UniMIDI
   take care of that?
 
-* Should each input get its own thread?
-
 * Fix PromptWindow display cleanup.
 
 * Help screen.
@@ -28,7 +26,10 @@
 
 * "Are you sure?" on quit? --- but I hate that.
 
-* Is UniMIDI gets_data blocking?
+* Should each input get its own thread?
+
+* Is UniMIDI gets_data blocking? If so, we'll definitely need to create a
+  new thread for each instrument.
 
 * Programmable MIDI messages?
 
@@ -38,3 +39,4 @@
   patch changes, and could be used to display song/patch in a synth's
   display, for example.
 
+* See feature list at http://jimmenard.com/projects/keymaster/
