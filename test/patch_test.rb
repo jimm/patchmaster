@@ -65,8 +65,7 @@ class PatchTest < PMTest
     @in_instrument.port.data_to_send = midi_data(4, 5, 6)
     @patch.start
     # FIXME this sleep is a hack to make sure #gets_data is called.
-    sleep(0.1)
-    assert @patch.running?
+    sleep(0.01)
     @patch.stop
     assert_equal [PM::PROGRAM_CHANGE + 1, 3, 4, 5, 6], @out_instrument.port.buffer
   end
@@ -75,7 +74,7 @@ class PatchTest < PMTest
     @in_instrument.port.data_to_send = midi_data(4, 5, 6)
     @patch.start
     # FIXME this sleep is a hack to make sure #gets_data is called.
-    sleep(0.1)
+    sleep(0.01)
     @patch.stop
 
     # Now send more data and make sure it was not sent
