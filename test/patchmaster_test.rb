@@ -14,8 +14,6 @@ class PatchMasterTest < PMTest
   end
 
   def teardown
-    assert_only_curr_patch_running
-
     @pm.stop
     @pm.init_data
   end
@@ -24,16 +22,18 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs, @pm.curr_song_list
     assert_equal @pm.all_songs.songs[0], @pm.curr_song
     assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_running
     assert @pm.instance_variable_get(:@running)
+    assert_only_curr_patch_running
   end
 
   def test_stop
     @pm.stop
-    assert_nil @pm.curr_patch
-    assert !@pm.instance_variable_get(:@running)
+    assert !@pm.curr_patch.running?
+    assert !@pm.running?
 
     @pm.all_songs.songs.each do |song|
       song.patches.each do |patch|
@@ -47,6 +47,7 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs, @pm.curr_song_list
     assert_equal @pm.all_songs.songs[1], @pm.curr_song
     assert_equal @pm.all_songs.songs[1].patches[0], @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_next_song_end_of_song_list_does_nothing
@@ -56,6 +57,7 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs.songs[1], @pm.curr_song
     assert_equal @pm.all_songs.songs[1].patches[0], @pm.curr_patch
     assert @pm.all_songs.songs[1].patches[0].running?
+    assert_only_curr_patch_running
   end
 
   def test_prev_song
@@ -64,6 +66,7 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs, @pm.curr_song_list
     assert_equal @pm.all_songs.songs[0], @pm.curr_song
     assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_prev_song_start_of_song_list_does_nothing
@@ -71,6 +74,7 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs, @pm.curr_song_list
     assert_equal @pm.all_songs.songs[0], @pm.curr_song
     assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_next_patch
@@ -78,6 +82,7 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs, @pm.curr_song_list
     assert_equal @pm.all_songs.songs[0], @pm.curr_song
     assert_equal @pm.all_songs.songs[0].patches[1], @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_next_patch_end_of_song
@@ -86,6 +91,7 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs, @pm.curr_song_list
     assert_equal @pm.all_songs.songs[1], @pm.curr_song
     assert_equal @pm.all_songs.songs[1].patches[0], @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_prev_patch
@@ -94,6 +100,7 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs, @pm.curr_song_list
     assert_equal @pm.all_songs.songs[0], @pm.curr_song
     assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_prev_patch_start_of_song
@@ -101,6 +108,7 @@ class PatchMasterTest < PMTest
     assert_equal @pm.all_songs, @pm.curr_song_list
     assert_equal @pm.all_songs.songs[0], @pm.curr_song
     assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_goto_song
@@ -108,6 +116,7 @@ class PatchMasterTest < PMTest
     song = @pm.all_songs.find('First')
     assert_equal song, @pm.curr_song
     assert_equal song.patches.first, @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_goto_song_list
@@ -115,6 +124,7 @@ class PatchMasterTest < PMTest
     assert_equal "Tonight's Song List", @pm.curr_song_list.name
     assert_equal @pm.curr_song_list.songs.first, @pm.curr_song
     assert_equal @pm.curr_song_list.songs.first.patches.first, @pm.curr_patch
+    assert_only_curr_patch_running
   end
 
   def test_find_nearest_match
@@ -129,6 +139,7 @@ class PatchMasterTest < PMTest
     song = @pm.send(:find_nearest_match, @pm.all_songs.songs, "Second Sing")
     assert_not_nil song
     assert_equal 'Second Song', song.name
+    assert_only_curr_patch_running
   end
 
   def test_load_restores_position
@@ -138,9 +149,6 @@ class PatchMasterTest < PMTest
     assert_equal 'All Songs', @pm.curr_song_list.name
     assert_equal 'Second Song', @pm.curr_song.name
     assert_equal 'Second Song, First Patch', @pm.curr_patch.name
-
-    # so assert_only_curr_patch_running in teardown succeeds
-    @pm.start                   
   end
 
   def assert_only_curr_patch_running

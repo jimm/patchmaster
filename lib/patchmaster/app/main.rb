@@ -19,7 +19,10 @@ class Main
 
   # File must be a Ruby file that returns an array of song lists.
   def load(file)
+    running = @pm.running?
+    @pm.stop
     @pm.load(file)
+    @pm.start(false) if @pm.running?
   end
 
   def run
@@ -60,7 +63,7 @@ class Main
           when ?l
             file = PromptWindow.new('Load', 'Load file:').gets
             begin
-              @pm.load(file)
+              load(file)
             rescue => ex
               message(ex.to_s)
             end

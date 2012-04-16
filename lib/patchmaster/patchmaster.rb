@@ -39,7 +39,6 @@ class PatchMaster
   # song list, song, and patch.
   def load(file)
     curr_pos = curr_position()
-    stop
     init_data
     DSL.new(@no_midi).load(file)
     @loaded_file = file
@@ -82,19 +81,24 @@ class PatchMaster
     @curr_patch.start if @curr_patch
 
     @running = true
-    Thread.new do
-      loop do
-        break unless @running
-        @inputs.values.map(&:gets_data)
+    @inputs.values.each do |input|
+      Thread.new(input) do |instrument|
+        loop do
+          break unless @running
+          instrument.gets_data
+        end
       end
     end
   end
 
-  # Stops the MIDI input thread and sets the cursor to +nil+.
+  # Stops the MIDI input threads.
   def stop
     @running = false
     @curr_patch.stop if @curr_patch
-    @curr_song_list = @curr_song = @curr_patch = nil
+  end
+
+  def running?
+    @running
   end
 
   def next_song
