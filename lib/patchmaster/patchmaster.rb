@@ -85,7 +85,7 @@ class PatchMaster
       Thread.new(input) do |instrument|
         loop do
           break unless @running
-          instrument.gets_data
+          instrument.process_messages
         end
       end
     end

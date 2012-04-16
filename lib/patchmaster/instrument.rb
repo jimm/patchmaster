@@ -33,7 +33,7 @@ class InputInstrument < Instrument
   end
 
   # Poll for more MIDI input and process it.
-  def gets_data
+  def process_messages
     @port.gets_data.each { |bytes| midi_in(bytes) }
   end
 

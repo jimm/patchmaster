@@ -14,18 +14,18 @@ class InstrumentTest < PMTest
     assert_equal 'test_in', @in_instrument.name
   end
 
-  def test_gets_data_sends_to_connection
+  def test_process_messages_sends_to_connection
     @in_instrument.add_connection(@conn)
-    @in_instrument.gets_data
+    @in_instrument.process_messages
     assert_equal @data.first, @conn.bytes_received
   end
 
-  def test_gets_data_sends_to_multiple_connections
+  def test_process_messages_sends_to_multiple_connections
     conn2 = TestConnection.new(@in_instrument, nil, PM::OutputInstrument.new('test_out2', 0, true), 2)
     @in_instrument.add_connection(@conn)
     @in_instrument.add_connection(conn2)
 
-    @in_instrument.gets_data
+    @in_instrument.process_messages
     assert_equal @data.first, @conn.bytes_received
     assert_equal @data.first, conn2.bytes_received
   end
