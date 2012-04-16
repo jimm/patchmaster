@@ -13,12 +13,13 @@ connect _instruments_. Those _connections_ can send program changes, set
 keyboard splits, transpose, send volume or other controller changes, and let
 you apply any Ruby code you want to the MIDI stream in realtime.
 
-_Song_ _lists_ let you organize songs into "set lists" for live performance or
+_Song_ _lists_ let you organize songs into set lists for live performance or
 in the studio.
 
-Any MIDI controller can trigger a move to the next or previous _patch_. For
-example, you can tell PatchMaster to move forward or backward based on
-controller values coming from foot switches or an instrument's buttons.
+Any MIDI message can _trigger_ an action such as moving to the next or
+previous patch or song. For example, you can tell PatchMaster to move
+forward or backward based on controller values coming from foot switches or
+an instrument's buttons.
 
 A software panic button turns off any stuck notes.
 
@@ -62,8 +63,9 @@ Patches have connections and arrays of start and stop bytes. Each connection
 links an input instrument to a single chanel on an output instrument.
 
 When a patch is started (it becomes the _current_ _patch_), each connection
-is started and passed the patch's start bytes. When a patch is stopped, each
-connection is stopped and passed the stop bytes.
+is started and passed the patch's start bytes to send to its output
+instrument. When a patch is stopped, each connection is stopped and passed
+the stop bytes to send to its output.
 
 == Connections
 
@@ -92,9 +94,21 @@ When a connection is started:
 
 === Running
 
-While a patch is running, incoming data on each input is sent through one or
-more connections to the proper outputs. Each connection can filter and
-modify the data on the way:
+At all times, when MIDI data comes in from an instrument two things happen:
+
+* The data is sent to the instrument's triggers. Each trigger looks at the
+  data and decides if it should act by send its message (for example
+  +next_patch+ or +next_song+) to PM::PatchMaster.
+
+* The data is then sent next 
+
+While a patch is running (it is the current patch), each 
+ connection is given
+the incoming bytes to process. incoming data on each
+of its connection's inputs is sent through one or more connections to the proper outputs. Each
+connection can filter and modify the data on the way:
+
+* The data is then processed by each conne
 
 * The data is ignored if it is not on the input instrument's selected
   channel

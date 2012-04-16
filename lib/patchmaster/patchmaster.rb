@@ -12,9 +12,6 @@ module PM
 #   PatchMaster.instance.start
 #   # ...when you're done
 #   PatchMaster.instance.stop
-#
-# A stopped PatchMaster instance can't be restarted. That's mostly because
-# triggers are erased instead of disabled; it wouldn't be too hard
 class PatchMaster
 
   DEBUG_FILE = '/tmp/pm_debug.txt'
