@@ -35,15 +35,23 @@ class PatchMaster
     @no_midi = true
   end
 
-  # Stops everything and loads +file+. Does its best to restore the current
-  # song list, song, and patch.
+  # Loads +file+. Does its best to restore the current song list, song, and
+  # patch after loading.
   def load(file)
+    restart = running?
+    stop
+
     curr_pos = curr_position()
     init_data
     DSL.new(@no_midi).load(file)
     @loaded_file = file
     restore_position(curr_pos)
-    @curr_patch.start if @curr_patch && @running
+
+    if restart
+      start(false)
+    elsif @curr_patch
+      @curr_patch.start
+    end
   rescue => ex
     raise("error loading #{file}: #{ex}\n" + caller.join("\n"))
   end

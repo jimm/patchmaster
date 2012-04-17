@@ -146,6 +146,7 @@ class PatchMasterTest < PMTest
     @pm.next_song
     @pm.load(EXAMPLE_DSL)
 
+    assert @pm.running?
     assert_equal 'All Songs', @pm.curr_song_list.name
     assert_equal 'Second Song', @pm.curr_song.name
     assert_equal 'Second Song, First Patch', @pm.curr_patch.name
