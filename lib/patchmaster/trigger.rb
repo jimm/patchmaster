@@ -23,7 +23,7 @@ class Trigger
   end
 
   def to_s
-    "Trigger(#{@bytes.inspect} => #{text ? text.gsub(/\n/, '; ') : ''})"
+    "#{@bytes.inspect} => #{@text ? @text.gsub(/\n\s*/, '; ') : ''}"
   end
 end
 end

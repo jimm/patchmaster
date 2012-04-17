@@ -16,7 +16,7 @@ class Filter
   end
 
   def to_s
-    @text.gsub("\n", "; ")
+    @text.gsub(/\n\s*/, "; ")
   end
 
 end
