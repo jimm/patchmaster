@@ -12,4 +12,6 @@ F1  - help
 l   - load
 s   - save
 
+e   - edit
+
 q   - quit
