@@ -28,11 +28,6 @@
 
 * "Are you sure?" on quit? --- but I hate that.
 
-* Should each input get its own thread?
-
-* Is UniMIDI gets_data blocking? If so, we'll definitely need to create a
-  new thread for each instrument.
-
 * Programmable MIDI messages?
 
 * See list of features at http://jimmenard.com/projects/keymaster/

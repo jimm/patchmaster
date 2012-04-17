@@ -26,7 +26,7 @@ class PatchMasterTest < PMTest
   end
 
   def test_running
-    assert @pm.instance_variable_get(:@running)
+    assert @pm.running?
     assert_only_curr_patch_running
   end
 

@@ -88,25 +88,31 @@ class PatchMaster
     end
     @curr_patch.start if @curr_patch
 
-    @running = true
+    @input_threads = ThreadGroup.new
     @inputs.values.each do |input|
-      Thread.new(input) do |instrument|
-        loop do
-          break unless @running
-          instrument.process_messages
-        end
+      t = Thread.new(input) do |instrument|
+        loop { instrument.process_messages }
       end
+      @input_threads.add(t)
+      debug("#{Time.now} Thread #{t} started")
     end
+    @input_threads.enclose
   end
 
   # Stops the MIDI input threads.
   def stop
-    @running = false
+    if @input_threads
+      @input_threads.list.each do |t|
+        Thread.kill(t)
+        debug("#{Time.now} Thread #{t} stopped")
+      end
+      @input_threads = nil
+    end
     @curr_patch.stop if @curr_patch
   end
 
   def running?
-    @running
+    @input_threads
   end
 
   def next_song
