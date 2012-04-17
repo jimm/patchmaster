@@ -211,12 +211,9 @@ class PatchMaster
 
   def debug(str)
     if $DEBUG
-      if @debug_file
-        @debug_file.puts str
-        @debug_file.flush
-      else
-        $stderr.puts str
-      end
+      f = @debug_file || $stderr
+      f.puts str
+      f.flush
     end
   end
 
