@@ -16,6 +16,7 @@ class DSL
     contents = IO.read(file)
     @triggers = []
     @filters = []
+    @songs = {}                 # key = name, value = song
     instance_eval(contents)
     read_triggers(contents)
     read_filters(contents)
@@ -45,6 +46,7 @@ class DSL
 
   def song(name)
     @song = Song.new(name)      # ctor saves into @pm.all_songs
+    @songs[name] = @song
     yield @song if block_given?
   end
 
@@ -106,7 +108,7 @@ class DSL
     sl = SongList.new(name)
     @pm.song_lists << sl
     song_names.each do |sn|
-      song = @pm.all_songs.find(sn)
+      song = @songs[sn]
       raise "song \"#{sn}\" not found (song list \"#{name}\")" unless song
       sl << song
     end
