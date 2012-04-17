@@ -146,8 +146,9 @@ class Main
 
   def refresh_all
     set_window_data
-    [@song_lists_win, @song_list_win, @song_win, @patch_win].map(&:draw)
-    [stdscr, @song_lists_win, @song_list_win, @song_win, @info_win, @patch_win, @trigger_win].map(&:refresh)
+    wins = [@song_lists_win, @song_list_win, @song_win, @patch_win, @info_win, @trigger_win]
+    wins.map(&:draw)
+    ([stdscr] + wins).map(&:refresh)
   end
 
   def set_window_data
