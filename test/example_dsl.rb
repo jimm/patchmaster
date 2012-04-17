@@ -4,10 +4,10 @@ output 2, :kz, 'K2000R'
 output 4, :sj                   # name will be "sj"
 output 6, :ws, 'WaveStation'
 
-trigger :next_patch, :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0]
-trigger :prev_patch, :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0]
-trigger :next_song,  :mb, [CONTROLLER, CC_GEN_PURPOSE_7, 0]
-trigger :prev_song,  :mb, [CONTROLLER, CC_GEN_PURPOSE_8, 0]
+trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
+trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }
+trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_7, 0] { next_song }
+trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_8, 0] { prev_song }
 
 song "First Song" do
   patch "First Song, First Patch" do
@@ -40,6 +40,9 @@ song "Second Song" do
     c :ws, :any, :ws, 6 do
       zone C4..B5
       filter { |c, b| b }       # no-op
+    end
+    c :ws, :any, :kz, 3 do
+      filter { |c, b| b[0] += 1 }
     end
   end
 end

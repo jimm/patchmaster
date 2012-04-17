@@ -5,22 +5,25 @@ module PM
 # sent to PM::PatchMaster.
 class Trigger
 
-  attr_accessor :action_sym, :bytes
+  attr_accessor :bytes, :block, :text
 
-  def initialize(action_sym, bytes)
-    @action_sym, @bytes = action_sym, bytes
+  def initialize(bytes, block)
+    @bytes, @block = bytes, block
   end
 
-  # If +bytes+ matches our +@bytes+ array then send +action_sym+ to the
-  # PatchMaster instance.
+  def method_missing(sym, *args)
+    PM::PatchMaster.instance.send(sym, *args)
+  end
+
+  # If +bytes+ matches our +@bytes+ array then run +block+.
   def signal(bytes)
     if bytes == @bytes
-      PatchMaster.instance.send(action_sym)
+      block.call
     end
   end
 
   def to_s
-    "#{@bytes.inspect} => :#{@action_sym}"
+    "Trigger(#{@bytes.inspect} => #{text ? text.gsub(/\n/, '; ') : ''})"
   end
 end
 end

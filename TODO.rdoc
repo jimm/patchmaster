@@ -2,9 +2,6 @@
 
 * Extract cursor out of PatchMaster.
 
-* Triggers should be able to run any Ruby code, just like filters. Maybe
-  create a new "pm" method for DSL that exposes PM::Patchmaster.instance.
-
 * Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 

@@ -18,11 +18,16 @@ class TriggerTest < PMTest
     first_patch = song.patches.first
     second_patch = song.patches[1]
 
-    trigger = PM::Trigger.new(:next_patch, [1, 2, 3])
-    assert_equal(first_patch, @pm.curr_patch)
+    x = 0
+    trigger = PM::Trigger.new([1, 2, 3], -> { x += 1 })
+
     trigger.signal([4, 5, 6])
-    assert_equal first_patch, @pm.curr_patch
+    assert_equal 0, x
+
     trigger.signal([1, 2, 3])
-    assert_equal second_patch, @pm.curr_patch
+    assert_equal 1, x
+
+    trigger.signal([1, 2, 3])
+    assert_equal 2, x
   end
 end

@@ -14,8 +14,10 @@ class DSL
 
   def load(file)
     contents = IO.read(file)
+    @triggers = []
     @filters = []
     instance_eval(contents)
+    read_triggers(contents)
     read_filters(contents)
   end
 
@@ -33,10 +35,12 @@ class DSL
   end
   alias_method :out, :output
 
-  def trigger(action_sym, instrument_sym, bytes)
+  def trigger(instrument_sym, bytes, &block)
     instrument = @pm.inputs[instrument_sym]
     raise "trigger: error finding instrument #{instrument_sym}" unless instrument
-    instrument.triggers << Trigger.new(action_sym, bytes)
+    t = Trigger.new(bytes, block)
+    instrument.triggers << t
+    @triggers << t
   end
 
   def song(name)
@@ -132,7 +136,8 @@ class DSL
   def save_triggers(f)
     @pm.inputs.each do |sym, instrument|
       instrument.triggers.each do |trigger|
-        f.puts "trigger :#{trigger.action_sym}, :#{sym}, #{trigger.bytes.inspect}"
+        str = "trigger :#{sym}, #{trigger.bytes.inspect} #{trigger.text}"
+        f.puts str
       end
     end
     f.puts
@@ -202,19 +207,28 @@ class DSL
     end
   end
 
-  # Extremely simple filter text reader. Relies on indentation to detect end
-  # of filter block.
+  def read_triggers(contents)
+    read_block_text('trigger', @triggers, contents)
+  end
+
   def read_filters(contents)
-    i = 0
-    in_filter = false
-    filter_indentation = nil
-    filter_end_token = nil
+    read_block_text('filter', @filters, contents)
+  end
+
+  # Extremely simple block text reader. Relies on indentation to detect end
+  # of code block.
+  def read_block_text(name, containers, contents)
+    i = -1
+    in_block = false
+    block_indentation = nil
+    block_end_token = nil
     contents.each_line do |line|
-      if line =~ /^(\s*)filter\s*(.*)/
-        filter_indentation, text = $1, $2
-        @filters[i].text = text + "\n"
-        in_filter = true
-        filter_end_token = case text
+      if line =~ /^(\s*)#{name}\s*.*?(({|do|lambda\s*{)(.*))/
+        block_indentation, text = $1, $2
+        i += 1
+        containers[i].text = text + "\n"
+        in_block = true
+        block_end_token = case text
                              when /^{/
                                "}"
                              when /^do\b/
@@ -224,20 +238,20 @@ class DSL
                              else
                                "}|end" # regex
                              end
-      elsif in_filter
+      elsif in_block
         line =~ /^(\s*)(.*)/
         indentation, text = $1, $2
-        if indentation.length <= filter_indentation.length
-          if text =~ /^#{filter_end_token}/
-            @filters[i].text << line
+        if indentation.length <= block_indentation.length
+          if text =~ /^#{block_end_token}/
+            containers[i].text << line
           end
-          i += 1
-          in_filter = false
+          in_block = false
         else
-          @filters[i].text << line
+          containers[i].text << line
         end
       end
     end
+    containers.each { |thing| thing.text.strip! }
   end
 
 end

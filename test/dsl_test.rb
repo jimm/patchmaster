@@ -26,8 +26,8 @@ class DSLTest < PMTest
     triggers = @pm.inputs[:mb].triggers
     assert_equal 4, triggers.length
     trigger = triggers[0]
-    assert_equal :next_patch, trigger.action_sym
     assert_equal [PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0], trigger.bytes
+    assert_equal "{ prev_song }", @pm.inputs[:mb].triggers[3].text
 
     assert_equal 2, @pm.all_songs.songs.length
     song = @pm.all_songs.find('First Song')
@@ -86,8 +86,10 @@ class DSLTest < PMTest
     @dsl.save('/tmp/dsl_test_save_file_contents.rb')
     str = IO.read(f)
     assert_match 'output 6, :ws, "WaveStation"', str
-    assert_match "trigger :next_patch, :mb, [176, 50, 0]", str
+    assert_match "trigger :mb, [176, 50, 0] { next_patch }", str
+    assert_match "trigger :mb, [176, 52, 0] { next_song }", str
     assert_match 'filter { |c, b| b }       # no-op', str
+    assert_match 'filter { |c, b| b[0] += 1 }', str
   rescue => ex
     fail ex.to_s
   ensure
@@ -122,10 +124,11 @@ class DSLTest < PMTest
         end
       }
 EOS
+    str.strip!
     assert_equal str,
       @pm.all_songs.find('First Song').patches[0].connections[1].filter.text
 
-    assert_equal "{ |c, b| b }       # no-op\n",
+    assert_equal "{ |c, b| b }       # no-op",
       @pm.all_songs.find('Second Song').patches[0].connections[1].filter.text
   end
 end
