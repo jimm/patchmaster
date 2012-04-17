@@ -225,7 +225,7 @@ class DSL
     block_indentation = nil
     block_end_token = nil
     contents.each_line do |line|
-      if line =~ /^(\s*)#{name}\s*.*?(({|do|lambda\s*{)(.*))/
+      if line =~ /^(\s*)#{name}\s*.*?(({|do|->\s*{|lambda\s*{)(.*))/
         block_indentation, text = $1, $2
         i += 1
         containers[i].text = text + "\n"
@@ -235,8 +235,8 @@ class DSL
                                "}"
                              when /^do\b/
                                "end"
-                             when /^lambda\s*({|do)/
-                               $1 == "{" ? "}" : "end"
+                             when /^(->|lambda)\s*({|do)/
+                               $2 == "{" ? "}" : "end"
                              else
                                "}|end" # regex
                              end
