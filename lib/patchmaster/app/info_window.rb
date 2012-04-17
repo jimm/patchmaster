@@ -7,12 +7,13 @@ class InfoWindow
 
   include Curses
 
-  attr_reader :win
+  attr_reader :win, :text
 
   TITLE = ' PatchMaster '
 
   def initialize(rows, cols, row, col)
     @win = Window.new(rows, cols, row, col)
+    @text = IO.read(CONTENTS)
   end
 
   def draw
@@ -21,7 +22,7 @@ class InfoWindow
       @win.addstr(TITLE)
     }
     @win.addstr("\n")
-    IO.foreach(CONTENTS) { |line| @win.addstr(line) }
+    @text.each_line { |line| @win.addstr(line) }
   end
 
   def refresh
