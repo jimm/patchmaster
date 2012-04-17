@@ -94,7 +94,7 @@ class PatchMaster
         loop { instrument.process_messages }
       end
       @input_threads.add(t)
-      debug("#{Time.now} Thread #{t} started")
+      debug("#{Time.now} Thread #{t} started for #{input.name}")
     end
     @input_threads.enclose
   end
