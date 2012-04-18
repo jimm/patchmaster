@@ -1,11 +1,9 @@
 = To Do
 
-* Extract cursor out of PatchMaster.
-
 * Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 
-* Scrolling in windows.
+* Scrolling in windows. See newpad.
 
 * Display instruments?
 

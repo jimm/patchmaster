@@ -20,7 +20,6 @@ class PatchMaster
 
   attr_reader :inputs, :outputs, :all_songs, :song_lists, :no_midi
   attr_reader :curr_song_list, :curr_song, :curr_patch
-  attr_reader :debug_file
 
   def initialize
     if $DEBUG
