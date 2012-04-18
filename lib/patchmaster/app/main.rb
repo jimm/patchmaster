@@ -17,7 +17,6 @@ class Main
     @pm.no_midi!
   end
 
-  # File must be a Ruby file that returns an array of song lists.
   def load(file)
     @pm.load(file)
   end
