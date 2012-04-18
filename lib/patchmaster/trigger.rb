@@ -3,6 +3,9 @@ module PM
 # A Trigger performs an action when it sees a particular array of bytes.
 # Instruments have zero or more triggers. The action is a symbol that gets
 # sent to PM::PatchMaster.
+#
+# Since we want to save them to files, we store the text representation as
+# well.
 class Trigger
 
   attr_accessor :bytes, :block, :text
