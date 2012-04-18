@@ -15,7 +15,7 @@ class Trigger
     PM::PatchMaster.instance.send(sym, *args)
   end
 
-  # If +bytes+ matches our +@bytes+ array then run +block+.
+  # If +bytes+ matches our +@bytes+ array then run +@block+.
   def signal(bytes)
     if bytes == @bytes
       block.call
