@@ -19,9 +19,9 @@ class PatchMasterTest < PMTest
   end
 
   def test_start
-    assert_equal @pm.all_songs, @pm.curr_song_list
-    assert_equal @pm.all_songs.songs[0], @pm.curr_song
-    assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_equal @pm.all_songs, @pm.song_list
+    assert_equal @pm.all_songs.songs[0], @pm.song
+    assert_equal @pm.all_songs.songs[0].patches[0], @pm.patch
     assert_only_curr_patch_running
   end
 
@@ -32,7 +32,7 @@ class PatchMasterTest < PMTest
 
   def test_stop
     @pm.stop
-    assert !@pm.curr_patch.running?
+    assert !@pm.patch.running?
     assert !@pm.running?
 
     @pm.all_songs.songs.each do |song|
@@ -44,18 +44,18 @@ class PatchMasterTest < PMTest
 
   def test_next_song
     @pm.next_song
-    assert_equal @pm.all_songs, @pm.curr_song_list
-    assert_equal @pm.all_songs.songs[1], @pm.curr_song
-    assert_equal @pm.all_songs.songs[1].patches[0], @pm.curr_patch
+    assert_equal @pm.all_songs, @pm.song_list
+    assert_equal @pm.all_songs.songs[1], @pm.song
+    assert_equal @pm.all_songs.songs[1].patches[0], @pm.patch
     assert_only_curr_patch_running
   end
 
   def test_next_song_end_of_song_list_does_nothing
     @pm.next_song
     @pm.next_song
-    assert_equal @pm.all_songs, @pm.curr_song_list
-    assert_equal @pm.all_songs.songs[1], @pm.curr_song
-    assert_equal @pm.all_songs.songs[1].patches[0], @pm.curr_patch
+    assert_equal @pm.all_songs, @pm.song_list
+    assert_equal @pm.all_songs.songs[1], @pm.song
+    assert_equal @pm.all_songs.songs[1].patches[0], @pm.patch
     assert @pm.all_songs.songs[1].patches[0].running?
     assert_only_curr_patch_running
   end
@@ -63,67 +63,67 @@ class PatchMasterTest < PMTest
   def test_prev_song
     @pm.next_song               # We've proven that next_song works
     @pm.prev_song
-    assert_equal @pm.all_songs, @pm.curr_song_list
-    assert_equal @pm.all_songs.songs[0], @pm.curr_song
-    assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_equal @pm.all_songs, @pm.song_list
+    assert_equal @pm.all_songs.songs[0], @pm.song
+    assert_equal @pm.all_songs.songs[0].patches[0], @pm.patch
     assert_only_curr_patch_running
   end
 
   def test_prev_song_start_of_song_list_does_nothing
     @pm.prev_song
-    assert_equal @pm.all_songs, @pm.curr_song_list
-    assert_equal @pm.all_songs.songs[0], @pm.curr_song
-    assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_equal @pm.all_songs, @pm.song_list
+    assert_equal @pm.all_songs.songs[0], @pm.song
+    assert_equal @pm.all_songs.songs[0].patches[0], @pm.patch
     assert_only_curr_patch_running
   end
 
   def test_next_patch
     @pm.next_patch
-    assert_equal @pm.all_songs, @pm.curr_song_list
-    assert_equal @pm.all_songs.songs[0], @pm.curr_song
-    assert_equal @pm.all_songs.songs[0].patches[1], @pm.curr_patch
+    assert_equal @pm.all_songs, @pm.song_list
+    assert_equal @pm.all_songs.songs[0], @pm.song
+    assert_equal @pm.all_songs.songs[0].patches[1], @pm.patch
     assert_only_curr_patch_running
   end
 
   def test_next_patch_end_of_song
     @pm.next_patch
     @pm.next_patch              # should call next song
-    assert_equal @pm.all_songs, @pm.curr_song_list
-    assert_equal @pm.all_songs.songs[1], @pm.curr_song
-    assert_equal @pm.all_songs.songs[1].patches[0], @pm.curr_patch
+    assert_equal @pm.all_songs, @pm.song_list
+    assert_equal @pm.all_songs.songs[1], @pm.song
+    assert_equal @pm.all_songs.songs[1].patches[0], @pm.patch
     assert_only_curr_patch_running
   end
 
   def test_prev_patch
     @pm.next_patch              # We've proven that next_patch works
     @pm.prev_patch
-    assert_equal @pm.all_songs, @pm.curr_song_list
-    assert_equal @pm.all_songs.songs[0], @pm.curr_song
-    assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_equal @pm.all_songs, @pm.song_list
+    assert_equal @pm.all_songs.songs[0], @pm.song
+    assert_equal @pm.all_songs.songs[0].patches[0], @pm.patch
     assert_only_curr_patch_running
   end
 
   def test_prev_patch_start_of_song
     @pm.prev_patch
-    assert_equal @pm.all_songs, @pm.curr_song_list
-    assert_equal @pm.all_songs.songs[0], @pm.curr_song
-    assert_equal @pm.all_songs.songs[0].patches[0], @pm.curr_patch
+    assert_equal @pm.all_songs, @pm.song_list
+    assert_equal @pm.all_songs.songs[0], @pm.song
+    assert_equal @pm.all_songs.songs[0].patches[0], @pm.patch
     assert_only_curr_patch_running
   end
 
   def test_goto_song
     @pm.goto_song('First')
     song = @pm.all_songs.find('First')
-    assert_equal song, @pm.curr_song
-    assert_equal song.patches.first, @pm.curr_patch
+    assert_equal song, @pm.song
+    assert_equal song.patches.first, @pm.patch
     assert_only_curr_patch_running
   end
 
   def test_goto_song_list
     @pm.goto_song_list('Tonight')
-    assert_equal "Tonight's Song List", @pm.curr_song_list.name
-    assert_equal @pm.curr_song_list.songs.first, @pm.curr_song
-    assert_equal @pm.curr_song_list.songs.first.patches.first, @pm.curr_patch
+    assert_equal "Tonight's Song List", @pm.song_list.name
+    assert_equal @pm.song_list.songs.first, @pm.song
+    assert_equal @pm.song_list.songs.first.patches.first, @pm.patch
     assert_only_curr_patch_running
   end
 
@@ -132,7 +132,7 @@ class PatchMasterTest < PMTest
     assert_not_nil song
     assert_equal 'First Song', song.name
 
-    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, "Second Song")
+    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, "SECOND SONG")
     assert_not_nil song
     assert_equal 'Second Song', song.name
 
@@ -147,15 +147,15 @@ class PatchMasterTest < PMTest
     @pm.load(EXAMPLE_DSL)
 
     assert @pm.running?
-    assert_equal 'All Songs', @pm.curr_song_list.name
-    assert_equal 'Second Song', @pm.curr_song.name
-    assert_equal 'Second Song, First Patch', @pm.curr_patch.name
+    assert_equal 'All Songs', @pm.song_list.name
+    assert_equal 'Second Song', @pm.song.name
+    assert_equal 'Second Song, First Patch', @pm.patch.name
   end
 
   def assert_only_curr_patch_running
     @pm.all_songs.songs.each do |song|
       song.patches.each do |patch|
-        if patch == @pm.curr_patch
+        if patch == @pm.patch
           assert patch.running?, "patch #{patch.name} should be running"
         else
           assert !patch.running?, "patch #{patch.name} should not be running"
