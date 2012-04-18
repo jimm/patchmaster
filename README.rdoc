@@ -1,3 +1,5 @@
+= PatchMaster
+
 PatchMaster is realtime MIDI performance software that alloweds a musician
 to totally reconfigure a MIDI setup instantaneously and modify the MIDI data
 while it's being sent.
@@ -102,10 +104,9 @@ At all times, when MIDI data comes in from an instrument two things happen:
 
 * The data is then sent next 
 
-While a patch is running (it is the current patch), each 
- connection is given
-the incoming bytes to process. incoming data on each
-of its connection's inputs is sent through one or more connections to the proper outputs. Each
+While a patch is running (it is the current patch), each connection is given
+the incoming bytes to process. incoming data on each of its connection's
+inputs is sent through one or more connections to the proper outputs. Each
 connection can filter and modify the data on the way:
 
 * The data is then processed by each conne
