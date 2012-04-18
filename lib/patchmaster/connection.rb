@@ -37,8 +37,8 @@ class Connection
 
   def accept_from_input?(bytes)
     return true if @input_chan == nil
-    return true if bytes[0] >= 0xf0
-    (bytes[0] & 0xf0) >= 0x80 && (bytes[0] & 0x0f) == @input_chan
+    return true unless bytes.channel?
+    bytes.note? && bytes.channel == @input_chan
   end
 
   # Returns true if the +@zone+ is nil (allowing all notes throught) or if
@@ -50,8 +50,8 @@ class Connection
   def midi_in(bytes)
     return unless accept_from_input?(bytes)
 
-    # TODO handle running bytes
-    high_nibble = bytes[0] & 0xf0
+    # TODO handle running bytes if needed
+    high_nibble = bytes.high_nibble
     case high_nibble
     when NOTE_ON, NOTE_OFF, POLY_PRESSURE
       return unless inside_zone?(bytes[1])
