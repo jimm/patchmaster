@@ -59,7 +59,8 @@ class Main
           when ?l
             file = PromptWindow.new('Load', 'Load file:').gets
             begin
-              load(file)
+              @pm.load(file)
+              message("Loaded #{file}")
             rescue => ex
               message(ex.to_s)
             end
@@ -67,6 +68,7 @@ class Main
             file = PromptWindow.new('Save', 'Save into file:').gets
             begin
               @pm.save(file)
+              message("Saved #{file}")
             rescue => ex
               message(ex.to_s)
             end

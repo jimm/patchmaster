@@ -10,7 +10,3 @@ require 'patchmaster/patchmaster'
 require 'patchmaster/trigger'
 require 'patchmaster/dsl'
 require 'patchmaster/app/main'
-
-def message(str)
-  PM::Main.instance.message(str)
-end

@@ -65,7 +65,7 @@ class PatchMaster < SimpleDelegator
 
   def save(file)
     DSL.new(@no_midi).save(file)
-    message("saved #{file}")
+    @loaded_file = file
   rescue => ex
     raise("error saving #{file}: #{ex}" + caller.join("\n"))
   end
@@ -124,17 +124,16 @@ class PatchMaster < SimpleDelegator
 
   def edit
     cmd = "#{ENV['VISUAL'] || ENV['EDITOR'] || 'vi'} #{@loaded_file}"
-    message(cmd) if $DEBUG
+    debug(cmd)
     system(cmd)
     load(@loaded_file)
   end
 
   def debug(str)
-    if $DEBUG
-      f = @debug_file || $stderr
-      f.puts str
-      f.flush
-    end
+    return unless $DEBUG
+    f = @debug_file || $stderr
+    f.puts str
+    f.flush
   end
 
   def close_debug_file
