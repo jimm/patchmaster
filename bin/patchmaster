@@ -18,11 +18,11 @@ OptionParser.new do |opts|
   opts.on("-n", "--no-midi", "Turn off MIDI processing") { use_midi = false }
 end.parse!(ARGV)
 
-# Must require patchmaster here because Singleton initialze code checks
-# $DEBUG.
+# Must require patchmaster here, after handling options, because Singleton
+# initialze code checks $DEBUG.
 require 'patchmaster'
 
-pm = PM::Main.instance
-pm.no_midi! if !use_midi
-pm.load(ARGV[0]) if ARGV[0]
-pm.run
+app = PM::Main.instance
+app.no_midi! if !use_midi
+app.load(ARGV[0]) if ARGV[0]
+app.run
