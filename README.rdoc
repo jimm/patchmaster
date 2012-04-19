@@ -87,7 +87,8 @@ any data on other channels is ignored.
 
 When a connection is started:
 
-* The start bytes from the patch, if any, are sent to the output instrument as-is
+* The start bytes from the patch, if any, are sent to the output instrument
+  as-is (in particular, status bytes' channels are not changed)
 
 * The program change is sent
 
@@ -96,43 +97,42 @@ When a connection is started:
 
 === Running
 
-At all times, when MIDI data comes in from an instrument two things happen:
+When MIDI data comes in from an instrument two things happen:
 
 * The data is sent to the instrument's triggers. Each trigger looks at the
   data and decides if it should act by send its message (for example
   +next_patch+ or +next_song+) to PM::PatchMaster.
 
-* The data is then sent
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* The data is then sent to the connections connected to the instrument, if
+  any. A patch's connections are connected to an input instrument when the
+  patch starts (becomes the active patch) and are disconnected when the
+  patch stops.
 
 While a patch is running (it is the current patch), each connection is given
-the incoming bytes to process. incoming data on each of its connection's
-inputs is sent through one or more connections to the proper outputs. Each
-connection can filter and modify the data on the way:
-
-* The data is then processed by each conne
+the incoming bytes to process. A connection can filter and modify the data
+on the way:
 
 * The data is ignored if it is not on the input instrument's selected
   channel
 
-* Note messages (note on, note off, and polyphonic pressure) are transposed.
+* Note messages (note on, note off, and polyphonic pressure) are transposed
 
 * Channel messages (note on, note off, polyphonic pressure, controller,
   program change, channel pressure, and pitch bend) have their channel
   changed to the output instrument's selected channel
 
-* The filter code, if any, is run and the result of that block becomes the
-  output data
+* If the connection has a filter, its block of code is run and the result of
+  that block becomes the bytes to be output. The filter may return an empty
+  array or nil which will prevent anything from being sent to the output
 
-* The resulting data, if any, is sent to the output instrument
+* The resulting bytes, if any, are sent to the output instrument
 
 === Stop
 
 When a connection is stopped:
 
 * The stop bytes from the patch, if any, are sent to the output instrument
-  as-is
+  as-is (in particular, status bytes' channels are not changed)
 
 * The connection removes itself from its input instrument's list of outgoing
   connections
@@ -159,7 +159,7 @@ Filter returns bytes. if bytes is nil or empty nothing sent.
 
 PatchMaster files describe your MIDI setup and define triggers, songs with
 their patches, and song lists. They are written in Ruby using a few special
-keywords (method names).
+keywords (Ruby method names).
 
 For a sample PatchMaster file, see
 examples/example.rb[https://github.com/jimm/patchmaster/blob/master/examples/example.rb].
