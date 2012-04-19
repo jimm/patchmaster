@@ -53,7 +53,9 @@ class Main
           when Key::F1
             help
           when 27               # escape
-            @pm.panic
+            # Twice in a row sends individual note-off commands
+            message('Sending panic note off messages...')
+            @pm.panic(@prev_cmd == 27)
             message('Panic sent')
           when ?l
             file = PromptWindow.new('Load', 'Load file:').gets
@@ -81,6 +83,7 @@ class Main
           when ?q
             break
           end
+          @prev_cmd = ch
         rescue => ex
           message(ex.to_s)
           @pm.debug caller.join("\n")
@@ -116,6 +119,7 @@ class Main
     @song_win = ListWindow.new(top_height, top_width, 0, top_width, 'Song')
     @patch_win = PatchWindow.new(bot_height, cols(), top_height, 0, 'Patch')
     @message_win = Window.new(1, cols(), lines()-1, 0)
+    @message_win.scrollok(false)
 
     third_height = top_height / 3
     width = cols() - (top_width * 2) - 1

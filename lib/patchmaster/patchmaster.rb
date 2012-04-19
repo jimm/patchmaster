@@ -115,11 +115,16 @@ class PatchMaster < SimpleDelegator
   end
 
   # Sends the +CM_ALL_NOTES_OFF+ controller message to all output
-  # instruments on all 16 MIDI channels.
-  def panic
+  # instruments on all 16 MIDI channels. If +individual_notes+ is +true+
+  # send individual +NOTE_OFF+ messages to all notes as well.
+  def panic(individual_notes=false)
+    debug("panic(#{individual_notes})")
     @outputs.values.each do |out|
       MIDI_CHANNELS.times do |chan|
         out.midi_out([CONTROLLER + chan, CM_ALL_NOTES_OFF, 0])
+        if individual_notes
+          128.times { |note| out.midi_out([NOTE_OFF + chan, note, 0]) }
+        end
       end
     end
   end
