@@ -114,6 +114,8 @@ class PatchMaster < SimpleDelegator
     @input_threads
   end
 
+  # Sends the +CM_ALL_NOTES_OFF+ controller message to all output
+  # instruments on all 16 MIDI channels.
   def panic
     @outputs.values.each do |out|
       MIDI_CHANNELS.times do |chan|
@@ -122,13 +124,30 @@ class PatchMaster < SimpleDelegator
     end
   end
 
+  # Opens the most recently loaded/saved file name in an editor. After
+  # editing, the file is re-loaded.
   def edit
-    cmd = "#{ENV['VISUAL'] || ENV['EDITOR'] || 'vi'} #{@loaded_file}"
+    editor_command = find_editor
+    unless editor_command
+      message("Can not find $VISUAL, $EDITOR, vim, or vi on your path")
+      return
+    end
+
+    cmd = "#{editor_command} #{@loaded_file}"
     debug(cmd)
     system(cmd)
     load(@loaded_file)
   end
 
+  # Return the first legit command from $VISUAL, $EDITOR, vim, vi, and
+  # notepad.exe.
+  def find_editor
+    @editor ||= [ENV['VISUAL'], ENV['EDITOR'], 'vim', 'vi', 'notepad.exe'].compact.detect do |cmd|
+      system('which', cmd) || File.exist?(cmd)
+    end
+  end
+
+  # Output +str+ to @debug_file or $stderr.
   def debug(str)
     return unless $DEBUG
     f = @debug_file || $stderr
