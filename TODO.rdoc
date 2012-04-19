@@ -1,5 +1,12 @@
 = To Do
 
+== Bugs
+
+* If start with no file and edit, upon reentering PatchMaster see "no method
+  'name' for nil"
+
+== New Features
+
 * Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 

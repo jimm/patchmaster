@@ -102,7 +102,9 @@ At all times, when MIDI data comes in from an instrument two things happen:
   data and decides if it should act by send its message (for example
   +next_patch+ or +next_song+) to PM::PatchMaster.
 
-* The data is then sent next 
+* The data is then sent
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 While a patch is running (it is the current patch), each connection is given
 the incoming bytes to process. incoming data on each of its connection's
@@ -153,11 +155,79 @@ swapping" of filter code.
 
 Filter returns bytes. if bytes is nil or empty nothing sent.
 
-= DSL
+= PatchMaster Files
 
-TODO write this. In the mean time, see link:../examples/example.rb .
+PatchMaster files describe your MIDI setup and define triggers, songs with
+their patches, and song lists. They are written in Ruby using a few special
+keywords (method names).
+
+For a sample PatchMaster file, see
+examples/example.rb[https://github.com/jimm/patchmaster/blob/master/examples/example.rb].
+
+== Editing PatchMaster Files
+
+You can create and edit PatchMaster files using any text editor you like.
+
+While running PatchMaster, the 'e' key lets you edit the file you loaded or
+most recently saved. If you have not yet loaded a file or you save the file
+to a different location, you'll have to use the 'l' load command to load
+that file.
+
+The edit command suspends PatchMaster and starts the editor defined by the
+environment variables +VISUAL+ or +EDITOR+. If neither of those are defined
+it tries 'vim', 'vi', and finally 'notepad.exe'.
+
+After editing a file, PatchMaster attempts to continue with the same song
+list, song, and patch that was current when you edited the file.
+
+== Anatomy of a PatchMaster File
+
+=== MIDI Instruments
+
+  input/output port, symbol, optional_name
+
+=== Triggers
+
+  trigger input_instrument_symbol, bytes, block
+
+Block can call PM::PatchMaster methods such as #next_patch or #prev_song.
+
+=== Songs
+
+  song name block
+
+==== Patches
+
+  patch name block
+
+* start_bytes
+* connection
+
+==== Connections
+
+  connection in_sym, in_chan_or_any, out_sym, out_chan, block
+
+* prog_chg
+* zone
+* filter
+
+===== Filters
+
+=== Song Lists
+
+== Aliases
+
+= Miscellaneous
+
+== Panic Button
+
+Hitting ESCAPE sends all-notes-off messages to every output instrument on
+all 16 MIDI channels. Hitting ESCAPE a second time sends individual note off
+messages to every note on all 16 channels to every output instrument.
 
 = Notes
+
+These are development notes, not end-user notes.
 
 * http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/index.html
 * http://heather.cs.ucdavis.edu/~matloff/UnixAndC/CLanguage/Curses.pdf
