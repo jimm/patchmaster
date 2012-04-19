@@ -26,7 +26,6 @@ class Main
     begin
       config_curses
       create_windows
-      message("Welcome to PatchMaster")
 
       loop do
         begin
