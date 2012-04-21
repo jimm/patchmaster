@@ -6,7 +6,7 @@ require 'rubygems/package_task'
 
 HERE = File.dirname(__FILE__)
 PROJECT_NAME = 'patchmaster'
-VERSION = '0.0.0'
+VERSION = '0.0.2'
 
 task :default => [:package]
 

@@ -88,9 +88,29 @@ class OutputInstrument < Instrument
 end
 
 class MockInputPort
+
+  # For MIDIEye::Listener
+  def self.is_compatible?(input)
+    true
+  end
+
+  def initialize(_=nil)
+  end
+
   def gets
     [{:data => [], :timestamp => 0}]
   end
+    
+  def poll
+    yield gets
+  end
+
+  def clear_buffer
+  end
+
+  # add this class to the Listener class' known input types
+  MIDIEye::Listener.input_types << self 
+
 end
 
 class MockOutputPort
