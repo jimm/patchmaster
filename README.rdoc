@@ -184,48 +184,48 @@ list, song, and patch that was current when you edited the file.
 
 === MIDI Instruments
 
-    Describes MIDI inputs and outputs.
+Describes MIDI inputs and outputs.
 
-      input/output port, symbol, optional_name
+  input/output port, symbol, optional_name
 
 === Triggers
 
-    Input MIDI messages can trigger behaviors.
+Input MIDI messages can trigger behaviors.
 
-      trigger input_instrument_symbol, bytes, block
+  trigger input_instrument_symbol, bytes, block
 
-    Block can call PM::PatchMaster methods such as #next_patch or #prev_song.
+Block can call PM::PatchMaster methods such as #next_patch or #prev_song.
 
 === Songs
 
-    A song is an list of patches.
+A song is an list of patches.
 
-      song name block
+  song name block
 
 ==== Patches
 
-    A patch contains connections.
+A patch contains connections.
 
-      patch name block
+  patch name block
 
-    * start_bytes
-    * connection
+* start_bytes
+* connection
 
 ==== Connections
 
-    Connects input to output.
+Connects input to output.
 
-      connection in_sym, in_chan_or_any, out_sym, out_chan, block
+  connection in_sym, in_chan_or_any, out_sym, out_chan, block
 
-    * prog_chg
-    * zone
-    * filter
+* prog_chg
+* zone
+* filter
 
 ===== Filters
 
 === Song Lists
 
-    Optional.
+Optional.
 
 == Aliases
 
