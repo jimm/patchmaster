@@ -1,3 +1,5 @@
+require 'midi-eye'
+
 # Ports are UniMIDI inputs or outputs.
 module PM
 
@@ -7,6 +9,7 @@ class Instrument
 
   def initialize(name, port_num, port)
     @name, @port_num, @port = name, port_num, port
+    PatchMaster.instance.debug("instrument #{name} @port = #{@port.inspect}")
   end
 
 end
@@ -33,8 +36,15 @@ class InputInstrument < Instrument
   end
 
   # Poll for more MIDI input and process it.
-  def process_messages
-    @port.gets.each { |event| midi_in(event[:data])  }
+  def start
+    PatchMaster.instance.debug("instrument #{name} start")
+    @listener = MIDIEye::Listener.new(@port).listen_for { |event| midi_in(event[:message].to_bytes) }
+    @listener.run(:background => true)
+  end
+
+  def stop
+    PatchMaster.instance.debug("instrument #{name} stop")
+    @listener.close
   end
 
   # Passes MIDI bytes on to triggers and to each output connection.

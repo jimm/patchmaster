@@ -33,7 +33,11 @@ KeyMaster[http://jimmenard.com/projects/keymaster/].
 
 = Requirements
 
-* {UniMIDI}[https://github.com/arirusso/unimidi] gem.
+* {midi-eye}[https://github.com/arirusso/midi-eye] gem, which in turn
+  requires (and will install automatically):
+** {midi-message}[https://github.com/arirusso/midi-message] gem.
+** {nibbler}[https://github.com/arirusso/nibbler] gem.
+** {unimidi}[https://github.com/arirusso/unimidi] gem.
 * Ruby 1.9 (because UniMIDI requires it).
 * Curses (comes with Ruby, but I'm not sure about JRuby)
 
