@@ -61,7 +61,8 @@ run PatchMaster without actually talking to any MIDI instruments.
 The +-d+ flag turns on debug mode. The app becomes slightly more verbose and
 logs everything to +/tmp/pm_debug.txt+.
 
-See "DSL" below for a description of the PatchMaster file format.
+See "Anatomy of a PatchMaster File" below for a description of the
+PatchMaster file format.
 
 = Patches
 
