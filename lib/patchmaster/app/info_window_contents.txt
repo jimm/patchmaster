@@ -1,7 +1,7 @@
-j, down  - next patch
-k, up    - prev patch
-n, left  - next song
-p, right - prev song
+j, down, space  - next patch
+k, up           - prev patch
+n, left         - next song
+p, right        - prev song
 
 g   - goto song
 t   - goto song list

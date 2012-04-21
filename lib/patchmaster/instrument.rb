@@ -9,7 +9,6 @@ class Instrument
 
   def initialize(name, port_num, port)
     @name, @port_num, @port = name, port_num, port
-    PatchMaster.instance.debug("instrument #{name} @port = #{@port.inspect}")
   end
 
 end

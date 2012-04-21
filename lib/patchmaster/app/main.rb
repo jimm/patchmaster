@@ -33,31 +33,31 @@ class Main
           ch = getch
           message("ch = #{ch}") if $DEBUG
           case ch
-          when ?j, Key::DOWN
+          when 'j', Key::DOWN, ' '
             @pm.next_patch
-          when ?k, Key::UP
+          when 'k', Key::UP
             @pm.prev_patch
-          when ?n, Key::LEFT
+          when 'n', Key::LEFT
             @pm.next_song
-          when ?p, Key::RIGHT
+          when 'p', Key::RIGHT
             @pm.prev_song
-          when ?g
+          when 'g'
             name = PromptWindow.new('Go To Song', 'Go to song:').gets
             @pm.goto_song(name)
-          when ?t
+          when 't'
             name = PromptWindow.new('Go To Song List', 'Go to Song List:').gets
             @pm.goto_song_list(name)
-          when ?e
+          when 'e'
             close_screen
             @pm.edit
           when Key::F1
             help
-          when 27               # escape
+          when 27        # "\e" doesn't work here
             # Twice in a row sends individual note-off commands
             message('Sending panic note off messages...')
             @pm.panic(@prev_cmd == 27)
             message('Panic sent')
-          when ?l
+          when 'l'
             file = PromptWindow.new('Load', 'Load file:').gets
             begin
               @pm.load(file)
@@ -65,7 +65,7 @@ class Main
             rescue => ex
               message(ex.to_s)
             end
-          when ?s
+          when 's'
             file = PromptWindow.new('Save', 'Save into file:').gets
             begin
               @pm.save(file)
@@ -73,14 +73,14 @@ class Main
             rescue => ex
               message(ex.to_s)
             end
-          when ??
+          when '?'
             if $DEBUG
               require 'pp'
               out = ''
               str = pp(@pm, out)
               message("pm = #{out}")
             end
-          when ?q
+          when 'q'
             break
           end
           @prev_cmd = ch
