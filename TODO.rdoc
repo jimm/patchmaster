@@ -2,6 +2,8 @@
 
 == Bugs
 
+* Processing (reading?) of MIDI data is way too slow.
+
 * If start with no file and edit, upon reentering PatchMaster see "no method
   'name' for nil"
 

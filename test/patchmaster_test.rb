@@ -26,7 +26,7 @@ class PatchMasterTest < Test::Unit::TestCase
   end
 
   def test_running
-    assert @pm.running?
+    assert @pm.running?, "PatchMaster instance should be running"
     assert_only_curr_patch_running
   end
 
@@ -146,7 +146,7 @@ class PatchMasterTest < Test::Unit::TestCase
     @pm.next_song
     @pm.load(EXAMPLE_DSL)
 
-    assert @pm.running?
+    assert @pm.running?, "PatchMaster instance should be running"
     assert_equal 'All Songs', @pm.song_list.name
     assert_equal 'Second Song', @pm.song.name
     assert_equal 'Second Song, First Patch', @pm.patch.name

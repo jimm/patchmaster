@@ -81,37 +81,20 @@ class PatchMaster < SimpleDelegator
   end
 
   # If +init_cursor+ is +true+ (the default), initializes current song list,
-  # song, and patch. Starts a new thread that listens for MIDI input and
-  # processes it.
+  # song, and patch.
   def start(init_cursor = true)
     @cursor.init if init_cursor
     @cursor.patch.start if @cursor.patch
-
-    @input_threads = ThreadGroup.new
-    @inputs.values.each do |input|
-      t = Thread.new(input) do |instrument|
-        loop { instrument.process_messages }
-      end
-      @input_threads.add(t)
-      debug("#{Time.now} Thread #{t} started for #{input.name}")
-    end
-    @input_threads.enclose
+    @running = true
   end
 
-  # Stops the MIDI input threads.
   def stop
-    if @input_threads
-      @input_threads.list.each do |t|
-        Thread.kill(t)
-        debug("#{Time.now} Thread #{t} stopped")
-      end
-      @input_threads = nil
-    end
     @cursor.patch.stop if @cursor.patch
+    @running = false
   end
 
   def running?
-    @input_threads
+    @running
   end
 
   # Sends the +CM_ALL_NOTES_OFF+ controller message to all output

@@ -28,10 +28,14 @@ class Connection
     midi_out(start_bytes) if start_bytes
     midi_out([PROGRAM_CHANGE + @output_chan, @pc_prog]) if pc?
     @input.add_connection(self)
+    @thread = Thread.new(@input) do |instrument|
+      loop { instrument.process_messages }
+    end
   end
 
   def stop(stop_bytes=nil)
     midi_out(stop_bytes) if stop_bytes
+    Thread.kill(@thread)
     @input.remove_connection(self)
   end
 
