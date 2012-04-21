@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class InstrumentTest < PMTest
+class InstrumentTest < Test::Unit::TestCase
 
   def setup
-    @data = midi_data(1, 2, 3)
+    @data = [1, 2, 3]
     @in_instrument = PM::InputInstrument.new('test_in', 0, true)
     @in_instrument.port.data_to_send = @data
     @out_instrument = PM::OutputInstrument.new('test_out', 0, true)
@@ -17,7 +17,7 @@ class InstrumentTest < PMTest
   def test_process_messages_sends_to_connection
     @in_instrument.add_connection(@conn)
     @in_instrument.process_messages
-    assert_equal @data.first, @conn.bytes_received
+    assert_equal @data, @conn.bytes_received
   end
 
   def test_process_messages_sends_to_multiple_connections
@@ -26,12 +26,12 @@ class InstrumentTest < PMTest
     @in_instrument.add_connection(conn2)
 
     @in_instrument.process_messages
-    assert_equal @data.first, @conn.bytes_received
-    assert_equal @data.first, conn2.bytes_received
+    assert_equal @data, @conn.bytes_received
+    assert_equal @data, conn2.bytes_received
   end
 
   def test_output_sends_to_port
-    @out_instrument.midi_out(@data.first)
-    assert_equal @data.first, @out_instrument.port.buffer
+    @out_instrument.midi_out(@data)
+    assert_equal @data, @out_instrument.port.buffer
   end
 end

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ConnectionTest < PMTest
+class ConnectionTest < Test::Unit::TestCase
 
   def setup
     @in_instrument = PM::InputInstrument.new('test_in', 0, true)

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TriggerTest < PMTest
+class TriggerTest < Test::Unit::TestCase
 
   def setup
     @pm = PM::PatchMaster.instance

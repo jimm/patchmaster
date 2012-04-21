@@ -34,7 +34,7 @@ class InputInstrument < Instrument
 
   # Poll for more MIDI input and process it.
   def process_messages
-    @port.gets_data.each { |bytes| midi_in(bytes) }
+    @port.gets.each { |event| midi_in(event[:data])  }
   end
 
   # Passes MIDI bytes on to triggers and to each output connection.
@@ -77,8 +77,8 @@ class OutputInstrument < Instrument
 end
 
 class MockInputPort
-  def gets_data
-    []
+  def gets
+    [{:data => [], :timestamp => 0}]
   end
 end
 

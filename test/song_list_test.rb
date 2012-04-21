@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SongListTest < PMTest
+class SongListTest < Test::Unit::TestCase
 
   def setup
     @song_info = []

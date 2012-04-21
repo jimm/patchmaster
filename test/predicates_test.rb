@@ -1,7 +1,7 @@
 require 'test_helper'
 
 # Not gonna test everything exhaustively.
-class PredicatesTest < PMTest
+class PredicatesTest < Test::Unit::TestCase
 
   include PM
 

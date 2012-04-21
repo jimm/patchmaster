@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PatchMasterTest < PMTest
+class PatchMasterTest < Test::Unit::TestCase
 
   EXAMPLE_DSL = File.join(File.dirname(__FILE__), 'example_dsl.rb')
 

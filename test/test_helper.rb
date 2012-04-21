@@ -6,17 +6,21 @@ PM::PatchMaster.instance.no_midi!
 
 module PM
 
-# To help with testing, we replace MockInputPort#gets_data and
+# To help with testing, we replace MockInputPort#gets and
 # MockOutputPort#puts with versions that send what we want and save what is
 # received.
 class MockInputPort
 
   attr_accessor :data_to_send
 
-  def gets_data
+  def initialize
+    @t0 = (Time.now.to_f * 1000).to_i
+  end
+
+  def gets
     retval = @data_to_send || []
     @data_to_send = []
-    retval
+    [{:data => retval, :timestamp => (Time.now.to_f * 1000).to_i - @t0}]
   end
 end
 
@@ -46,13 +50,4 @@ class TestConnection < PM::Connection
     midi_out(bytes)
   end
 
-end
-
-class PMTest < Test::Unit::TestCase
-
-  # Data comes out of UniMIDI::Input#gets_ata as an array of arrays of MIDI
-  # bytes.
-  def midi_data(*bytes)
-    [bytes]
-  end
 end
