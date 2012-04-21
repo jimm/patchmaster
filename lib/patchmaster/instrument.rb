@@ -5,7 +5,7 @@ module PM
 
 class Instrument
 
-  attr_reader :name, :port_num, :port, :listener
+  attr_reader :name, :port_num, :port
 
   def initialize(name, port_num, port)
     @name, @port_num, @port = name, port_num, port
@@ -18,6 +18,7 @@ end
 class InputInstrument < Instrument
 
   attr_accessor :connections, :triggers
+  attr_reader :listener
 
   # If +port+ is nil (the normal case), creates either a real or a mock port
   def initialize(name, port_num, no_midi=false)
