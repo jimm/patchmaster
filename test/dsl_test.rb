@@ -85,7 +85,7 @@ class DSLTest < Test::Unit::TestCase
     @dsl.load(EXAMPLE_DSL)
     @dsl.save('/tmp/dsl_test_save_file_contents.rb')
     str = IO.read(f)
-    assert_match 'output 6, :ws, "WaveStation"', str
+    assert_match 'output 1, :ws, "WaveStation"', str
     assert_match "trigger :mb, [176, 50, 0] { next_patch }", str
     assert_match "trigger :mb, [176, 52, 0] { next_song }", str
     assert_match 'filter { |c, b| b }       # no-op', str
