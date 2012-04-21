@@ -10,6 +10,9 @@
 * Default instrument name should be UniMIDI +pretty_name+, not stringified
   symbol.
 
+* Store instrument symbol in instrument. Make PM::PatchMaster inputs and
+  outputs arrays, not hashes.
+
 * Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 

@@ -86,10 +86,12 @@ class PatchMaster < SimpleDelegator
     @cursor.init if init_cursor
     @cursor.patch.start if @cursor.patch
     @running = true
+    @inputs.values.map(&:start)
   end
 
   def stop
     @cursor.patch.stop if @cursor.patch
+    @inputs.values.map(&:stop)
     @running = false
   end
 

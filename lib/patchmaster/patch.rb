@@ -22,7 +22,6 @@ class Patch
   def start
     unless @running
       @connections.each { |conn| conn.start(@start_bytes) }
-      @connections.map(&:input).uniq.each { |input| input.start }
       @running = true
     end
   end
@@ -36,7 +35,6 @@ class Patch
     if @running
       @running = false
       @connections.each { |conn| conn.stop(@stop_bytes) }
-      @connections.map(&:input).uniq.each { |input| input.stop }
     end
   end
 end

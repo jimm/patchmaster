@@ -5,7 +5,7 @@ module PM
 
 class Instrument
 
-  attr_reader :name, :port_num, :port
+  attr_reader :name, :port_num, :port, :listener
 
   def initialize(name, port_num, port)
     @name, @port_num, @port = name, port_num, port
@@ -38,12 +38,14 @@ class InputInstrument < Instrument
   # Poll for more MIDI input and process it.
   def start
     PatchMaster.instance.debug("instrument #{name} start")
+    @port.clear_buffer
     @listener = MIDIEye::Listener.new(@port).listen_for { |event| midi_in(event[:message].to_bytes) }
     @listener.run(:background => true)
   end
 
   def stop
     PatchMaster.instance.debug("instrument #{name} stop")
+    @port.clear_buffer
     @listener.close
   end
 
