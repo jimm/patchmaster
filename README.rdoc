@@ -1,7 +1,7 @@
 = PatchMaster
 
-PatchMaster is realtime MIDI performance software that alloweds a musician
-to totally reconfigure a MIDI setup instantaneously and modify the MIDI data
+PatchMaster is realtime MIDI performance software that allows a musician to
+totally reconfigure a MIDI setup instantaneously and modify the MIDI data
 while it's being sent.
 
 With PatchMaster a performer can split controlling keyboards, layer MIDI
