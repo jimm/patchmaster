@@ -33,12 +33,13 @@ KeyMaster[http://jimmenard.com/projects/keymaster/].
 
 = Requirements
 
-* {midi-eye}[https://github.com/arirusso/midi-eye] gem, which in turn
-  requires (and will install automatically):
+* {midi-eye}[https://github.com/arirusso/midi-eye] gem, which will be
+  installed automatically if you install PatchMaster as a gem. midi-eye in
+  turn requires (and will install automatically):
   * {midi-message}[https://github.com/arirusso/midi-message]
   * {nibbler}[https://github.com/arirusso/nibbler]
   * {unimidi}[https://github.com/arirusso/unimidi]
-* Ruby 1.9 (because UniMIDI requires it).
+* Ruby 1.9 (because UniMIDI requires it)
 * Curses (comes with Ruby, but I'm not sure about JRuby)
 
 = Installation
@@ -256,5 +257,7 @@ These are development notes, not end-user notes.
 * http://heather.cs.ucdavis.edu/~matloff/UnixAndC/CLanguage/Curses.pdf
 * http://www.ruby-doc.org/stdlib-1.9.3/libdoc/curses/rdoc/index.html
 * man ncurses
+
+:include:CHANGES.rdoc
 
 :include:TODO.rdoc

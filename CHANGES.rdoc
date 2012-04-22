@@ -1,0 +1,14 @@
+= 0.0.4
+
+* Fixed gem dependency in Rakefile
+
+* Added a way to run the app without windows
+
+= 0.0.3
+
+* Added missing DSL stop_bytes method so PatchMaster files can now specify
+  stop_bytes in a patch
+
+= 0.0.1
+
+* initial release

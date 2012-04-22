@@ -6,7 +6,7 @@ require 'rubygems/package_task'
 
 HERE = File.dirname(__FILE__)
 PROJECT_NAME = 'patchmaster'
-GEM_VERSION = '0.0.3'
+GEM_VERSION = '0.0.4'
 GEM_DATE = Time.now.strftime('%Y-%m-%d')
 
 task :default => [:package]
