@@ -89,10 +89,21 @@ class PatchMaster < SimpleDelegator
     @inputs.values.map(&:start)
   end
 
+  # Stop everything, including input instruments' MIDIEye listener threads.
   def stop
     @cursor.patch.stop if @cursor.patch
     @inputs.values.map(&:stop)
     @running = false
+  end
+
+  # Call #start, wait for inputs' MIDIEye listener threads to finish, then
+  # call #stop. Note that normally nothing stops those threads, so this is
+  # used as a way to make sure the script doesn't quit until killed by
+  # something like SIGINT.
+  def run
+    start(true)
+    @inputs.values.each { |input| input.listener.join }
+    stop
   end
 
   def running?

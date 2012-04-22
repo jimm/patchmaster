@@ -49,9 +49,14 @@ To install as a gem, type
 
 = Running PatchMaster
 
-  patchmaster [-n] [-d] [patchmaster_file]
+  patchmaster [-t] [-n] [-d] [patchmaster_file]
 
 Starts PatchMaster and optionally loads +patchmaster_file+.
+
+The +-t+ flag runs the app without Curses windows. All output will go to the
+console. The app will run until interrupted. (If you do this, you might want
+to create a trigger that calls +panic+, because you won't be able to use the
+computer keyboard to do that.)
 
 The +-n+ flag tells PatchMaster to not use MIDI. All MIDI errors such as not
 being able to connect to the MIDI instruments specified in pm_file are
