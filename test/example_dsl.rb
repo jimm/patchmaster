@@ -12,6 +12,7 @@ trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_8, 0] { prev_song }
 song "First Song" do
   patch "First Song, First Patch" do
     start_bytes [TUNE_REQUEST]
+    stop_bytes [STOP]
     connection :mb, nil, :kz, 2 do  # all chans from :mb, out to chan 2 on :kz
       prog_chg 64
       zone C4, B5

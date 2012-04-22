@@ -60,6 +60,10 @@ class DSL
     @patch.start_bytes = bytes
   end
 
+  def stop_bytes(bytes)
+    @patch.stop_bytes = bytes
+  end
+
   def connection(in_sym, in_chan, out_sym, out_chan)
     input = @pm.inputs[in_sym]
     in_chan = nil if in_chan == :all || in_chan == :any

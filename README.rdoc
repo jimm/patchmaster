@@ -214,6 +214,7 @@ A patch contains connections.
   patch name block
 
 * start_bytes
+* stop_bytes
 * connection
 
 ==== Connections

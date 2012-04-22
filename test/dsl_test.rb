@@ -39,6 +39,7 @@ class DSLTest < Test::Unit::TestCase
 
     patch = song.patches[0]
     assert_equal [PM::TUNE_REQUEST], patch.start_bytes
+    assert_equal [PM::STOP], patch.stop_bytes
     assert_equal 3, patch.connections.length
 
     conn = patch.connections[0]

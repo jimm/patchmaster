@@ -13,6 +13,8 @@
 * Store instrument symbol in instrument. Make PM::PatchMaster inputs and
   outputs arrays, not hashes.
 
+* Documentation: examples of each of the DSL methods.
+
 * Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 
