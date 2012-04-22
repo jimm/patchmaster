@@ -6,7 +6,8 @@ require 'rubygems/package_task'
 
 HERE = File.dirname(__FILE__)
 PROJECT_NAME = 'patchmaster'
-VERSION = '0.0.3'
+GEM_VERSION = '0.0.3'
+GEM_DATE = Time.now.strftime('%Y-%m-%d')
 
 task :default => [:package]
 
@@ -25,8 +26,8 @@ end
 
 spec = Gem::Specification.new do |s|
   s.name        = PROJECT_NAME
-  s.version     = VERSION
-  s.date        = '2012-04-09'
+  s.version     = GEM_VERSION
+  s.date        = GEM_DATE
   s.summary     = "Realtime MIDI setup configuration and MIDI filtering"
   s.description = <<EOS
 PatchMaster is realtime MIDI performance software that alloweds a musician
@@ -50,7 +51,7 @@ end
 
 desc "Publish the gem to RubyGems.org"
 task :publish => [:rdoc, :package] do
-  system "gem push pkg/#{PROJECT_NAME}-#{VERSION}.gem"
+  system "gem push pkg/#{PROJECT_NAME}-#{GEM_VERSION}.gem"
 end
 
 desc "Clean up rdoc and packages"
