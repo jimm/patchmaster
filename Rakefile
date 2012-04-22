@@ -40,7 +40,7 @@ EOS
   s.files       = FileList["bin/*", "lib/**/*"].to_a
   s.test_files  = FileList["test/**/test*.rb"].to_a
   s.homepage    = "https://github.com/jimm/#{PROJECT_NAME}"
-  s.add_runtime_dependency 'unimidi'
+  s.add_runtime_dependency 'midi-eye'
   s.license     = 'Ruby'
 end
 
