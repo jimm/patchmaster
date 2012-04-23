@@ -73,8 +73,8 @@ class PatchMaster < SimpleDelegator
   # Initializes the cursor and all data.
   def init_data
     @cursor.clear
-    @inputs = {}
-    @outputs = {}
+    @inputs = []
+    @outputs = []
     @song_lists = []
     @all_songs = SortedSongList.new('All Songs')
     @song_lists << @all_songs
@@ -86,23 +86,25 @@ class PatchMaster < SimpleDelegator
     @cursor.init if init_cursor
     @cursor.patch.start if @cursor.patch
     @running = true
-    @inputs.values.map(&:start)
+    @inputs.map(&:start)
   end
 
   # Stop everything, including input instruments' MIDIEye listener threads.
   def stop
     @cursor.patch.stop if @cursor.patch
-    @inputs.values.map(&:stop)
+    @inputs.map(&:stop)
     @running = false
   end
 
+  # Run PatchMaster without the GUI. Don't use this when using PM::Main.
+  #
   # Call #start, wait for inputs' MIDIEye listener threads to finish, then
   # call #stop. Note that normally nothing stops those threads, so this is
   # used as a way to make sure the script doesn't quit until killed by
   # something like SIGINT.
   def run
     start(true)
-    @inputs.values.each { |input| input.listener.join }
+    @inputs.each { |input| input.listener.join }
     stop
   end
 
@@ -115,7 +117,7 @@ class PatchMaster < SimpleDelegator
   # send individual +NOTE_OFF+ messages to all notes as well.
   def panic(individual_notes=false)
     debug("panic(#{individual_notes})")
-    @outputs.values.each do |out|
+    @outputs.each do |out|
       MIDI_CHANNELS.times do |chan|
         out.midi_out([CONTROLLER + chan, CM_ALL_NOTES_OFF, 0])
         if individual_notes

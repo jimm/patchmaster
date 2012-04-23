@@ -5,10 +5,10 @@ module PM
 
 class Instrument
 
-  attr_reader :name, :port_num, :port
+  attr_reader :sym, :name, :port_num, :port
 
-  def initialize(name, port_num, port)
-    @name, @port_num, @port = name, port_num, port
+  def initialize(sym, name, port_num, port)
+    @sym, @name, @port_num, @port = sym, name, port_num, port
     @name ||= @port.name if @port
   end
 
@@ -22,8 +22,8 @@ class InputInstrument < Instrument
   attr_reader :listener
 
   # If +port+ is nil (the normal case), creates either a real or a mock port
-  def initialize(name, port_num, no_midi=false)
-    super(name, port_num, input_port(port_num, no_midi))
+  def initialize(sym, name, port_num, no_midi=false)
+    super(sym, name, port_num, input_port(port_num, no_midi))
     @connections = []
     @triggers = []
   end
@@ -73,8 +73,8 @@ end
 
 class OutputInstrument < Instrument
 
-  def initialize(name, port_num, no_midi=false)
-    super(name, port_num, output_port(port_num, no_midi))
+  def initialize(sym, name, port_num, no_midi=false)
+    super(sym, name, port_num, output_port(port_num, no_midi))
   end
 
   def midi_out(bytes)

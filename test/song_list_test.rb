@@ -32,8 +32,10 @@ class SongListTest < Test::Unit::TestCase
   end
 
   def create_patch(n)
-    in_instrument = PM::InputInstrument.new("test_in #{n}", 0, true)
-    out_instrument = PM::OutputInstrument.new("test_out #{n}", 0, true)
+    name = "test_in_#{n}"
+    in_instrument = PM::InputInstrument.new(name.to_sym, name, 0, true)
+    name = "test_out_#{n}"
+    out_instrument = PM::OutputInstrument.new(name.to_sym, name, 0, true)
     options = {:pc_prog => n, :zone => (40..60), :xpose => 12}
     conn = PM::Connection.new(in_instrument, nil, out_instrument, 2, nil, options)
     patch = PM::Patch.new("Untitled #{n}")

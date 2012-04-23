@@ -17,17 +17,23 @@ class DSLTest < Test::Unit::TestCase
   def test_load
     @dsl.load(EXAMPLE_DSL)
 
-    assert_kind_of PM::InputInstrument, @pm.inputs[:mb]
-    assert_kind_of PM::InputInstrument, @pm.inputs[:ws]
-    assert_kind_of PM::OutputInstrument, @pm.outputs[:kz]
-    assert_kind_of PM::OutputInstrument, @pm.outputs[:sj]
-    assert_equal 'MockOutputPort', @pm.outputs[:sj].name # name from symbol
+    mb = @pm.inputs.detect { |instr| instr.sym == :mb }
+    assert_not_nil mb
+    assert_kind_of PM::InputInstrument, mb
 
-    triggers = @pm.inputs[:mb].triggers
+    kz = @pm.outputs.detect { |instr| instr.sym == :kz }
+    assert_kind_of PM::OutputInstrument, kz
+
+    sj = @pm.outputs.detect { |instr| instr.sym == :sj }
+    assert_kind_of PM::OutputInstrument, sj
+    assert_equal 'MockOutputPort', sj.name # get name from port
+
+
+    triggers = mb.triggers
     assert_equal 4, triggers.length
     trigger = triggers[0]
     assert_equal [PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0], trigger.bytes
-    assert_equal "{ prev_song }", @pm.inputs[:mb].triggers[3].text
+    assert_equal "{ prev_song }", mb.triggers[3].text
 
     assert_equal 2, @pm.all_songs.songs.length
     song = @pm.all_songs.find('First Song')
@@ -44,9 +50,9 @@ class DSLTest < Test::Unit::TestCase
 
     conn = patch.connections[0]
 
-    assert_equal @pm.inputs[:mb], conn.input
+    assert_equal mb, conn.input
     assert_nil conn.input_chan
-    assert_equal @pm.outputs[:kz], conn.output
+    assert_equal kz, conn.output
     assert_equal 1, conn.output_chan
 
     assert_equal 64, conn.pc_prog

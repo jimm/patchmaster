@@ -5,11 +5,11 @@ class PatchTest < Test::Unit::TestCase
   def setup
     @pm = PM::PatchMaster.instance
 
-    @in_instrument = PM::InputInstrument.new('test_in', 0, true)
-    @pm.inputs[:in] = @in_instrument
+    @in_instrument = PM::InputInstrument.new(:tin, 'test_in', 0, true)
+    @pm.inputs << @in_instrument
 
-    @out_instrument = PM::OutputInstrument.new('test_out', 0, true)
-    @pm.outputs[:out] = @out_instrument
+    @out_instrument = PM::OutputInstrument.new(:tout, 'test_out', 0, true)
+    @pm.outputs << @out_instrument
 
     @options = {:pc_prog => 3, :zone => (40..60), :xpose => 12}
     @patch = PM::Patch.new('Untitled')
@@ -53,7 +53,7 @@ class PatchTest < Test::Unit::TestCase
     assert_equal [@in_instrument], @patch.inputs
 
     # Add another connection that uses a different one
-    second_in_instrument = PM::InputInstrument.new('', 0, true)
+    second_in_instrument = PM::InputInstrument.new(:tin2, '', 0, true)
     @patch << PM::Connection.new(second_in_instrument, nil, nil, nil)
     inputs = @patch.inputs
     assert_equal 2, inputs.size

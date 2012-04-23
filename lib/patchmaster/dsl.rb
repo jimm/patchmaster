@@ -14,6 +14,8 @@ class DSL
 
   def load(file)
     contents = IO.read(file)
+    @inputs = {}
+    @outputs = {}
     @triggers = []
     @filters = []
     @songs = {}                 # key = name, value = song
@@ -23,21 +25,25 @@ class DSL
   end
 
   def input(port_num, sym, name=nil)
-    @pm.inputs[sym] = InputInstrument.new(name, port_num, @no_midi)
+    input = InputInstrument.new(sym, name, port_num, @no_midi)
+    @inputs[sym] = input
+    @pm.inputs << input
   rescue => ex
     raise "input: error creating input instrument \"#{name}\" on input port #{port_num}: #{ex}"
   end
   alias_method :in, :input
 
   def output(port_num, sym, name=nil)
-    @pm.outputs[sym] = OutputInstrument.new(name, port_num, @no_midi)
+    output = OutputInstrument.new(sym, name, port_num, @no_midi)
+    @outputs[sym] = output
+    @pm.outputs << output
   rescue => ex
     raise "output: error creating output instrument \"#{name}\" on output port #{port_num}: #{ex}"
   end
   alias_method :out, :output
 
   def trigger(instrument_sym, bytes, &block)
-    instrument = @pm.inputs[instrument_sym]
+    instrument = @inputs[instrument_sym]
     raise "trigger: error finding instrument #{instrument_sym}" unless instrument
     t = Trigger.new(bytes, block)
     instrument.triggers << t
@@ -65,10 +71,10 @@ class DSL
   end
 
   def connection(in_sym, in_chan, out_sym, out_chan)
-    input = @pm.inputs[in_sym]
+    input = @inputs[in_sym]
     in_chan = nil if in_chan == :all || in_chan == :any
     raise "can't find input instrument #{in_sym}" unless input
-    output = @pm.outputs[out_sym]
+    output = @outputs[out_sym]
     raise "can't find outputput instrument #{out_sym}" unless output
 
     @conn = Connection.new(input, in_chan, output, out_chan)
@@ -130,19 +136,19 @@ class DSL
   end
 
   def save_instruments(f)
-    @pm.inputs.each do |sym, instr|
-      f.puts "input #{instr.port_num}, :#{sym}, #{quoted(instr.name)}"
+    @pm.inputs.each do |instr|
+      f.puts "input #{instr.port_num}, :#{instr.sym}, #{quoted(instr.name)}"
     end
-    @pm.outputs.each do |sym, instr|
-      f.puts "output #{instr.port_num}, :#{sym}, #{quoted(instr.name)}"
+    @pm.outputs.each do |instr|
+      f.puts "output #{instr.port_num}, :#{instr.sym}, #{quoted(instr.name)}"
     end
     f.puts
   end
 
   def save_triggers(f)
-    @pm.inputs.each do |sym, instrument|
+    @pm.inputs.each do |instrument|
       instrument.triggers.each do |trigger|
-        str = "trigger :#{sym}, #{trigger.bytes.inspect} #{trigger.text}"
+        str = "trigger :#{instrument.sym}, #{trigger.bytes.inspect} #{trigger.text}"
         f.puts str
       end
     end
@@ -166,11 +172,9 @@ class DSL
   end
 
   def save_connection(f, conn)
-    in_sym = @pm.inputs.key(conn.input)
     in_chan = conn.input_chan ? conn.input_chan + 1 : 'nil'
-    out_sym = @pm.outputs.key(conn.output)
     out_chan = conn.output_chan + 1
-    f.puts "    conn :#{in_sym}, #{in_chan}, :#{out_sym}, #{out_chan} do"
+    f.puts "    conn :#{conn.input.sym}, #{in_chan}, :#{conn.output.sym}, #{out_chan} do"
     f.puts "      prog_chg #{conn.pc_prog}" if conn.pc?
     f.puts "      zone #{conn.note_num_to_name(conn.zone.begin)}, #{conn.note_num_to_name(conn.zone.end)}" if conn.zone
     f.puts "      xpose #{conn.xpose}" if conn.xpose
