@@ -21,7 +21,7 @@ class DSLTest < Test::Unit::TestCase
     assert_kind_of PM::InputInstrument, @pm.inputs[:ws]
     assert_kind_of PM::OutputInstrument, @pm.outputs[:kz]
     assert_kind_of PM::OutputInstrument, @pm.outputs[:sj]
-    assert_equal 'sj', @pm.outputs[:sj].name # name from symbol
+    assert_equal 'MockOutputPort', @pm.outputs[:sj].name # name from symbol
 
     triggers = @pm.inputs[:mb].triggers
     assert_equal 4, triggers.length

@@ -18,6 +18,10 @@ class MockInputPort
     @t0 = (Time.now.to_f * 1000).to_i
   end
 
+  def name
+    'MockInputPort'
+  end
+
   def gets
     retval = @data_to_send || []
     @data_to_send = []
@@ -31,6 +35,10 @@ class MockOutputPort
 
   def initialize
     @buffer = []
+  end
+
+  def name
+    'MockOutputPort'
   end
 
   def puts(bytes)

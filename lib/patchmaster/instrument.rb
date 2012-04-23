@@ -9,6 +9,7 @@ class Instrument
 
   def initialize(name, port_num, port)
     @name, @port_num, @port = name, port_num, port
+    @name ||= @port.name if @port
   end
 
 end

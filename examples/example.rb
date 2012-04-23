@@ -2,7 +2,7 @@ input  0, :mb, 'midiboard'
 input  1, :ws, 'WaveStation'
 output 1, :ws, 'WaveStation'
 output 2, :kz, 'K2000R'
-output 4, :sj                   # name will be "sj"
+output 4, :sj
 
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }

@@ -23,14 +23,14 @@ class DSL
   end
 
   def input(port_num, sym, name=nil)
-    @pm.inputs[sym] = InputInstrument.new(name || sym.to_s, port_num, @no_midi)
+    @pm.inputs[sym] = InputInstrument.new(name, port_num, @no_midi)
   rescue => ex
     raise "input: error creating input instrument \"#{name}\" on input port #{port_num}: #{ex}"
   end
   alias_method :in, :input
 
   def output(port_num, sym, name=nil)
-    @pm.outputs[sym] = OutputInstrument.new(name || sym.to_s, port_num, @no_midi)
+    @pm.outputs[sym] = OutputInstrument.new(name, port_num, @no_midi)
   rescue => ex
     raise "output: error creating output instrument \"#{name}\" on output port #{port_num}: #{ex}"
   end
