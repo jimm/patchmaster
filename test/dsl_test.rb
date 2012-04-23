@@ -27,7 +27,7 @@ class DSLTest < Test::Unit::TestCase
 
     sj = @pm.outputs.detect { |instr| instr.sym == :sj }
     assert_kind_of PM::OutputInstrument, sj
-    assert_equal 'MockOutputPort', sj.name # get name from port
+    assert_equal 'MockOutputPort 4', sj.name
 
 
     triggers = mb.triggers

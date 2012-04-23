@@ -14,10 +14,10 @@ class TriggerWindow < PmWindow
     super
     pm = PM::PatchMaster.instance
     i = 0
-    pm.inputs.each do |sym, instrument|
+    pm.inputs.each do |instrument|
       instrument.triggers.each do |trigger|
         @win.setpos(i+1, 1)
-        @win.addstr(make_fit(":#{sym} #{trigger.to_s}"))
+        @win.addstr(make_fit(":#{instrument.sym} #{trigger.to_s}"))
         i += 1
       end
     end

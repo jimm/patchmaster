@@ -14,12 +14,9 @@ class MockInputPort
 
   attr_accessor :data_to_send
 
-  def initialize(_=nil)
+  def initialize(arg)
+    @name = "MockInputPort #{arg}"
     @t0 = (Time.now.to_f * 1000).to_i
-  end
-
-  def name
-    'MockInputPort'
   end
 
   def gets
@@ -33,12 +30,9 @@ class MockOutputPort
 
   attr_accessor :buffer
 
-  def initialize
+  def initialize(port_num)
+    @name = "MockOutputPort #{port_num}"
     @buffer = []
-  end
-
-  def name
-    'MockOutputPort'
   end
 
   def puts(bytes)

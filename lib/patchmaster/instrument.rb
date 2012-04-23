@@ -63,7 +63,7 @@ class InputInstrument < Instrument
 
   def input_port(port_num, no_midi=false)
     if no_midi
-      MockInputPort.new
+      MockInputPort.new(port_num)
     else
       UniMIDI::Input.all[port_num].open
     end
@@ -85,7 +85,7 @@ class OutputInstrument < Instrument
 
   def output_port(port_num, no_midi)
     if no_midi
-      MockOutputPort.new
+      MockOutputPort.new(port_num)
     else
       UniMIDI::Output.all[port_num].open
     end
@@ -94,13 +94,16 @@ end
 
 class MockInputPort
 
+  attr_reader :name
+
   # For MIDIEye::Listener
   def self.is_compatible?(input)
     true
   end
 
   # Constructor param is ignored; it's required by MIDIEye.
-  def initialize(_=nil)
+  def initialize(arg)
+    @name = "MockInputPort #{arg}"
   end
 
   def gets
@@ -120,6 +123,13 @@ class MockInputPort
 end
 
 class MockOutputPort
+
+  attr_reader :name
+
+  def initialize(port_num)
+    @name = "MockOutputPort #{port_num}"
+  end
+
   def puts(data)
   end
 end

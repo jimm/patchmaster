@@ -205,22 +205,6 @@ class DSL
 
   private
 
-  def input_port(port)
-    if @no_midi
-      MockInputPort.new
-    else
-      UniMIDI::Input.all[port].open
-    end
-  end
-
-  def output_port(port)
-    if @no_midi
-      MockOutputPort.new
-    else
-      UniMIDI::Output.all[port].open
-    end
-  end
-
   def read_triggers(contents)
     read_block_text('trigger', @triggers, contents)
   end
