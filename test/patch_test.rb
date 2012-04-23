@@ -60,29 +60,4 @@ class PatchTest < Test::Unit::TestCase
     assert inputs.include?(@in_instrument)
     assert inputs.include?(second_in_instrument)
   end
-
-  # TODO These tests aren't valid since we started using MIDIEye. Delete
-  # them or fix them?
-
-  # def test_start_starts_thread
-  #   @in_instrument.port.data_to_send = [4, 5, 6]
-  #   @patch.start
-  #   # FIXME this sleep is a hack to make sure #process_messages is called.
-  #   sleep(0.01)
-  #   @patch.stop
-  #   assert_equal [PM::PROGRAM_CHANGE + 1, 3, 4, 5, 6], @out_instrument.port.buffer
-  # end
-
-  # def test_stop_stops_thread
-  #   @in_instrument.port.data_to_send = [4, 5, 6]
-  #   @patch.start
-  #   # FIXME this sleep is a hack to make sure #process_messages is called.
-  #   sleep(0.01)
-  #   @patch.stop
-
-  #   # Now send more data and make sure it was not sent
-  #   @in_instrument.port.data_to_send = [7, 8, 9]
-  #   assert_equal [PM::PROGRAM_CHANGE + 1, 3, 4, 5, 6], @out_instrument.port.buffer
-  # end
-
 end

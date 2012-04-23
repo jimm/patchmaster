@@ -12,6 +12,7 @@ class InstrumentTest < Test::Unit::TestCase
 
   def test_name
     assert_equal 'test_in', @in_instrument.name
+    @in_instrument.stop
   end
 
   def test_midi_in_sends_to_connection
@@ -33,5 +34,17 @@ class InstrumentTest < Test::Unit::TestCase
   def test_output_sends_to_port
     @out_instrument.midi_out(@data)
     assert_equal @data, @out_instrument.port.buffer
+  end
+
+  def test_start_starts_thread
+    @in_instrument.start
+    assert_not_nil @in_instrument.listener, "instrumnet listener should be created"
+    @in_instrument.stop
+  end
+
+  def test_stop_stops_thread
+    @in_instrument.start
+    @in_instrument.stop
+    assert_nil @in_instrument.listener, "instrumnet listener should be destroyed"
   end
 end

@@ -46,7 +46,10 @@ class InputInstrument < Instrument
   def stop
     PatchMaster.instance.debug("instrument #{name} stop")
     @port.clear_buffer
-    @listener.close
+    if @listener
+      @listener.close
+      @listener = nil
+    end
   end
 
   # Passes MIDI bytes on to triggers and to each output connection.
@@ -95,6 +98,7 @@ class MockInputPort
     true
   end
 
+  # Constructor param is ignored; it's required by MIDIEye.
   def initialize(_=nil)
   end
 
