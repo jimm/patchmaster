@@ -1,3 +1,4 @@
+require 'stringio'
 require 'test_helper'
 
 class DSLTest < Test::Unit::TestCase
@@ -92,7 +93,7 @@ class DSLTest < Test::Unit::TestCase
     @dsl.load(EXAMPLE_DSL)
     @dsl.save('/tmp/dsl_test_save_file_contents.rb')
     str = IO.read(f)
-    assert_match 'output 1, :ws, "WaveStation"', str
+    assert_match 'output 1, :ws_out, "WaveStation"', str
     assert_match "trigger :mb, [176, 50, 0] { next_patch }", str
     assert_match "trigger :mb, [176, 52, 0] { next_song }", str
     assert_match 'filter { |c, b| b }       # no-op', str
@@ -120,6 +121,21 @@ class DSLTest < Test::Unit::TestCase
     @dsl.load(EXAMPLE_DSL)
     conn = @pm.all_songs.find('Second Song').patches[0].connections[1]
     assert_equal (PM::C4..PM::B5), conn.zone
+  end
+
+  def test_unique_instrument_symbol
+    file = '/tmp/dsl_test.rb'
+    str = IO.read(EXAMPLE_DSL)
+    str.gsub!(/output 4, :sj/, 'output 4, :ws_out')
+    File.open(file, 'w') { |f| f.puts str }
+    begin
+      @dsl.load(file)
+      fail "expected unique symbol error to be raised"
+    rescue => ex
+      assert_match /can not have the same symbol \(:ws_out\)/, ex.to_s
+    ensure
+      File.delete(file)
+    end
   end
 
   def test_read_filter_text

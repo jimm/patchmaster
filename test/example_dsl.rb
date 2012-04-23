@@ -1,6 +1,6 @@
 input  0, :mb, 'midiboard'
-input  1, :ws, 'WaveStation'
-output 1, :ws, 'WaveStation'
+input  1, :ws_in, 'WaveStation'
+output 1, :ws_out, 'WaveStation'
 output 2, :kz, 'K2000R'
 output 4, :sj
 
@@ -18,7 +18,7 @@ song "First Song" do
       zone C4, B5
       transpose 12
     end
-    connection :ws, 6, :sj, 4 do  # only chan 6 from :ws_kbd, out to chan 4 on :sj
+    connection :ws_in, 6, :sj, 4 do  # only chan 6 from :ws_in, out to chan 4 on :sj
       prog_chg 100
       zone C4, B5
       filter { |connection, bytes|
@@ -27,7 +27,7 @@ song "First Song" do
         end
       }
     end
-    conn :ws, 6, :ws, 6
+    conn :ws_in, 6, :ws_out, 6
   end
   patch "First Song, Second Patch"
 end
@@ -38,11 +38,11 @@ song "Second Song" do
       pc 22
       z D4
     end
-    c :ws, :any, :ws, 6 do
+    c :ws_in, :any, :ws_out, 6 do
       zone C4..B5
       filter { |c, b| b }       # no-op
     end
-    c :ws, :any, :kz, 3 do
+    c :ws_in, :any, :kz, 3 do
       filter { |c, b| b[0] += 1 }
     end
   end

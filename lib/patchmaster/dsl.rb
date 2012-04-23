@@ -25,6 +25,8 @@ class DSL
   end
 
   def input(port_num, sym, name=nil)
+    raise "input: two inputs can not have the same symbol (:#{sym})" if @inputs[sym]
+
     input = InputInstrument.new(sym, name, port_num, @no_midi)
     @inputs[sym] = input
     @pm.inputs << input
@@ -34,6 +36,8 @@ class DSL
   alias_method :in, :input
 
   def output(port_num, sym, name=nil)
+    raise "output: two outputs can not have the same symbol (:#{sym})" if @outputs[sym]
+
     output = OutputInstrument.new(sym, name, port_num, @no_midi)
     @outputs[sym] = output
     @pm.outputs << output

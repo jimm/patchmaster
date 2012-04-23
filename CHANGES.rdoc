@@ -1,8 +1,17 @@
 = 0.0.4
 
-* Fixed gem dependency in Rakefile
+* Fixed gem dependency in Rakefile.
 
-* Added a way to run the app without windows
+* Added a way to run the app without windows.
+
+* Get default instrument name from UNIMidi, instead of using symbol defined
+  in input file.
+
+* Instrument symbols must be unique within type (input or output).
+
+* Internal changes that shouldn't matter to anybody
+
+  * Store instrument symbol in instrument
 
 = 0.0.3
 
@@ -11,4 +20,4 @@
 
 = 0.0.1
 
-* initial release
+* Initial release
