@@ -1,19 +1,19 @@
 = PatchMaster
 
-PatchMaster is realtime MIDI performance software that allows a musician to
+PatchMaster is real time MIDI performance software that allows a musician to
 totally reconfigure a MIDI setup instantaneously and modify the MIDI data
 while it's being sent.
 
 With PatchMaster a performer can split controlling keyboards, layer MIDI
 channels, transpose them, send program changes and System Exclusive
 messages, limit controller and velocity values, and much more. At the stomp
-of a footswitch (or any other MIDI event), an entire MIDI system can be
+of a foot switch (or any other MIDI event), an entire MIDI system can be
 totally reconfigured.
 
 PatchMaster lets you describe _songs_, which are lists of _patches_ that
 connect _instruments_. Those _connections_ can send program changes, set
 keyboard splits, transpose, send volume or other controller changes, and let
-you apply any Ruby code you want to the MIDI stream in realtime.
+you apply any Ruby code you want to the MIDI stream in real time.
 
 _Song_ _lists_ let you organize songs into set lists for live performance or
 in the studio.
@@ -25,7 +25,7 @@ an instrument's buttons.
 
 A software panic button turns off any stuck notes.
 
-PatchMaster is cross-platform: it should run on MacOS X, Linux, JRuby, and
+PatchMaster is cross-platform: it should run on Mac OS X, Linux, JRuby, and
 Windows.
 
 PatchMaster is by Jim Menard (mailto:jim@jimmenard.com). It is a rewrite of
@@ -50,19 +50,19 @@ To install as a gem, type
 
 = Running PatchMaster
 
-  patchmaster [-t] [-n] [-d] [patchmaster_file]
+  patchmaster [-n] [-t] [-d] [patchmaster_file]
 
 Starts PatchMaster and optionally loads +patchmaster_file+.
-
-The +-t+ flag runs the app without Curses windows. All output will go to the
-console. The app will run until interrupted. (If you do this, you might want
-to create a trigger that calls +panic+, because you won't be able to use the
-computer keyboard to do that.)
 
 The +-n+ flag tells PatchMaster to not use MIDI. All MIDI errors such as not
 being able to connect to the MIDI instruments specified in pm_file are
 ignored, and no MIDI data is sent/received. That is useful if you want to
 run PatchMaster without actually talking to any MIDI instruments.
+
+The +-t+ flag runs the app without Curses windows. All output will go to the
+console. The app will run until interrupted. (If you do this, you might want
+to create a trigger that calls +panic+, because you won't be able to use the
+computer keyboard to do that.)
 
 The +-d+ flag turns on debug mode. The app becomes slightly more verbose and
 logs everything to +/tmp/pm_debug.txt+.
@@ -72,8 +72,9 @@ PatchMaster file format.
 
 = Patches
 
-Patches have connections and arrays of start and stop bytes. Each connection
-links an input instrument to a single chanel on an output instrument.
+Each patch contains connections and an array of start and stop bytes. Each
+connection links an input instrument to a single channel on an output
+instrument.
 
 When a patch is started (it becomes the _current_ _patch_), each connection
 is started and passed the patch's start bytes to send to its output
@@ -103,7 +104,7 @@ When a connection is started:
 
 * The program change is sent
 
-* The connection adds itslef to its input instrument's list of outgoing
+* The connection adds itself to its input instrument's list of outgoing
   connections
 
 === Running
@@ -199,6 +200,15 @@ Describes MIDI inputs and outputs.
 
   input/output port, symbol, optional_name
 
+Example:
+
+  input  0, :mb, 'midiboard'
+  input  1, :ws_in, 'WaveStation'
+  output 1, :ws_out, 'WaveStation'
+  output 2, :kz, 'K2000R'
+  output 4, :sj                   # Name will come from UNIMidi
+
+
 === Triggers
 
 Input MIDI messages can trigger behaviors.
@@ -207,11 +217,22 @@ Input MIDI messages can trigger behaviors.
 
 Block can call PM::PatchMaster methods such as #next_patch or #prev_song.
 
+Example:
+
+  trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
+  trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }
+
 === Songs
 
 A song is an list of patches.
 
   song name block
+
+Example:
+
+  song "My First Song" do
+    # ...
+  end
 
 ==== Patches
 
@@ -223,6 +244,21 @@ A patch contains connections.
 * stop_bytes
 * connection
 
+Example:
+
+  song "My First Song" do
+    patch "First Song, First Patch" do
+      start_bytes [TUNE_REQUEST]
+      connection :mb, nil, :kz, 2 do  # all chans from :mb, out to chan 2 on :kz
+        # ...
+      end
+      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws_kbd, out to chan 4 on :sj
+        # ...
+      end
+      conn :ws, 6, :d4, 10
+    end
+  end
+
 ==== Connections
 
 Connects input to output.
@@ -233,13 +269,60 @@ Connects input to output.
 * zone
 * filter
 
+Example:
+
+  song "My First Song" do
+    patch "First Song, First Patch" do
+      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to chan 4 on :sj
+        prog_chg 100
+        zone C4, B5
+        filter { |connection, bytes|
+          # ...
+        }
+      end
+    end
+  end
+
 ===== Filters
+
+Example:
+
+  song "My First Song" do
+    patch "First Song, First Patch" do
+      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to chan 4 on :sj
+        prog_chg 100
+        zone C4, B5
+        filter { |connection, bytes|
+          if bytes.note_off?
+            bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
+          end
+        }
+      end
+    end
+  end
 
 === Song Lists
 
 Optional.
 
+Example:
+
+  song_list "Tonight's Song List", [
+    "First Song",
+    "Second Song"
+  ]
+
 == Aliases
+
+Many of the keywords have short versions.
+
+* input :: in
+* output :: out
+* connection :: conn, c
+* prog_chg :: pc
+* zone :: z
+* transpose :: xpose, x
+* filter :: f
 
 = Miscellaneous
 
