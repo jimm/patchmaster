@@ -9,15 +9,17 @@
 
 * Instrument symbols must be unique within type (input or output).
 
-* Internal changes that shouldn't matter to anybody
+* Internal changes that shouldn't matter to anybody:
 
-  * Store instrument symbol in instrument
+  * Store instrument symbol in instrument.
+
+  * In Rakefile, current date is used when publishing gem.
 
 = 0.0.3
 
 * Added missing DSL stop_bytes method so PatchMaster files can now specify
-  stop_bytes in a patch
+  stop_bytes in a patch.
 
 = 0.0.1
 
-* Initial release
+* Initial release.
