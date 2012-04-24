@@ -35,7 +35,7 @@ mailto:jim@jimmenard.com.
 
 * "Are you sure?" on quit? --- but I hate that.
 
-* Programmable MIDI messages?
+* Programmable MIDI messages: predefined keys that send blocks of MIDI data
 
 * See list of features at http://jimmenard.com/projects/keymaster/
 

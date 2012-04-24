@@ -182,8 +182,7 @@ You can create and edit PatchMaster files using any text editor you like.
 
 While running PatchMaster, the 'e' key lets you edit the file you loaded or
 most recently saved. If you have not yet loaded a file or you save the file
-to a different location, you'll have to use the 'l' load command to load
-that file.
+to a different location, PatchMaster will ask you for a file name.
 
 The edit command suspends PatchMaster and starts the editor defined by the
 environment variables +VISUAL+ or +EDITOR+. If neither of those are defined
@@ -192,13 +191,22 @@ it tries 'vim', 'vi', and finally 'notepad.exe'.
 After editing a file, PatchMaster attempts to continue with the same song
 list, song, and patch that was current when you edited the file.
 
+When you edit a file from within PatchMaster, it has no way of knowing if
+you saved that file to a different location. If you do so and want to load
+that file you'll have to use the 'l' command to do so.
+
 == Anatomy of a PatchMaster File
 
 === MIDI Instruments
 
+  input/output port, symbol, optional_name
+
 Describes MIDI inputs and outputs.
 
-  input/output port, symbol, optional_name
+Symbols must be unique within instrument type (input or output). For
+example, you can have an input instrument with the symbol :ws and an output
+instrument with the same symbol :ws, but you can't have two inputs or two
+outputs with the same symbol.
 
 Example:
 
@@ -208,14 +216,14 @@ Example:
   output 2, :kz, 'K2000R'
   output 4, :sj                   # Name will come from UNIMidi
 
-
 === Triggers
-
-Input MIDI messages can trigger behaviors.
 
   trigger input_instrument_symbol, bytes, block
 
-Block can call PM::PatchMaster methods such as #next_patch or #prev_song.
+Input MIDI messages can trigger behaviors. When +bytes+ are sent from the
+given input instrument then +block+ is executed. All of the methods of
+PM::PatchMaster are made available to the trigger, so for example the block
+can call methods such as #next_patch or #prev_song.
 
 Example:
 
@@ -224,9 +232,9 @@ Example:
 
 === Songs
 
-A song is an list of patches.
-
   song name block
+
+A song is an list of patches.
 
 Example:
 
@@ -236,9 +244,9 @@ Example:
 
 ==== Patches
 
-A patch contains connections.
-
   patch name block
+
+A patch contains connections and optional start and stop byte arrays.
 
 * start_bytes
 * stop_bytes
@@ -249,10 +257,10 @@ Example:
   song "My First Song" do
     patch "First Song, First Patch" do
       start_bytes [TUNE_REQUEST]
-      connection :mb, nil, :kz, 2 do  # all chans from :mb, out to chan 2 on :kz
+      connection :mb, nil, :kz, 2 do  # all chans from :mb, out to ch 2 on :kz
         # ...
       end
-      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws_kbd, out to chan 4 on :sj
+      connection :ws, 6, :sj, 4 do  # only ch 6 from :ws_kbd, out to ch 4 on :sj
         # ...
       end
       conn :ws, 6, :d4, 10
@@ -261,9 +269,11 @@ Example:
 
 ==== Connections
 
-Connects input to output.
-
   connection in_sym, in_chan_or_any, out_sym, out_chan, block
+
+Connects input to output. A connection can optionally specify a program
+change number (sent to the output instrument on +out_chan+), a zone, and a
+filter (see below).
 
 * prog_chg
 * zone
@@ -273,7 +283,7 @@ Example:
 
   song "My First Song" do
     patch "First Song, First Patch" do
-      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to chan 4 on :sj
+      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to ch 4 on :sj
         prog_chg 100
         zone C4, B5
         filter { |connection, bytes|
@@ -285,11 +295,18 @@ Example:
 
 ===== Filters
 
+  filter block_with_two_args
+
+Filters are applied as the last step in a connection's modification of the
+MIDI data. This means that the status byte's channel is already changed to
+the output instrument's channel for this connection (assuming the message is
+a channel message).
+
 Example:
 
   song "My First Song" do
     patch "First Song, First Patch" do
-      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to chan 4 on :sj
+      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to ch 4 on :sj
         prog_chg 100
         zone C4, B5
         filter { |connection, bytes|
@@ -302,6 +319,8 @@ Example:
   end
 
 === Song Lists
+
+  song_list name, [song_name, song_name...]
 
 Optional.
 
@@ -316,30 +335,78 @@ Example:
 
 Many of the keywords have short versions.
 
-* input :: in
-* output :: out
-* connection :: conn, c
-* prog_chg :: pc
-* zone :: z
-* transpose :: xpose, x
-* filter :: f
+input :: in
+output :: out
+connection :: conn, c
+prog_chg :: pc
+zone :: z
+transpose :: xpose, x
+filter :: f
 
-= Miscellaneous
+= Tips and Tricks
 
-== Panic Button
+== Don't Panic!
 
 Hitting ESCAPE sends all-notes-off messages to every output instrument on
 all 16 MIDI channels. Hitting ESCAPE a second time sends individual note off
 messages to every note on all 16 channels to every output instrument.
 
-= Notes
+== What?
 
-These are development notes, not end-user notes.
+predicates.rb defines methods on Integer and Array that might be useful to
+you when writing filters or triggers. Most of the Array methods apply
+themselves to the first byte, so for example these two are equivalent:
 
-* http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/index.html
-* http://heather.cs.ucdavis.edu/~matloff/UnixAndC/CLanguage/Curses.pdf
-* http://www.ruby-doc.org/stdlib-1.9.3/libdoc/curses/rdoc/index.html
-* man ncurses
+  my_array.controller?
+  my_array[0].controller?
+
+== From One, Many
+
+You can turn one note into multiple notes either by setting up two different
+connections that connect the same input to the same output, or by writing a
+filter that turns one message into multiple like this:
+
+  filter { |conn, bytes|
+    if bytes.note?
+      bytes += bytes    # duplicate note message
+      byte.last += 12   # add octave to second note's value
+  }
+
+This also shows the use of the predicate method #note? which returns true
+for note on, note off, and poly pressure messages.
+
+== This One Goes to 11
+
+Use start bytes to set initial volumes for instruments.
+
+== Hands-Free
+
+Use PatchMaster to play notes! A patch's start bytes can be used to play one
+or more notes-on messages, and the stop bytes can be used to play the
+corresponding note-off messages.
+
+== Tuning
+
+You might want to set up a song that helps you tune your instruments
+by sending the proper program changes and entering note on and note
+off commands that play the tuning note on different synths. (<i>Yes,
+you actually had to tune most older synths.</i>) For example,
+
+1. Patch One
+
+   * Start message: program changes and note-ons for reference synth A and
+     another synth (B).
+   * Stop message: note-off for synth B.
+
+2. Patch Two
+
+   * Start message: program change and note-on for synth C.
+   * Stop message: note-off for synth C.
+
+3. Patch Three
+
+   * Start message: program change and note-on for synth D.
+   * Stop message: note-offs for synth D and reference synth A.
 
 :include:CHANGES.rdoc
 

@@ -1,4 +1,6 @@
-= 0.0.4
+= Changes
+
+== 0.0.4
 
 * Fixed no-file edit bug.
 
@@ -17,11 +19,13 @@
 
   * In Rakefile, current date is used when publishing gem.
 
-= 0.0.3
+* More documentation.
+
+== 0.0.3
 
 * Added missing DSL stop_bytes method so PatchMaster files can now specify
   stop_bytes in a patch.
 
-= 0.0.1
+== 0.0.1
 
 * Initial release.

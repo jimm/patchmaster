@@ -62,6 +62,11 @@ class Integer
   alias_method :rt?, :realtime?
 end
 
+# All the methods here delegate to the first byte in the array, so for
+# example the following two are equivalent:
+#
+#   my_array.note_on?
+#   my_array[0].note_on?
 class Array
 
   def high_nibble
