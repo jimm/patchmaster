@@ -17,10 +17,6 @@ class Main
     @pm.no_midi!
   end
 
-  def load(file)
-    @pm.load(file)
-  end
-
   def run
     @pm.start
     begin
@@ -49,7 +45,8 @@ class Main
             @pm.goto_song_list(name)
           when 'e'
             close_screen
-            @pm.edit
+            file = @loaded_file || PromptWindow.new('Edit', 'Edit file:').gets
+            edit(file)
           when Key::F1
             help
           when 27        # "\e" doesn't work here
@@ -60,7 +57,7 @@ class Main
           when 'l'
             file = PromptWindow.new('Load', 'Load file:').gets
             begin
-              @pm.load(file)
+              load(file)
               message("Loaded #{file}")
             rescue => ex
               message(ex.to_s)
@@ -68,7 +65,7 @@ class Main
           when 's'
             file = PromptWindow.new('Save', 'Save into file:').gets
             begin
-              @pm.save(file)
+              save(file)
               message("Saved #{file}")
             rescue => ex
               message(ex.to_s)
@@ -131,6 +128,40 @@ class Main
     @info_win = InfoWindow.new(third_height * 2, width, 0, left)
     @info_win.draw
 
+  end
+
+  def load(file)
+    @pm.load(file)
+    @loaded_file = file
+  end
+
+  def save(file)
+    @pm.save(file)
+    @loaded_file = file
+  end
+
+  # Opens the most recently loaded/saved file name in an editor. After
+  # editing, the file is re-loaded.
+  def edit(file)
+    editor_command = find_editor
+    unless editor_command
+      message("Can not find $VISUAL, $EDITOR, vim, or vi on your path")
+      return
+    end
+
+    cmd = "#{editor_command} #{file}"
+    @pm.debug(cmd)
+    system(cmd)
+    load(file)
+    @loaded_file = file
+  end
+
+  # Return the first legit command from $VISUAL, $EDITOR, vim, vi, and
+  # notepad.exe.
+  def find_editor
+    @editor ||= [ENV['VISUAL'], ENV['EDITOR'], 'vim', 'vi', 'notepad.exe'].compact.detect do |cmd|
+      system('which', cmd) || File.exist?(cmd)
+    end
   end
 
   def help

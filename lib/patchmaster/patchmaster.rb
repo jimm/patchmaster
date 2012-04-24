@@ -51,7 +51,6 @@ class PatchMaster < SimpleDelegator
     @cursor.mark
     init_data
     DSL.new(@no_midi).load(file)
-    @loaded_file = file
     @cursor.restore
 
     if restart
@@ -65,7 +64,6 @@ class PatchMaster < SimpleDelegator
 
   def save(file)
     DSL.new(@no_midi).save(file)
-    @loaded_file = file
   rescue => ex
     raise("error saving #{file}: #{ex}" + caller.join("\n"))
   end
@@ -124,29 +122,6 @@ class PatchMaster < SimpleDelegator
           128.times { |note| out.midi_out([NOTE_OFF + chan, note, 0]) }
         end
       end
-    end
-  end
-
-  # Opens the most recently loaded/saved file name in an editor. After
-  # editing, the file is re-loaded.
-  def edit
-    editor_command = find_editor
-    unless editor_command
-      message("Can not find $VISUAL, $EDITOR, vim, or vi on your path")
-      return
-    end
-
-    cmd = "#{editor_command} #{@loaded_file}"
-    debug(cmd)
-    system(cmd)
-    load(@loaded_file)
-  end
-
-  # Return the first legit command from $VISUAL, $EDITOR, vim, vi, and
-  # notepad.exe.
-  def find_editor
-    @editor ||= [ENV['VISUAL'], ENV['EDITOR'], 'vim', 'vi', 'notepad.exe'].compact.detect do |cmd|
-      system('which', cmd) || File.exist?(cmd)
     end
   end
 

@@ -1,5 +1,7 @@
 = 0.0.4
 
+* Fixed no-file edit bug.
+
 * Fixed gem dependency in Rakefile.
 
 * Added a way to run the app without windows.

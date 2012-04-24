@@ -2,8 +2,8 @@
 
 == Bugs
 
-* If start with no file and edit, upon reentering PatchMaster see "no method
-  'name' for nil"
+None known, though many are assumed to exist. Please send bug reports to
+mailto:jim@jimmenard.com.
 
 == New Features
 
