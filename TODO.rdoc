@@ -7,7 +7,7 @@ mailto:jim@jimmenard.com.
 
 == New Features
 
-* Documentation: examples of each of the DSL methods.
+* Screen shot?
 
 * Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
