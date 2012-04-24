@@ -23,6 +23,9 @@ previous patch or song. For example, you can tell PatchMaster to move
 forward or backward based on controller values coming from foot switches or
 an instrument's buttons.
 
+Any array of MIDI bytes can be stored as a named _message_ which can be sent
+via a trigger, a key press, or from any filter.
+
 A software panic button turns off any stuck notes.
 
 PatchMaster is cross-platform: it should run on Mac OS X, Linux, JRuby, and
@@ -216,6 +219,39 @@ Example:
   output 2, :kz, 'K2000R'
   output 4, :sj                   # Name will come from UNIMidi
 
+=== Messages
+
+  message name, bytes
+
+Stores a named MIDI message. These messages can be sent at any time using
+message keys or triggers, and can be sent from filters.
+
+Message names, when referenced by message keys, triggers, or filters, are case
+sensitive.
+
+Messages sent from filters are sent before the filtered bytes are sent. Make
+sure the filter returns the filtered bytes after sending your message. If
+you send the mesasge last in your filter then no other bytes will be sent.
+
+  # WRONG
+  filter do |conn, bytes|
+    send_message "Interesting Bytes"
+  end
+
+  # RIGHT
+  filter do |conn, bytes|
+    send_message "Interesting Bytes"
+    bytes     # pass through original bytes unchanged
+  end
+
+=== Message Keys
+
+  message_key name, key
+
+Maps the named message to a key. Message keys are ignored if PatchMaster was
+started without Curses. +key+ may be any one-character string (for example
+'8' or 'p') or a function key symbol of the form +:f1+, +:f2+, etc.
+
 === Triggers
 
   trigger input_instrument_symbol, bytes, block
@@ -223,12 +259,13 @@ Example:
 Input MIDI messages can trigger behaviors. When +bytes+ are sent from the
 given input instrument then +block+ is executed. All of the methods of
 PM::PatchMaster are made available to the trigger, so for example the block
-can call methods such as #next_patch or #prev_song.
+can call methods such as #next_patch, #prev_song, or #send_message.
 
 Example:
 
   trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
   trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }
+  trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
 
 === Songs
 
@@ -384,6 +421,30 @@ Use start bytes to set initial volumes for instruments.
 Use PatchMaster to play notes! A patch's start bytes can be used to play one
 or more notes-on messages, and the stop bytes can be used to play the
 corresponding note-off messages.
+
+== And Now, a Massage from the Swedish Prime Minister
+
+You don't have to enter message byte arrays manually. You can build up the
+message using Ruby code, storing it in a variable, and then hand that
+variable to the +message+ method. See examples/example.rb.
+
+Messages can be sent not only from the keyboard but also from a trigger or a
+filter by calling
+
+  send_message "Message Name"
+
+== Method to Your Madness
+
+You can write your own methods in the PatchMaster file and call them from
+triggers and filters. Your method has access to the PM::PatchMaster methods
+and instance variables --- for example, @outputs is the array of all output
+instruments.
+
+  def output_silly_bytes
+    @outputs.each { |out| out.midi_out([1, 2, 3] } # Don't really send that
+  end
+    
+  trigger :mb, [CONTROLLER, 126, 127] { output_silly_bytes }
 
 == Tuning
 

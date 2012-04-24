@@ -152,6 +152,16 @@ class PatchMasterTest < Test::Unit::TestCase
     assert_equal 'Second Song, First Patch', @pm.patch.name
   end
 
+  def test_send_message
+    # We've started a patch that sends tune request as start_bytes
+    assert_equal [PM::TUNE_REQUEST], @pm.outputs[0].port.buffer
+
+    @pm.send_message "Tune Request"
+
+    # Make sure the message was sent
+    assert_equal [PM::TUNE_REQUEST, PM::TUNE_REQUEST], @pm.outputs[0].port.buffer
+  end
+
   def assert_only_curr_patch_running
     @pm.all_songs.songs.each do |song|
       song.patches.each do |patch|

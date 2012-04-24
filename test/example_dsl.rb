@@ -4,10 +4,19 @@ output 1, :ws_out, 'WaveStation'
 output 2, :kz, 'K2000R'
 output 4, :sj
 
+message "Tune Request", [TUNE_REQUEST]
+
+full_volumes = (0...MIDI_CHANNELS).collect { |chan| [CONTROLLER + chan, CC_VOLUME, 127]}.flatten
+message "Full Volume", full_volumes
+
+message_key "Tune Request", :f1
+message_key "Full Volume", :f2
+
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_7, 0] { next_song }
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_8, 0] { prev_song }
+trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
 
 song "First Song" do
   patch "First Song, First Patch" do

@@ -46,6 +46,16 @@ class DSL
   end
   alias_method :out, :output
 
+  def message(name, bytes)
+    @pm.messages[name] = bytes
+  end
+
+  def message_key(name, key_sym)
+    if !@pm.no_gui              # TODO get rid of double negative
+      PM::Main.instance.bind_message(name, key_sym)
+    end
+  end
+
   def trigger(instrument_sym, bytes, &block)
     instrument = @inputs[instrument_sym]
     raise "trigger: error finding instrument #{instrument_sym}" unless instrument

@@ -20,7 +20,9 @@ class PatchMaster < SimpleDelegator
 
   include Singleton
 
-  attr_reader :inputs, :outputs, :all_songs, :song_lists, :no_midi
+  attr_reader :inputs, :outputs, :all_songs, :song_lists
+  attr_reader :messages
+  attr_reader :no_midi, :no_gui
 
   # A Cursor to which we delegate incoming position methods (#song_list,
   # #song, #patch, #next_song, #prev_patch, etc.)
@@ -29,17 +31,22 @@ class PatchMaster < SimpleDelegator
   def initialize
     @cursor = Cursor.new(self)
     super(@cursor)
+    @no_midi = false
+    @no_gui = false
 
     if $DEBUG
       @debug_file = File.open(DEBUG_FILE, 'a')
     end
-    @no_midi = false
 
     init_data
   end
 
   def no_midi!
     @no_midi = true
+  end
+
+  def no_gui!
+    @no_gui = true
   end
 
   # Loads +file+. Does its best to restore the current song list, song, and
@@ -76,6 +83,7 @@ class PatchMaster < SimpleDelegator
     @song_lists = []
     @all_songs = SortedSongList.new('All Songs')
     @song_lists << @all_songs
+    @messages = {}
   end
 
   # If +init_cursor+ is +true+ (the default), initializes current song list,
@@ -108,6 +116,23 @@ class PatchMaster < SimpleDelegator
 
   def running?
     @running
+  end
+
+  # Send the message with the given name to all outputs.
+  def send_message(name)
+    msg = @messages[name]
+    if !msg
+      message("Message \"#{name}\" not found")
+      return
+    end
+
+    debug("Sending message \"#{name}\"")
+    @outputs.each { |out| out.midi_out(msg) }
+
+    # If the user accidentally calls send_message in a filter at the end,
+    # then the filter will return whatever this method returns. Just in
+    # case, return nil instead of whatever the preceding code would return.
+    nil
   end
 
   # Sends the +CM_ALL_NOTES_OFF+ controller message to all output

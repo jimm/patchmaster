@@ -31,7 +31,7 @@ class DSLTest < Test::Unit::TestCase
 
 
     triggers = mb.triggers
-    assert_equal 4, triggers.length
+    assert_equal 5, triggers.length
     trigger = triggers[0]
     assert_equal [PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0], trigger.bytes
     assert_equal "{ prev_song }", mb.triggers[3].text
@@ -154,4 +154,10 @@ EOS
     assert_equal "{ |c, b| b }       # no-op",
       @pm.all_songs.find('Second Song').patches[0].connections[1].filter.text
   end
+
+  def test_messages
+    @dsl.load(EXAMPLE_DSL)
+    assert_equal [PM::TUNE_REQUEST], @pm.messages["Tune Request"]
+  end
+
 end

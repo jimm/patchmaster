@@ -12,19 +12,20 @@
 require 'optparse'
 
 use_midi = true
-use_curses = true
+use_gui = true
 OptionParser.new do |opts|
   opts.banner = "usage: patchmaster [options] [pm_file]"
   opts.on("-d", "--debug", "Turn on debug mode") { $DEBUG = true }
   opts.on("-n", "--no-midi", "Turn off MIDI processing") { use_midi = false }
-  opts.on("-t", "--text", "--nw", "--no-window", "No windows") { use_curses = false }
+  opts.on("-t", "--text", "--nw", "--no-window", "No windows") { use_gui = false }
 end.parse!(ARGV)
 
 # Must require patchmaster here, after handling options, because Singleton
-# initialze code checks $DEBUG.
+# initialize code checks $DEBUG.
 require 'patchmaster'
 
-app = use_curses ? PM::Main.instance : PM::PatchMaster.instance
+app = use_gui ? PM::Main.instance : PM::PatchMaster.instance
+app.no_gui! if !use_gui
 app.no_midi! if !use_midi
 app.load(ARGV[0]) if ARGV[0]
 app.run

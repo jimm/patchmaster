@@ -9,8 +9,15 @@ class Main
   include Singleton
   include Curses
 
+  FUNCTION_KEY_SYMBOLS = {}
+  12.times do |i|
+    FUNCTION_KEY_SYMBOLS["f#{i+1}".to_sym] = Key::F1 + i
+    FUNCTION_KEY_SYMBOLS["F#{i+1}".to_sym] = Key::F1 + i
+  end
+
   def initialize
     @pm = PatchMaster.instance
+    @message_bindings = {}
   end
 
   def no_midi!
@@ -47,7 +54,7 @@ class Main
             close_screen
             file = @loaded_file || PromptWindow.new('Edit', 'Edit file:').gets
             edit(file)
-          when Key::F1
+          when 'h'
             help
           when 27        # "\e" doesn't work here
             # Twice in a row sends individual note-off commands
@@ -85,6 +92,9 @@ class Main
           message(ex.to_s)
           @pm.debug caller.join("\n")
         end
+
+        msg_name = @message_bindings[ch]
+        @pm.send_message(msg_name) if msg_name
       end
     ensure
       clear
@@ -93,6 +103,10 @@ class Main
       @pm.stop
       @pm.close_debug_file
     end
+  end
+
+  def bind_message(name, key_sym)
+    @message_bindings[FUNCTION_KEY_SYMBOLS[key_sym]] = name
   end
 
   def config_curses

@@ -6,8 +6,8 @@ p, right        - prev song
 g   - goto song
 t   - goto song list
 
+h   - help
 ESC - panic
-F1  - help
 
 l   - load
 s   - save

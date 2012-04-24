@@ -2,6 +2,8 @@
 
 == 0.0.4
 
+* Added user-defined messages and the ability to bind them to keys.
+
 * Fixed no-file edit bug.
 
 * Fixed gem dependency in Rakefile.
