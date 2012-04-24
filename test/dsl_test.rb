@@ -97,7 +97,7 @@ class DSLTest < Test::Unit::TestCase
     assert_match "trigger :mb, [176, 50, 0] { next_patch }", str
     assert_match "trigger :mb, [176, 52, 0] { next_song }", str
     assert_match 'filter { |c, b| b }       # no-op', str
-    assert_match 'filter { |c, b| b[0] += 1 }', str
+    assert_match 'filter { |c, b| b[0] += 1; b }', str
   rescue => ex
     fail ex.to_s
   ensure
@@ -145,6 +145,7 @@ class DSLTest < Test::Unit::TestCase
         if bytes.note_off?
           bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
         end
+        bytes
       }
 EOS
     str.strip!

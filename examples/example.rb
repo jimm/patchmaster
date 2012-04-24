@@ -33,6 +33,7 @@ song "First Song" do
         if bytes.note_off?
           bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
         end
+        bytes
       }
     end
     conn :ws_in, 6, :ws_out, 6

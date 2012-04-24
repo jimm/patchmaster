@@ -168,7 +168,15 @@ swapping" of filter code.
   other filter will not be saved properly when everything gets saved to a
   file.
 
-Filter returns bytes. if bytes is nil or empty nothing sent.
+The filter's block must evaluate to the bytes you want sent. That is, it
+must have as its last line an array of bytes or +nil+. For example,
+
+  filter { |connection, bytes|
+    if bytes.note_off?
+      bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
+    end
+    bytes
+  }
 
 = PatchMaster Files
 
@@ -235,6 +243,7 @@ you send the mesasge last in your filter then no other bytes will be sent.
 
   # WRONG
   filter do |conn, bytes|
+    bytes
     send_message "Interesting Bytes"
   end
 
@@ -339,6 +348,10 @@ MIDI data. This means that the status byte's channel is already changed to
 the output instrument's channel for this connection (assuming the message is
 a channel message).
 
+The filter's block must return the array of bytes you want sent to the
+output. Don't use the "return" keyword; simply add the bytes as the last
+thing in the block.
+
 Example:
 
   song "My First Song" do
@@ -350,6 +363,7 @@ Example:
           if bytes.note_off?
             bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
           end
+          bytes
         }
       end
     end
@@ -407,6 +421,7 @@ filter that turns one message into multiple like this:
     if bytes.note?
       bytes += bytes    # duplicate note message
       byte.last += 12   # add octave to second note's value
+    end
   }
 
 This also shows the use of the predicate method #note? which returns true
@@ -414,7 +429,8 @@ for note on, note off, and poly pressure messages.
 
 == This One Goes to 11
 
-Use start bytes to set initial volumes for instruments.
+Use start bytes or messages to set initial volumes for instruments, for
+example resetting all instrument's volumes to 127.
 
 == Hands-Free
 
