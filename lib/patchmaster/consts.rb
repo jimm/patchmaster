@@ -91,6 +91,7 @@ EOS
   # = 0 - 31 = continuous, LSB
   # = 32 - 63 = continuous, MSB
   # = 64 - 97 = switches
+  CC_BANK_SELECT = 0
   CC_MOD_WHEEL = 1
   CC_BREATH_CONTROLLER = 2
   CC_FOOT_CONTROLLER = 4
@@ -120,6 +121,7 @@ EOS
   CC_GEN_PURPOSE_6 = 51
   CC_GEN_PURPOSE_7 = 52
   CC_GEN_PURPOSE_8 = 53
+  CC_EXT_EFFECTS_DEPTH = 91
   CC_TREMELO_DEPTH = 92
   CC_CHORUS_DEPTH = 93
   CC_DETUNE_DEPTH = 94
@@ -135,6 +137,7 @@ EOS
   # Channel mode message values
   #++
   # Val 0 == off, 0x7f == on
+  CM_RESET_ALL_CONTROLLERS = 0x79
   CM_LOCAL_CONTROL = 0x7A
   CM_ALL_NOTES_OFF = 0x7B       # Val must be 0
   CM_OMNI_MODE_OFF = 0x7C       # Val must be 0
