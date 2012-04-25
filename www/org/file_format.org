@@ -1,4 +1,14 @@
+#+title: PatchMaster Files
+#+options: h:7
+#+html: <div class="nav"><a href="index.html">Home</a></div>
+
 * PatchMaster Files
+
+#+begin_quote
+Source code in files. How quaint.\\
+\\
+-- Attributed to Kent Beck
+#+end_quote
 
 PatchMaster files describe your MIDI setup and define triggers, songs with
 their patches, and song lists. They are written in Ruby using a few special
@@ -7,7 +17,13 @@ keywords (Ruby method names).
 For a sample PatchMaster file, see
 examples/example.rb[https://github.com/jimm/patchmaster/blob/master/examples/example.rb].
 
-** Editing PatchMaster Files
+* Editing PatchMaster Files
+
+#+begin_quote
+Most editors are failed writers - but so are most writers.\\
+\\
+-- T. S. Eliot
+#+end_quote
 
 You can create and edit PatchMaster files using any text editor you like.
 
@@ -26,9 +42,9 @@ When you edit a file from within PatchMaster, it has no way of knowing if
 you saved that file to a different location. If you do so and want to load
 that file you'll have to use the 'l' command to do so.
 
-** Anatomy of a PatchMaster File
+* Anatomy of a PatchMaster File
 
-*** MIDI Instruments
+** MIDI Instruments
 
   input/output port, symbol, optional_name
 
@@ -49,7 +65,7 @@ Example:
   output 4, :sj                   # Name will come from UNIMidi
 #+end_src
 
-*** Messages
+** Messages
 
 #+begin_src ruby
   message name, bytes
@@ -79,7 +95,7 @@ you send the mesasge last in your filter then no other bytes will be sent.
   end
 #+end_src
 
-*** Message Keys
+** Message Keys
 
 #+begin_src ruby
   message_key name, key
@@ -89,7 +105,7 @@ Maps the named message to a key. Message keys are ignored if PatchMaster was
 started without Curses. =key= may be any one-character string (for example
 '8' or 'p') or a function key symbol of the form =:f1=, =:f2=, etc.
 
-*** Triggers
+** Triggers
 
 #+begin_src ruby
   trigger input_instrument_symbol, bytes, block
@@ -108,7 +124,7 @@ Example:
   trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
 #+end_src
 
-*** Songs
+** Songs
 
 #+begin_src ruby
   song name block
@@ -124,7 +140,7 @@ Example:
   end
 #+end_src
 
-**** Patches
+*** Patches
 
 #+begin_src ruby
   patch name block
@@ -217,7 +233,7 @@ Example:
   end
 #+end_src
 
-*** Song Lists
+** Song Lists
 
 #+begin_src ruby
   song_list name, [song_name, song_name...]

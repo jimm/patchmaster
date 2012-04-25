@@ -1,11 +1,45 @@
-* To Do
+#+title: To Do
+#+html: <div class="nav"><a href="index.html">Home</a></div>
 
-** Bugs
+* Bugs
+
+#+begin_quote
+The Be staff...went to see the movie "Men in Black." ...The movie makes
+a point that is somehow appropriate -- It is impossible to completely rid
+the universe of bugs, but at least you can drive something fast, arm
+yourself with powerful tools, and look good doing it.\\
+\\
+-- markg@be.com
+#+end_quote
+
+#+begin_quote
+The most likely way for the world to be destroyed, most experts agree, is by
+accident. That's where we come in; we're computer professionals. We cause
+accidents.\\
+\\
+-- Nathaniel S. Borenstein
+#+end_quote
+
+#+begin_quote
+Good engineering is hard to find, but bad engineering is fun to laugh at.\\
+\\
+-- Dan Franklin, on the xBBN mailing list
+#+end_quote
 
 None known, though many are assumed to exist. Please send bug reports to [[mailto:jim@jimmenard.com][Jim
 Menard]].
 
-** New Features
+* New Features
+
+#+begin_quote
+Innovation is not about saying yes to everything. It's about saying NO to all
+but the most crucial features.\\
+\\
+-- Steve Jobs
+#+end_quote
+
+
+- Connections should know how to send bank numbers as well as patch changes.
 
 - Screen shot?
 

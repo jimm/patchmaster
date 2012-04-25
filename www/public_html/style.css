@@ -1,0 +1,40 @@
+body {
+  background-color: #ddd;
+}
+div.nav {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+div#table-of-contents {
+  width: 40em;
+  margin: auto;
+
+  background-color: #eee;
+  padding: 0.25em 2em 0.5em 2em;
+  margin-left: -2em;
+  margin-right: -2em;
+}
+div#table-of-contents ul {
+  margin-left: -1em;
+}
+div#content {
+  width: 40em;
+  margin: auto;
+  background-color: #ddd;
+
+  background-color: white;
+  padding-left: 2em;
+  padding-right: 2em;
+}
+div#content h1.title {
+  display: none;
+}
+div#postamble {
+  margin-top: 2em;
+  padding-top: 1em;
+  border-top: 1px solid #ccc;
+  font-size: 0.8em;
+}
+div#postamble p {
+  margin-top: -0.5em;
+}

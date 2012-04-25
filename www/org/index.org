@@ -1,4 +1,13 @@
+#+title: PatchMaster
+#+html: <div class="nav">Home</div>
+
 * PatchMaster
+
+#+begin_quote
+Welcome. Welcome. Welcome.\\
+\\
+-- The entire Ig Nobel awards ceremony welcoming speech
+#+end_quote
 
 PatchMaster is real time MIDI performance software that allows a musician to
 totally reconfigure a MIDI setup instantaneously and modify the MIDI data
@@ -18,8 +27,8 @@ you apply any Ruby code you want to the MIDI stream in real time.
 /Song lists/ let you organize songs into set lists for live performance or
 in the studio.
 
-Any MIDI message can /trigger/ an action such as moving to the next or
-previous patch or song. For example, you can tell PatchMaster to move
+Any incoming MIDI message can /trigger/ an action such as moving to the next
+or previous patch or song. For example, you can tell PatchMaster to move
 forward or backward based on controller values coming from foot switches or
 an instrument's buttons.
 
@@ -31,7 +40,8 @@ A software panic button turns off any stuck notes.
 PatchMaster is cross-platform: it should run on Mac OS X, Linux, JRuby, and
 Windows.
 
-PatchMaster is by [[mailto:jim@jimmenard.com][Jim Menard]]. It is a rewrite of [[http://jimmenard.com/projects/keymaster/][KeyMaster]].
+PatchMaster is by [[mailto:jim@jimmenard.com][Jim Menard]]. It is a rewrite of [[http://jimmenard.com/projects/keymaster/][KeyMaster]]. The Github repo
+is [[https://github.com/jimm/patchmaster][here]].
 
 * Requirements
 
@@ -78,7 +88,7 @@ PatchMaster file format.
 
 * More Information
 
-- All about [[file:patches.org][patches]] --- what happens when they run
+- All about [[file:patches.org][patches and connections]] --- what happens when they run
 - The [[file:file_format.org][PatchMaster file format]]
 - [[file:tips_and_tricks.org][Tips and Tricks]]
 - [[file:changes.org][Changes]] between PatchMaster versions

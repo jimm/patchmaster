@@ -11,4 +11,5 @@ of a foot switch (or any other MIDI event), an entire MIDI system can be
 totally reconfigured.
 
 For more information please see the {PatchMaster Web
-site}[http://www.patchmaster.org/] or, if you're offline, link:www/org/index.org.
+site}[http://www.patchmaster.org/] or, if you're offline, the file
+www/org/index.org.

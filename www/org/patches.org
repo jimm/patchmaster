@@ -1,4 +1,16 @@
+#+title: Patches and Connections
+#+html: <div class="nav"><a href="index.html">Home</a></div>
+
 * Patches
+
+#+begin_quote
+A wandering minstrel I -\\
+A thing of threads and patches,\\
+Of ballads, songs and snatches,\\
+And dreamy lullaby!\\
+\\
+-- Sir William Gilbert, /The Mikado/
+#+end_quote
 
 Each patch contains connections and an array of start and stop bytes. Each
 connection links an input instrument to a single channel on an output
@@ -9,7 +21,7 @@ is started and passed the patch's start bytes to send to its output
 instrument. When a patch is stopped, each connection is stopped and passed
 the stop bytes to send to its output.
 
-** Connections
+* Connections
 
 Connections have an input instrument and (optional) channel, output
 instrument and channel, and the following optional settings:
@@ -23,7 +35,7 @@ If the input instrument's channel is not specified then all input from that
 instrument is run through the connection. If the channel is specified then
 any data on other channels is ignored.
 
-*** Start
+** Start
 
 When a connection is started:
 
@@ -35,7 +47,7 @@ When a connection is started:
 - The connection adds itself to its input instrument's list of outgoing
   connections
 
-*** Running
+** Running
 
 When MIDI data comes in from an instrument two things happen:
 
@@ -67,7 +79,7 @@ on the way:
 
 - The resulting bytes, if any, are sent to the output instrument
 
-*** Stop
+** Stop
 
 When a connection is stopped:
 
@@ -77,7 +89,7 @@ When a connection is stopped:
 - The connection removes itself from its input instrument's list of outgoing
   connections
 
-** Connection Filters
+* Connection Filters
 
 When a filter is run it is passed two arguments: the connection and an array
 of MIDI bytes. Whatever the filter returns will be sent to the output

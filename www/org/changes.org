@@ -1,11 +1,22 @@
+#+title: Changes
+#+html: <div class="nav"><a href="index.html">Home</a></div>
+
 * Changes
 
-** 0.0.5
+#+begin_quote
+If you love something, set it free. If it leaves, hunt it down and kill it.\\
+\\
+-- Anonymous
+#+end_quote
+
+* 0.0.5
+
+- More MIDI constants defined in consts.rb.
 
 - Obtained http://www.patchmaster.org and moved docs to org files in
   www/org.
 
-** 0.0.4
+* 0.0.4
 
 - Added user-defined messages and the ability to bind them to keys.
 
@@ -28,11 +39,11 @@
 
 - More documentation.
 
-** 0.0.3
+* 0.0.3
 
 - Added missing DSL stop_bytes method so PatchMaster files can now specify
   stop_bytes in a patch.
 
-** 0.0.1
+* 0.0.1
 
 - Initial release.
