@@ -1,0 +1,85 @@
+* PatchMaster
+
+PatchMaster is real time MIDI performance software that allows a musician to
+totally reconfigure a MIDI setup instantaneously and modify the MIDI data
+while it's being sent.
+
+With PatchMaster a performer can split controlling keyboards, layer MIDI
+channels, transpose them, send program changes and System Exclusive
+messages, limit controller and velocity values, and much more. At the stomp
+of a foot switch (or any other MIDI event), an entire MIDI system can be
+totally reconfigured.
+
+PatchMaster lets you describe /songs/, which are lists of /patches/ that
+connect /instruments/. Those /connections/ can send program changes, set
+keyboard splits, transpose, send volume or other controller changes, and let
+you apply any Ruby code you want to the MIDI stream in real time.
+
+/Song lists/ let you organize songs into set lists for live performance or
+in the studio.
+
+Any MIDI message can /trigger/ an action such as moving to the next or
+previous patch or song. For example, you can tell PatchMaster to move
+forward or backward based on controller values coming from foot switches or
+an instrument's buttons.
+
+Any array of MIDI bytes can be stored as a named /message/ which can be sent
+via a trigger, a key press, or from any filter.
+
+A software panic button turns off any stuck notes.
+
+PatchMaster is cross-platform: it should run on Mac OS X, Linux, JRuby, and
+Windows.
+
+PatchMaster is by [[mailto:jim@jimmenard.com][Jim Menard]]. It is a rewrite of [[http://jimmenard.com/projects/keymaster/][KeyMaster]].
+
+* Requirements
+
+- The [[https://github.com/arirusso/midi-eye][midi-eye]] gem, which will be installed automatically if you install
+  PatchMaster as a gem. midi-eye in turn requires (and will install
+  automatically):
+  - [[https://github.com/arirusso/midi-message][midi-message]]
+  - [[https://github.com/arirusso/nibbler][nibbler]]
+  - [[https://github.com/arirusso/unimidi][unimidi]]
+- Ruby 1.9 (because UniMIDI requires it)
+- Curses (comes with Ruby, but I'm not sure about JRuby)
+
+* Installation
+
+To install as a gem, type
+
+#+begin_src sh
+  gem install patchmaster
+#+end_src
+
+* Running PatchMaster
+
+#+begin_src sh
+  patchmaster [-n] [-t] [-d] [patchmaster_file]
+#+end_src
+
+Starts PatchMaster and optionally loads =patchmaster_file=.
+
+The =-n= flag tells PatchMaster to not use MIDI. All MIDI errors such as not
+being able to connect to the MIDI instruments specified in pm_file are
+ignored, and no MIDI data is sent/received. That is useful if you want to
+run PatchMaster without actually talking to any MIDI instruments.
+
+The =-t= flag runs the app without Curses windows. All output will go to the
+console. The app will run until interrupted. (If you do this, you might want
+to create a trigger that calls =panic=, because you won't be able to use the
+computer keyboard to do that.)
+
+The =-d= flag turns on debug mode. The app becomes slightly more verbose and
+logs everything to =/tmp/pm_debug.txt=.
+
+See "Anatomy of a PatchMaster File" below for a description of the
+PatchMaster file format.
+
+* More Information
+
+- All about [[file:patches.org][patches]] --- what happens when they run
+- The [[file:file_format.org][PatchMaster file format]]
+- [[file:tips_and_tricks.org][Tips and Tricks]]
+- [[file:changes.org][Changes]] between PatchMaster versions
+- [[file:todo.org][To Do]] list, including bugs and new features

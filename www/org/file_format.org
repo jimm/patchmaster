@@ -1,0 +1,249 @@
+* PatchMaster Files
+
+PatchMaster files describe your MIDI setup and define triggers, songs with
+their patches, and song lists. They are written in Ruby using a few special
+keywords (Ruby method names).
+
+For a sample PatchMaster file, see
+examples/example.rb[https://github.com/jimm/patchmaster/blob/master/examples/example.rb].
+
+** Editing PatchMaster Files
+
+You can create and edit PatchMaster files using any text editor you like.
+
+While running PatchMaster, the 'e' key lets you edit the file you loaded or
+most recently saved. If you have not yet loaded a file or you save the file
+to a different location, PatchMaster will ask you for a file name.
+
+The edit command suspends PatchMaster and starts the editor defined by the
+environment variables =VISUAL= or =EDITOR=. If neither of those are defined
+it tries 'vim', 'vi', and finally 'notepad.exe'.
+
+After editing a file, PatchMaster attempts to continue with the same song
+list, song, and patch that was current when you edited the file.
+
+When you edit a file from within PatchMaster, it has no way of knowing if
+you saved that file to a different location. If you do so and want to load
+that file you'll have to use the 'l' command to do so.
+
+** Anatomy of a PatchMaster File
+
+*** MIDI Instruments
+
+  input/output port, symbol, optional_name
+
+Describes MIDI inputs and outputs.
+
+Symbols must be unique within instrument type (input or output). For
+example, you can have an input instrument with the symbol :ws and an output
+instrument with the same symbol :ws, but you can't have two inputs or two
+outputs with the same symbol.
+
+Example:
+
+#+begin_src ruby
+  input  0, :mb, 'midiboard'
+  input  1, :ws_in, 'WaveStation'
+  output 1, :ws_out, 'WaveStation'
+  output 2, :kz, 'K2000R'
+  output 4, :sj                   # Name will come from UNIMidi
+#+end_src
+
+*** Messages
+
+#+begin_src ruby
+  message name, bytes
+#+end_src
+
+Stores a named MIDI message. These messages can be sent at any time using
+message keys or triggers, and can be sent from filters.
+
+Message names, when referenced by message keys, triggers, or filters, are case
+sensitive.
+
+Messages sent from filters are sent before the filtered bytes are sent. Make
+sure the filter returns the filtered bytes after sending your message. If
+you send the mesasge last in your filter then no other bytes will be sent.
+
+#+begin_src ruby
+  # WRONG
+  filter do |conn, bytes|
+    bytes
+    send_message "Interesting Bytes"
+  end
+
+  # RIGHT
+  filter do |conn, bytes|
+    send_message "Interesting Bytes"
+    bytes     # pass through original bytes unchanged
+  end
+#+end_src
+
+*** Message Keys
+
+#+begin_src ruby
+  message_key name, key
+#+end_src
+
+Maps the named message to a key. Message keys are ignored if PatchMaster was
+started without Curses. =key= may be any one-character string (for example
+'8' or 'p') or a function key symbol of the form =:f1=, =:f2=, etc.
+
+*** Triggers
+
+#+begin_src ruby
+  trigger input_instrument_symbol, bytes, block
+#+end_src
+
+Input MIDI messages can trigger behaviors. When =bytes= are sent from the
+given input instrument then =block= is executed. All of the methods of
+PM::PatchMaster are made available to the trigger, so for example the block
+can call methods such as #next_patch, #prev_song, or #send_message.
+
+Example:
+
+#+begin_src ruby
+  trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
+  trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }
+  trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
+#+end_src
+
+*** Songs
+
+#+begin_src ruby
+  song name block
+#+end_src
+
+A song is an list of patches.
+
+Example:
+
+#+begin_src ruby
+  song "My First Song" do
+    # ...
+  end
+#+end_src
+
+**** Patches
+
+#+begin_src ruby
+  patch name block
+#+end_src
+
+A patch contains connections and optional start and stop byte arrays.
+
+- start_bytes
+- stop_bytes
+- connection
+
+Example:
+
+#+begin_src ruby
+  song "My First Song" do
+    patch "First Song, First Patch" do
+      start_bytes [TUNE_REQUEST]
+      connection :mb, nil, :kz, 2 do  # all chans from :mb, out to ch 2 on :kz
+        # ...
+      end
+      connection :ws, 6, :sj, 4 do  # only ch 6 from :ws_kbd, out to ch 4 on :sj
+        # ...
+      end
+      conn :ws, 6, :d4, 10
+    end
+  end
+#+end_src
+
+**** Connections
+
+#+begin_src ruby
+  connection in_sym, in_chan_or_any, out_sym, out_chan, block
+#+end_src
+
+Connects input to output. A connection can optionally specify a program
+change number (sent to the output instrument on =out_chan=), a zone, and a
+filter (see below).
+
+- prog_chg
+- zone
+- filter
+
+Example:
+
+#+begin_src ruby
+  song "My First Song" do
+    patch "First Song, First Patch" do
+      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to ch 4 on :sj
+        prog_chg 100
+        zone C4, B5
+        filter { |connection, bytes|
+          # ...
+        }
+      end
+    end
+  end
+#+end_src
+
+***** Filters
+
+#+begin_src ruby
+  filter block_with_two_args
+#+end_src
+
+Filters are applied as the last step in a connection's modification of the
+MIDI data. This means that the status byte's channel is already changed to
+the output instrument's channel for this connection (assuming the message is
+a channel message).
+
+The filter's block must return the array of bytes you want sent to the
+output. Don't use the "return" keyword; simply add the bytes as the last
+thing in the block.
+
+Example:
+
+#+begin_src ruby
+  song "My First Song" do
+    patch "First Song, First Patch" do
+      connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to ch 4 on :sj
+        prog_chg 100
+        zone C4, B5
+        filter { |connection, bytes|
+          if bytes.note_off?
+            bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
+          end
+          bytes
+        }
+      end
+    end
+  end
+#+end_src
+
+*** Song Lists
+
+#+begin_src ruby
+  song_list name, [song_name, song_name...]
+#+end_src
+
+Optional.
+
+Example:
+
+#+begin_src ruby
+  song_list "Tonight's Song List", [
+    "First Song",
+    "Second Song"
+  ]
+#+end_src
+
+** Aliases
+
+Many of the keywords have short versions.
+
+| Full Name  | Aliases  |
+|------------+----------|
+| input      | in       |
+| output     | out      |
+| connection | conn, c  |
+| prog_chg   | pc       |
+| zone       | z        |
+| transpose  | xpose, x |
+| filter     | f        |
