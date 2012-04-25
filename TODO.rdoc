@@ -17,7 +17,11 @@ mailto:jim@jimmenard.com.
 * Display instruments?
 
 * Alternate display that only shows song and patch names and little else?
-  This might be useful during performance.
+  This might be useful during performance. Already have console-only
+  version.
+
+* Console version: output song and patch name whenever switch is made and in
+  console mode.
 
 * Do I need to handle running bytes in Connection#midi_in, or does UniMIDI
   take care of that?
@@ -28,19 +32,23 @@ mailto:jim@jimmenard.com.
 
 * More documentation.
 
-* Handle window resizing (SIGWINCH).
+* Handle window resizing (SIGWINCH). How do I get new screen size?
 
 * Trap signals like ^C. Don't do work, just set flag to be handled next time
   through loop.
+
+* Remember playing notes. When move from patch to patch, make sure to send
+  corresponding note-off messages to the original outputs on the original
+  channels. Add 2-dimensional arrays to output instrument: channel and note
+  number. If entry is non-nil then note is playing.
 
 * "Are you sure?" on quit? --- but I hate that.
 
 * Programmable MIDI messages: predefined keys that send blocks of MIDI data
 
-* See list of features at http://jimmenard.com/projects/keymaster/
+* See list of features at http://jimmenard.com/projects/keymaster/, but note
+  that many of those can be implemented via triggers and filters
 
-* Sysex for displaying song and patch name. This would get sent out whenever
-  patch changes, and could be used to display song/patch in a synth's
-  display, for example.
-
-* See feature list at http://jimmenard.com/projects/keymaster/
+* Fill-in-the-blank messages, useful for things like sysex for displaying
+  song and patch name. This could get sent out whenever patch changes, and
+  could be used to display song/patch in a synth's display, for example.
