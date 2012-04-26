@@ -8,7 +8,6 @@ module PM
       eval <<EOS
 #{note}f#{oct} = #{base - 1}
 #{note}b#{oct} = #{base - 1}
-#{note}#{oct} = #{base}
 #{note}s#{oct} = #{base + 1}
 EOS
     }
