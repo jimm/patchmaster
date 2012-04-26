@@ -4,14 +4,17 @@
 * Changes
 
 #+begin_quote
-If you love something, set it free. If it leaves, hunt it down and kill it.\\
+In programming, do, or undo. There is always try.\\
 \\
--- Anonymous
+-- Yoda (via Ron Jeffries)
 #+end_quote
 
 * 0.0.5
 
-- More MIDI constants defined in consts.rb.
+- Program change command can now take optional bank number.
+
+- More MIDI constants defined in consts.rb. Removed erroneous note constant
+  definitions that used '#'.
 
 - Obtained http://www.patchmaster.org and moved docs to org files in
   www/org.
