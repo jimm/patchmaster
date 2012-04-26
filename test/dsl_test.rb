@@ -59,6 +59,10 @@ class DSLTest < Test::Unit::TestCase
     assert_equal 64, conn.pc_prog
     assert_equal (PM::C4..PM::B5), conn.zone
     assert_equal conn.xpose, 12
+
+    conn = patch.connections[1]
+    assert_equal 2, conn.bank
+    assert_equal 100, conn.pc_prog
   end
 
   def test_save
@@ -160,5 +164,4 @@ EOS
     @dsl.load(EXAMPLE_DSL)
     assert_equal [PM::TUNE_REQUEST], @pm.messages["Tune Request"]
   end
-
 end

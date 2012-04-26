@@ -98,8 +98,15 @@ class DSL
   alias_method :conn, :connection
   alias_method :c, :connection
 
-  def prog_chg(prog)
-    @conn.pc_prog = prog
+  # If only +bank_or_prog+ is specified, then it's a program change. If
+  # both, then it's bank number.
+  def prog_chg(bank_or_prog, prog=nil)
+    if prog
+      @conn.bank = bank_or_prog
+      @conn.pc_prog = prog
+    else
+      @conn.pc_prog = bank_or_prog
+    end
   end
   alias_method :pc, :prog_chg
 

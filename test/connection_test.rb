@@ -82,6 +82,14 @@ class ConnectionTest < Test::Unit::TestCase
     assert_equal [PM::PROGRAM_CHANGE + @conn.output_chan, 3], @out_instrument.port.buffer
   end
 
+  def test_bank_sent
+    @conn.bank = 2
+    @conn.start
+    assert_equal [PM::CC_BANK_SELECT + @conn.output_chan, 2,
+                  PM::PROGRAM_CHANGE + @conn.output_chan, 3],
+      @out_instrument.port.buffer
+  end
+
   def test_filter
     filter_block = lambda { |conn, bytes| bytes.map(&:succ) }
     filter = PM::Filter.new(filter_block, nil)

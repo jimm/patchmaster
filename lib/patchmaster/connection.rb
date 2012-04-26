@@ -9,7 +9,7 @@ module PM
 class Connection
 
   attr_accessor :input, :input_chan, :output, :output_chan,
-    :pc_prog, :zone, :xpose, :filter
+    :bank, :pc_prog, :zone, :xpose, :filter
 
   # If input_chan is nil than all messages from input will be sent to
   # output.
@@ -25,8 +25,11 @@ class Connection
   end
 
   def start(start_bytes=nil)
-    midi_out(start_bytes) if start_bytes
-    midi_out([PROGRAM_CHANGE + @output_chan, @pc_prog]) if pc?
+    bytes = []
+    bytes += start_bytes if start_bytes
+    bytes += [CC_BANK_SELECT + @output_chan, @bank] if @bank
+    bytes += [PROGRAM_CHANGE + @output_chan, @pc_prog] if @pc_prog
+    midi_out(bytes) unless bytes.empty?
     @input.add_connection(self)
   end
 

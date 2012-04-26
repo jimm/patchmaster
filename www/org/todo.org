@@ -43,10 +43,6 @@ but the most crucial features.\\
 
 - Need a logo.
 
-- Connections should know how to send bank numbers as well as patch changes.
-
-- Screen shot?
-
 - Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 

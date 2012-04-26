@@ -176,8 +176,8 @@ Example:
 #+end_src
 
 Connects input to output. A connection can optionally specify a program
-change number (sent to the output instrument on =out_chan=), a zone, and a
-filter (see below).
+change or bank plus program change (sent to the output instrument on
+=out_chan=), a zone, and a filter (see below).
 
 - prog_chg
 - zone
@@ -189,7 +189,7 @@ Example:
   song "My First Song" do
     patch "First Song, First Patch" do
       connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to ch 4 on :sj
-        prog_chg 100
+        prog_chg 100    # no bank, prog chg 100
         zone C4, B5
         filter { |connection, bytes|
           # ...
@@ -197,6 +197,58 @@ Example:
       end
     end
   end
+#+end_src
+
+***** Program Changes
+
+#+begin_src ruby
+  prog_chg prog_number
+  prog_chg bank_number, prog_number
+#+end_src
+
+Sends =prog_number= to the output instrument's channel. If =bank_number= is
+specified, sends bank change then program change.
+
+Only one program change per connection is allowed. If there is more than one
+in a connection the last one is used.
+
+Example:
+
+#+begin_src ruby
+  prog_chg 42        # program change only
+  prog_chg 2, 100    # bank change th
+#+end_src
+
+***** Zones
+
+#+begin_src ruby
+  zone low, high
+  zone (low..high)   # or (low...high) to exclude high
+#+end_src
+
+By default a connection accepts and processes notes (and poly pressure
+messages) for all MIDI note numbers 0-127. You can use the zone command to
+limit which notes are passed through. Notes outside the defined range are
+ignored.
+
+The =zone= command can take either two notes or a range. Notes can be
+numbers, or you can use the constants defined in consts.rb (for example, C2, A#3
+consts.rb) such as C2, Ab3, or Df7 ("s" for sharp, "f" or "b" for "flat").
+
+If you specify a single number, it's the bottom of the zone and the zone
+extends all the way up to note 127. If you specify no numbers, that's the
+same as not specifying a zone at all; all notes will get through.
+
+Only one zone per connection is allowed. If there is more than one in a
+connection the last one is used.
+
+Example:
+
+#+begin_src ruby
+  zone C2         # filters out all notes below C2
+  zone C2, B4     # only allows notes from C2 to B4
+  zone (C2..B4)   # same as previous
+  zone (C2...C5)  # same as previous ("..." excludes top)
 #+end_src
 
 ***** Filters
@@ -213,6 +265,9 @@ a channel message).
 The filter's block must return the array of bytes you want sent to the
 output. Don't use the "return" keyword; simply add the bytes as the last
 thing in the block.
+
+Only one filter per connection is allowed. If there is more than one in a
+connection the last one is used.
 
 Example:
 

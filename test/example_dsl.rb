@@ -28,7 +28,7 @@ song "First Song" do
       transpose 12
     end
     connection :ws_in, 6, :sj, 4 do  # only chan 6 from :ws_in, out to chan 4 on :sj
-      prog_chg 100
+      prog_chg 2, 100                # bank 2, prog 100
       zone C4, B5
       filter { |connection, bytes|
         if bytes.note_off?
