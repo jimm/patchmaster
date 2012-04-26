@@ -1,6 +1,6 @@
 #+title: PatchMaster Files
 #+options: h:7
-#+html: <div class="nav"><a href="index.html">Home</a></div>
+#+html: <!--#include virtual="header.html"-->
 
 * PatchMaster Files
 

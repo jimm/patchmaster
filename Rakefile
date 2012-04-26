@@ -8,8 +8,12 @@ HERE = File.dirname(__FILE__)
 PROJECT_NAME = 'patchmaster'
 GEM_VERSION = '0.0.5'
 GEM_DATE = Time.now.strftime('%Y-%m-%d')
+WEB_SERVER = 'jimm.textdriven.com'
+WEB_DIR = 'domains/patchmaster.org'
+LOCAL_HTML_TARGET = "/Library/WebServer/Documents"
+LOCAL_CGI_TARGET = "/Library/WebServer/CGI-Executables"
 
-task :default => [:package]
+# Default is defined below after namespace definitions.
 
 Rake::TestTask.new do |t|
   t.libs << File.join(HERE, 'test')
@@ -18,10 +22,12 @@ Rake::TestTask.new do |t|
   t.pattern = "test/**/*_test.rb"
 end
 
-Rake::RDocTask.new do | rd |
+namespace :doc do
+  Rake::RDocTask.new do | rd |
     rd.main = 'README.rdoc'
     rd.title = 'PatchMaster'
     rd.rdoc_files.include('README.rdoc', 'TODO.rdoc', 'lib/**/*.rb')
+  end
 end
 
 spec = Gem::Specification.new do |s|
@@ -44,15 +50,33 @@ EOS
   s.license     = 'Ruby'
 end
 
-# Creates a :package task (also named :gem). Also useful are :clobber_package
-# and :repackage.
-Gem::PackageTask.new(spec) do |package|
+gem_ns = namespace :gem do
+
+  # Creates a :package task (also named :gem). Also useful are
+  # :clobber_package and :repackage.
+  Gem::PackageTask.new(spec) do |package|
+  end
+
+  desc "Publish the gem to RubyGems.org"
+  task :publish => [:rdoc, :package] do
+    system "gem push pkg/#{PROJECT_NAME}-#{GEM_VERSION}.gem"
+  end
 end
 
-desc "Publish the gem to RubyGems.org"
-task :publish => [:rdoc, :package] do
-  system "gem push pkg/#{PROJECT_NAME}-#{GEM_VERSION}.gem"
+namespace :web do
+  desc "Publish the Web site (Org Mode files must be HTML-ized)"
+  task :publish do
+    system "scp -r www/public_html #{WEB_SERVER}:#{WEB_DIR}"
+  end
+
+  desc "copy everything to local Mac Web server"
+  task :local do
+    system("rm -rf #{LOCAL_HTML_TARGET}/* #{LOCAL_CGI_TARGET}/*")
+    system("cp -r www/public_html/* #{LOCAL_HTML_TARGET}")
+  end
 end
 
 desc "Clean up rdoc and packages"
-task :clean => [:clobber_rdoc, :clobber_package]
+task :clean => [:clobber_rdoc, gem_ns[:clobber_package]]
+
+task :default => [gem_ns[:package]]

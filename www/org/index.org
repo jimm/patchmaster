@@ -1,5 +1,5 @@
 #+title: PatchMaster
-#+html: <div class="nav">Home</div>
+#+html: <!--#include virtual="header.html"-->
 
 * PatchMaster
 

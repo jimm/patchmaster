@@ -1,5 +1,5 @@
 #+title: Tips and Tricks
-#+html: <div class="nav"><a href="index.html">Home</a></div>
+#+html: <!--#include virtual="header.html"-->
 
 * Tips and Tricks
 
