@@ -232,8 +232,8 @@ limit which notes are passed through. Notes outside the defined range are
 ignored.
 
 The =zone= command can take either two notes or a range. Notes can be
-numbers, or you can use the constants defined in consts.rb (for example, C2, A#3
-consts.rb) such as C2, Ab3, or Df7 ("s" for sharp, "f" or "b" for "flat").
+numbers, or you can use the constants defined in consts.rb such as =C2=,
+=Ab3=, or =Df7= ("s" for sharp, "f" or "b" for "flat").
 
 If you specify a single number, it's the bottom of the zone and the zone
 extends all the way up to note 127. If you specify no numbers, that's the
