@@ -26,8 +26,11 @@ Good engineering is hard to find, but bad engineering is fun to laugh at.\\
 -- Dan Franklin, on the xBBN mailing list
 #+end_quote
 
-None known, though many are assumed to exist. Please send bug reports to [[mailto:jim@jimmenard.com][Jim
-Menard]].
+- Need better CSS for Web site so left margin of content moves when site
+  made bigger and LHS grows into it.
+
+# None known, though many are assumed to exist. Please send bug reports to [[mailto:jim@jimmenard.com][Jim
+# Menard]].
 
 * New Features
 
@@ -38,6 +41,7 @@ but the most crucial features.\\
 -- Steve Jobs
 #+end_quote
 
+- Need a logo.
 
 - Connections should know how to send bank numbers as well as patch changes.
 

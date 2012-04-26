@@ -1,6 +1,7 @@
 <div class="lhs">
   <ul id="menu">
     <li><a href="index.html">Home</a></li>
+    <li><a href="screenshots.html">Screen Shots</a></li>
     <li><a href="patches.html">Patches and Connections</a></li>
     <li><a href="file_format.html">PatchMaster Files</a></li>
     <li><a href="tips_and_tricks.html">Tips and Tricks</a></li>
@@ -13,14 +14,15 @@
 </div>
 <script type="text/javascript">
   // Not time for jQuery yet, but soon perhaps.
-  if (window.location.pathname == "/index.html")
+  if (window.location.pathname == "/index.html" || window.location.pathname == "/")
     document.getElementById("logo").innerHTML = "PatchMaster";
 
   var kids = document.getElementById("menu").children;
   var i;
   for (i = 0; i < kids.length; ++i) {
     var kid = kids[i];
-    if (window.location.pathname == "/" + kid.firstChild.getAttribute('href'))
+    if ((window.location.pathname == "/" + kid.firstChild.getAttribute('href')) ||
+        (window.location.pathname == "/" && kid.firstChild.getAttribute('href') == "index.html"))
       kid.innerHTML = kid.firstChild.innerHTML;
   }
 </script>
