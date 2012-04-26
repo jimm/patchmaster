@@ -1,5 +1,4 @@
 <div class="lhs">
-  <h1>PatchMaster</h1>
   <ul id="menu">
     <li><a href="index.html">Home</a></li>
     <li><a href="patches.html">Patches and Connections</a></li>
@@ -10,13 +9,12 @@
   </ul>
 </div>
 <div class="header">
-  <h1>PatchMaster</h1>
-  <div id="nav" class="nav"><a href="index.html">Home</a></div>
+  <h1 id="logo"><a href="index.html">PatchMaster</a></h1>
 </div>
 <script type="text/javascript">
   // Not time for jQuery yet, but soon perhaps.
   if (window.location.pathname == "/index.html")
-    document.getElementById("nav").innerHTML = "Home";
+    document.getElementById("logo").innerHTML = "PatchMaster";
 
   var kids = document.getElementById("menu").children;
   var i;

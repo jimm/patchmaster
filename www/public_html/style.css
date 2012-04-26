@@ -1,32 +1,39 @@
 body {
-  background-color: #ddd;
+  background-color: #888;
   margin-top: 0;
 }
 
 div.header {
   margin-top: 0;
+  padding-top: 1px;
 }
-div.header h1 {
-  padding-bottom: 0;
-  margin-bottom: 0;
+div.header h1 a:link,
+div.header h1 a:visited,
+div.header h1 a:hover,
+div.header h1 a:active {
+  text-decoration: none;
+  color: black;
 }
+
 div.nav {
   padding-bottom: 0.5em;
 }
 
 div.lhs {
   position: fixed;
-  top: 4em;
+  top: 1em;
   left: 0;
   margin-left: 1em;
-}
-div.lhs h1 {
-  font-size: 1em;
+  padding: 0.5em;
+  background-color: #eee;
 }
 div.lhs ul {
   padding-left: 0;
   margin-left: 0;
   list-style: none;
+}
+div.lhs ul li {
+  padding-bottom: 1em;
 }
 
 div#table-of-contents {
@@ -48,8 +55,7 @@ div#content {
   background-color: #ddd;
 
   background-color: white;
-  padding-left: 2em;
-  padding-right: 2em;
+  padding: 0 2em 0.5em 2em;
 }
 div#content h1.title {
   display: none;
