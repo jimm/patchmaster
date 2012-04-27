@@ -1,28 +1,56 @@
-<div class="lhs">
-  <ul id="menu">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="patches.html">Patches and Connections</a></li>
-    <li><a href="file_format.html">PatchMaster Files</a></li>
-    <li><a href="tips_and_tricks.html">Tips and Tricks</a></li>
-    <li><a href="screenshots.html">Screen Shots</a></li>
-    <li><a href="changes.html">Changes</a></li>
-    <li><a href="todo.html">To Do</a></li>
-  </ul>
+<div id="lhs">
+<pre class="src src-ruby"><span style="color: #b22222;"># PatchMaster</span>
+
+conn <span style="color: #008b8b;">:mb</span> 1 <span style="color: #008b8b;">:d4</span> 10 <span style="color: #7f007f;">do</span>
+  zone <span style="color: #228b22;">C0</span>..<span style="color: #228b22;">B3</span>
+  xpose 12
+<span style="color: #7f007f;">end</span>
+
+conn <span style="color: #008b8b;">:mb</span> 1 <span style="color: #008b8b;">:kzwl</span> 1 <span style="color: #7f007f;">do</span>
+  zone <span style="color: #228b22;">C4</span>..<span style="color: #228b22;">B8</span>
+  filter <span style="color: #7f007f;">do</span> |c,b|
+    <span style="color: #7f007f;">if</span> b.note?
+      b[2] *= 2
+      b[2] &amp;= 0x7f
+    <span style="color: #7f007f;">end</span>
+    b
+  <span style="color: #7f007f;">end</span>
+<span style="color: #7f007f;">end</span>
+</pre>
 </div>
+
 <div class="header">
   <h1 id="logo"><a href="index.html">PatchMaster</a></h1>
 </div>
+
+<div class="nav noprint">
+  <ul id="menu">
+    <li style="display:inline"><a href="index.html">Home</a></li>
+    <li style="display:inline"><a href="patches.html">Patches</a></li>
+    <li style="display:inline"><a href="file_format.html">PatchMaster Files</a></li>
+    <li style="display:inline"><a href="tips_and_tricks.html">Tips and Tricks</a></li>
+    <li style="display:inline"><a href="screenshots.html">Screen Shots</a></li>
+    <li style="display:inline"><a href="changes.html">Changes</a></li>
+    <li style="display:inline"><a href="todo.html">To Do</a></li>
+  </ul>
+</div>
+
 <script type="text/javascript">
   // Not time for jQuery yet, but soon perhaps.
-  if (window.location.pathname == "/index.html" || window.location.pathname == "/")
-    document.getElementById("logo").innerHTML = "PatchMaster";
+  var loc = window.location.pathname;
+  if (loc == "/index.html" || loc == "/") {
+    var elem = document.getElementById("logo");
+    elem.innerHTML = elem.firstChild.innerHTML; // remove link
+  }
 
   var kids = document.getElementById("menu").children;
   var i;
   for (i = 0; i < kids.length; ++i) {
     var kid = kids[i];
-    if ((window.location.pathname == "/" + kid.firstChild.getAttribute('href')) ||
-        (window.location.pathname == "/" && kid.firstChild.getAttribute('href') == "index.html"))
-      kid.innerHTML = kid.firstChild.innerHTML;
+    if ((loc == "/" + kid.firstChild.getAttribute('href')) ||
+        (loc == "/" && kid.firstChild.getAttribute('href') == "index.html")) {
+      kid.innerHTML = kid.firstChild.innerHTML; // remove link
+      kid.setAttribute("class", "active-nav");
+    }
   }
 </script>

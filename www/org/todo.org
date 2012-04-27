@@ -64,6 +64,8 @@ but the most crucial features.\\
 
 - Help screen.
 
+- Documentation for screen commands.
+
 - More documentation.
 
 - Handle window resizing (SIGWINCH). How do I get new screen size?

@@ -16,24 +16,47 @@ div.header h1 a:active {
 }
 
 div.nav {
-  padding-bottom: 0.5em;
+  background-color: black;
+  color: white;
 }
 
-div.lhs {
-  position: fixed;
-  top: 1em;
-  left: 0;
-  margin-left: 1em;
-  padding: 0.5em;
-  background-color: #eee;
-}
-div.lhs ul {
+div.nav ul {
+  display: inline;
   padding-left: 0;
   margin-left: 0;
+  padding-bottom: 0.5em;
   list-style: none;
+  align: center;
 }
-div.lhs ul li {
-  padding-bottom: 1em;
+ul#menu li {
+  border-left: 1px solid #888;
+  padding-left: 0.5em;
+  padding-right: 0.25em;
+  text-align: center;
+}
+/* FIXME not red, but no border at all */
+ul#menu li:first {
+  border-left: 4px solid red;
+  padding-left: 0;
+}
+div.nav a:link,
+div.nav a:visited,
+div.nav a:hover,
+div.nav a:active {
+  text-decoration: none;
+  color: white;
+}
+
+div#lhs {
+  position: fixed;
+  top: -8px;
+  left: 6px;
+  z-index: -1;
+}
+
+.active-nav {
+  background-color: #eee;
+  color: black;
 }
 
 div#table-of-contents {
@@ -50,8 +73,7 @@ div#table-of-contents ul {
 }
 div#content {
   width: 40em;
-  margin: auto;
-  margin-top: 0;
+  margin: 0 auto;
   background-color: #ddd;
 
   background-color: white;
@@ -69,3 +91,6 @@ div#postamble {
 div#postamble p {
   margin-top: -0.5em;
 }
+
+.noprint {}
+@media print { .noprint {display: none} }
