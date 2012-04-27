@@ -1,12 +1,12 @@
 <div id="lhs">
 <pre class="src src-ruby"><span style="color: #b22222;"># PatchMaster</span>
 
-conn <span style="color: #008b8b;">:mb</span> 1 <span style="color: #008b8b;">:d4</span> 10 <span style="color: #7f007f;">do</span>
+conn <span style="color: #008b8b;">:mb</span>, 1, <span style="color: #008b8b;">:d4</span>, 10 <span style="color: #7f007f;">do</span>
   zone <span style="color: #228b22;">C0</span>..<span style="color: #228b22;">B3</span>
   xpose 12
 <span style="color: #7f007f;">end</span>
 
-conn <span style="color: #008b8b;">:mb</span> 1 <span style="color: #008b8b;">:kzwl</span> 1 <span style="color: #7f007f;">do</span>
+conn <span style="color: #008b8b;">:mb</span>, 1, <span style="color: #008b8b;">:kzwl,</span> 1 <span style="color: #7f007f;">do</span>
   zone <span style="color: #228b22;">C4</span>..<span style="color: #228b22;">B8</span>
   filter <span style="color: #7f007f;">do</span> |c,b|
     <span style="color: #7f007f;">if</span> b.note?
