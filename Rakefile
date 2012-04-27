@@ -26,7 +26,7 @@ doc_ns = namespace :doc do
   Rake::RDocTask.new do | rd |
     rd.main = 'README.rdoc'
     rd.title = 'PatchMaster'
-    rd.rdoc_files.include('README.rdoc', 'TODO.rdoc', 'lib/**/*.rb')
+    rd.rdoc_files.include('README.rdoc', 'lib/**/*.rb')
   end
 end
 
@@ -45,7 +45,7 @@ EOS
   s.executables << PROJECT_NAME
   s.files       = FileList["bin/*", "lib/**/*"].to_a
   s.test_files  = FileList["test/**/test*.rb"].to_a
-  s.homepage    = "https://github.com/jimm/#{PROJECT_NAME}"
+  s.homepage    = "http://www.patchmaster.org/"
   s.add_runtime_dependency 'midi-eye'
   s.license     = 'Ruby'
 end
