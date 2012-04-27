@@ -91,6 +91,7 @@ PatchMaster file format.
 
 - All about [[file:patches.org][patches and connections]] --- what happens when they run
 - The [[file:file_format.org][PatchMaster file format]]
-- [[file:tips_and_tricks.org][Tips and Tricks]]
+- [[file:tips_and_tricks.org][Tips and tricks]]
+- [[file:screenshots.org][Screen Shots]]
 - [[file:changes.org][Changes]] between PatchMaster versions
 - [[file:todo.org][To Do]] list, including bugs and new features

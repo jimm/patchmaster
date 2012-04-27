@@ -15,8 +15,7 @@ PatchMaster files describe your MIDI setup and define triggers, songs with
 their patches, and song lists. They are written in Ruby using a few special
 keywords (Ruby method names).
 
-For a sample PatchMaster file, see
-examples/example.rb[https://github.com/jimm/patchmaster/blob/master/examples/example.rb].
+For a sample PatchMaster file, see [[https://github.com/jimm/patchmaster/blob/master/examples/example.rb][examples/example.rb]].
 
 * Editing PatchMaster Files
 
