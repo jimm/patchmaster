@@ -1,0 +1,2 @@
+Options +ExecCGI +SymLinksIfOwnerMatch
+AddHandler server-parsed .html
