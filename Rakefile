@@ -22,7 +22,7 @@ Rake::TestTask.new do |t|
   t.pattern = "test/**/*_test.rb"
 end
 
-namespace :doc do
+doc_ns = namespace :doc do
   Rake::RDocTask.new do | rd |
     rd.main = 'README.rdoc'
     rd.title = 'PatchMaster'
@@ -64,7 +64,12 @@ gem_ns = namespace :gem do
 end
 
 namespace :web do
-  desc "Publish the Web site (Org Mode files must be HTML-ized)"
+  desc "Export Org-mode files to HTML"
+  task :build do
+    system("/Applications/Emacs.app/Contents/MacOS/Emacs --batch --load ~/.emacs --find-file www/org/file_format.org --eval '(org-publish (assoc \"patchmaster\" org-publish-project-alist) t)'")
+  end
+
+  desc "Publish the Web site (does not call web:build)"
   task :publish do
     system "scp -r www/public_html #{WEB_SERVER}:#{WEB_DIR}"
   end
@@ -76,7 +81,12 @@ namespace :web do
   end
 end
 
-desc "Clean up rdoc and packages"
-task :clean => [:clobber_rdoc, gem_ns[:clobber_package]]
+desc "Clean up rdoc, packages, and HTML generated from Org-mode files"
+task :clean => [doc_ns[:clobber_rdoc], gem_ns[:clobber_package]] do
+  Dir["www/org/*.org"].each do |f|
+    html = f.sub(/org/, 'public_html').sub(/\.org$/, '.html')
+    File.delete(f.sub(/org/, 'public_html').sub(/\.org$/, '.html')) if File.exist?(html)
+  end
+end
 
 task :default => [gem_ns[:package]]
