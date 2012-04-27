@@ -1,5 +1,6 @@
 #+title: To Do
 #+html: <!--#include virtual="header.html"-->
+#+options: num:nil
 
 * Bugs
 
@@ -10,20 +11,6 @@ the universe of bugs, but at least you can drive something fast, arm
 yourself with powerful tools, and look good doing it.\\
 \\
 -- markg@be.com
-#+end_quote
-
-#+begin_quote
-The most likely way for the world to be destroyed, most experts agree, is by
-accident. That's where we come in; we're computer professionals. We cause
-accidents.\\
-\\
--- Nathaniel S. Borenstein
-#+end_quote
-
-#+begin_quote
-Good engineering is hard to find, but bad engineering is fun to laugh at.\\
-\\
--- Dan Franklin, on the xBBN mailing list
 #+end_quote
 
 - Need better CSS for Web site so left margin of content moves when site

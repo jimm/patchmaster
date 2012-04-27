@@ -1,5 +1,6 @@
 #+title: Tips and Tricks
 #+html: <!--#include virtual="header.html"-->
+#+options: num:nil
 
 * Tips and Tricks
 

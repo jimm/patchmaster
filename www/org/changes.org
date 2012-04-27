@@ -1,5 +1,6 @@
 #+title: Changes
 #+html: <!--#include virtual="header.html"-->
+#+options: num:nil
 
 * Changes
 
