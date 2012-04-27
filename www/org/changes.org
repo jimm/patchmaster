@@ -10,6 +10,8 @@ In programming, do, or undo. There is always try.\\
 -- Yoda (via Ron Jeffries)
 #+end_quote
 
+* 0.0.6
+
 * 0.0.5
 
 - Program change command can now take optional bank number.
