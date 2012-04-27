@@ -58,7 +58,7 @@ gem_ns = namespace :gem do
   end
 
   desc "Publish the gem to RubyGems.org"
-  task :publish => [:rdoc, :package] do
+  task :publish => [doc_ns[:rdoc], :package] do
     system "gem push pkg/#{PROJECT_NAME}-#{GEM_VERSION}.gem"
   end
 end
