@@ -1,5 +1,6 @@
 body {
-  background-color: #888;
+  background-image: url('images/2keys.png');
+  background-attachment: fixed;
   margin-top: 0;
 }
 
@@ -51,6 +52,7 @@ div#lhs {
   position: fixed;
   top: -8px;
   left: 6px;
+  width: 20em;
   z-index: -1;
 }
 
