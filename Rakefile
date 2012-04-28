@@ -71,7 +71,7 @@ namespace :web do
 
   desc "Publish the Web site (does not call web:build)"
   task :publish do
-    system "scp -r www/public_html #{WEB_SERVER}:#{WEB_DIR}"
+    system "rsync -qrlpt --del --exclude=.textdrive www/public_html #{WEB_SERVER}:#{WEB_DIR}"
   end
 
   desc "copy everything to local Mac Web server"
