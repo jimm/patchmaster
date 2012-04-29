@@ -89,6 +89,8 @@ PatchMaster file format.
 
 * More Information
 
+- Descriptions of all the [[file:components.org][components]]: songs, patches, connections, filters,
+  and more
 - All about [[file:patches.org][patches and connections]] --- what happens when they run
 - The [[file:file_format.org][PatchMaster file format]]
 - [[file:tips_and_tricks.org][Tips and tricks]]
