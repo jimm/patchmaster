@@ -118,9 +118,10 @@ class PatchMaster < SimpleDelegator
     @running
   end
 
-  # Send the message with the given name to all outputs.
+  # Send the message with the given +name+ to all outputs. Names are matched
+  # case-insensitively.
   def send_message(name)
-    msg = @messages[name]
+    msg = @messages[name.downcase]
     if !msg
       message("Message \"#{name}\" not found")
       return

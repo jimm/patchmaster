@@ -47,12 +47,12 @@ class DSL
   alias_method :out, :output
 
   def message(name, bytes)
-    @pm.messages[name] = bytes
+    @pm.messages[name.downcase] = bytes
   end
 
-  def message_key(name, key_sym)
+  def message_key(name, key_or_sym)
     if !@pm.no_gui              # TODO get rid of double negative
-      PM::Main.instance.bind_message(name, key_sym)
+      PM::Main.instance.bind_message(name, key_or_sym)
     end
   end
 
