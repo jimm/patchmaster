@@ -105,8 +105,12 @@ class Main
     end
   end
 
-  def bind_message(name, key_sym)
-    @message_bindings[FUNCTION_KEY_SYMBOLS[key_sym]] = name
+  def bind_message(name, key_or_sym)
+    if FUNCTION_KEY_SYMBOLS.keys.include?(key_or_sym)
+      @message_bindings[FUNCTION_KEY_SYMBOLS[key_or_sym]] = name
+    else
+      @message_bindings[key_or_sym] = name
+    end
   end
 
   def config_curses
