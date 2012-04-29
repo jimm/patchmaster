@@ -162,6 +162,6 @@ EOS
 
   def test_messages
     @dsl.load(EXAMPLE_DSL)
-    assert_equal [PM::TUNE_REQUEST], @pm.messages["Tune Request"]
+    assert_equal [PM::TUNE_REQUEST], @pm.messages["Tune Request".downcase]
   end
 end
