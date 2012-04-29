@@ -17,6 +17,9 @@ keywords (Ruby method names).
 
 For a sample PatchMaster file, see [[https://github.com/jimm/patchmaster/blob/master/examples/example.rb][examples/example.rb]].
 
+For a more detailed discussion of the things that can be in a PatchMaster
+file (how they work and what they're for), see [[file:components.org][Components]].
+
 * Editing PatchMaster Files
 
 #+begin_quote
@@ -74,9 +77,6 @@ Example:
 Stores a named MIDI message. These messages can be sent at any time using
 message keys or triggers, and can be sent from filters.
 
-Message names, when referenced by message keys, triggers, or filters, are case
-sensitive.
-
 Messages sent from filters are sent before the filtered bytes are sent. Make
 sure the filter returns the filtered bytes after sending your message. If
 you send the mesasge last in your filter then no other bytes will be sent.
@@ -102,7 +102,7 @@ you send the mesasge last in your filter then no other bytes will be sent.
 #+end_src
 
 Maps the named message to a key. Message keys are ignored if PatchMaster was
-started without Curses. =key= may be any one-character string (for example
+started without curses. =key= may be any one-character string (for example
 '8' or 'p') or a function key symbol of the form =:f1=, =:f2=, etc.
 
 ** Triggers
@@ -172,15 +172,20 @@ Example:
 **** Connections
 
 #+begin_src ruby
-  connection in_sym, in_chan_or_any, out_sym, out_chan, block
+  connection in_sym, in_chan_or_nil, out_sym, out_chan, block
 #+end_src
 
-Connects input to output. A connection can optionally specify a program
-change or bank plus program change (sent to the output instrument on
-=out_chan=), a zone, and a filter (see below).
+Connects input to output. If +in_chan_or_nil+ is +nil+ then any message
+coming from that instrument will be processed, else only messages coming
+from the specified channel will be processed.
+
+A connection can optionally specify a program change or bank plus program
+change (sent to the output instrument on =out_chan=), a zone, a
+transposition, and a filter (see below).
 
 - prog_chg
 - zone
+- transpose
 - filter
 
 Example:
@@ -191,6 +196,7 @@ Example:
       connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to ch 4 on :sj
         prog_chg 100    # no bank, prog chg 100
         zone C4, B5
+        transpose -12
         filter { |connection, bytes|
           # ...
         }
@@ -250,6 +256,15 @@ Example:
   zone (C2..B4)   # same as previous
   zone (C2...C5)  # same as previous ("..." excludes top)
 #+end_src
+
+***** Transpose
+
+#+begin_src ruby
+  transpose num
+#+end_src
+
+Specifies a note transposition that will be applied to all incoming note on,
+note off, and polyphonic pressure messages.
 
 ***** Filters
 

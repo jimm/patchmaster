@@ -53,8 +53,6 @@ but the most crucial features.\\
 
 - Documentation for screen commands.
 
-- More documentation.
-
 - Handle window resizing (SIGWINCH). How do I get new screen size?
 
 - Trap signals like ^C. Don't do work, just set flag to be handled next time

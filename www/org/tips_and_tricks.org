@@ -110,3 +110,11 @@ you actually had to tune most older synths.</i>) For example,
 
    - Start message: program change and note-on for synth D.
    - Stop message: note-offs for synth D and reference synth A.
+* Matching Names
+
+When you enter the name of a song list, song, or patch on the screen, you
+need not type the whole name. Just use the shortest unique prefix of the
+name. Actually, you can type any regular expression. Also, you needn't worry
+about matching upper and lower case; all name comparisons are
+case-insensitive (the regular expression is automatically made to match
+case-insensitively).

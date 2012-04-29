@@ -12,6 +12,10 @@ In programming, do, or undo. There is always try.\\
 
 * 0.0.6
 
+- Added missing note const definitions.
+
+- Made message lookup case-insensitive.
+
 * 0.0.5
 
 - Program change command can now take optional bank number.

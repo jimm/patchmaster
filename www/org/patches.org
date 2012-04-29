@@ -1,8 +1,8 @@
-#+title: Patches and Connections
+#+title: Running Patches
 #+html: <!--#include virtual="header.html"-->
 #+options: num:nil
 
-* Patches
+* Running Patches
 
 #+begin_quote
 A wandering minstrel I -\\
