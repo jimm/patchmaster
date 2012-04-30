@@ -10,9 +10,9 @@ Welcome. Welcome. Welcome.\\
 -- The entire Ig Nobel awards ceremony welcoming speech
 #+end_quote
 
-PatchMaster is real time MIDI performance software that allows a musician to
-totally reconfigure a MIDI setup instantaneously and modify the MIDI data
-while it's being sent.
+PatchMaster is a MIDI processing and patching system. It allows a musician
+to reconfigure a MIDI setup instantaneously and modify the MIDI data in real
+time.
 
 With PatchMaster a performer can split controlling keyboards, layer MIDI
 channels, transpose them, send program changes and System Exclusive
