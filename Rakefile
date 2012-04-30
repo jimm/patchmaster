@@ -74,7 +74,7 @@ namespace :web do
     system "rsync -qrlpt --del --exclude=.textdrive www/public_html #{WEB_SERVER}:#{WEB_DIR}"
   end
 
-  desc "copy everything to local Mac Web server"
+  desc "Copy everything to local Mac Web server"
   task :local do
     system("rm -rf #{LOCAL_HTML_TARGET}/* #{LOCAL_CGI_TARGET}/*")
     system("cp -r www/public_html/* #{LOCAL_HTML_TARGET}")
