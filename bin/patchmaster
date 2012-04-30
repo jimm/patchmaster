@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# usage: patchmaster [-n] [-d] [pm_file]
+# usage: patchmaster [-n] [-t] [-d] [pm_file]
 #
 # Starts PatchMaster and optionally loads pm_file.
 #
@@ -8,6 +8,8 @@
 # being able to connect to the MIDI instruments specified in pm_file are
 # ignored, and no MIDI data is sent/received. That is useful if you want to
 # run PatchMaster without actually talking to any MIDI instruments.
+#
+# To run PatchMaster without a GUI use -t.
 
 require 'optparse'
 
