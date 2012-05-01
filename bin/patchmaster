@@ -20,6 +20,10 @@ OptionParser.new do |opts|
   opts.on("-d", "--debug", "Turn on debug mode") { $DEBUG = true }
   opts.on("-n", "--no-midi", "Turn off MIDI processing") { use_midi = false }
   opts.on("-t", "--text", "--nw", "--no-window", "No windows") { use_gui = false }
+  opts.on_tail("-h", "-?", "--help", "Show this message") do
+    puts opts
+    exit 0
+  end
 end.parse!(ARGV)
 
 # Must require patchmaster here, after handling options, because Singleton
