@@ -12,6 +12,11 @@ In programming, do, or undo. There is always try.\\
 
 * 0.0.7
 
+- Handle display and reading of missing block text for triggers and filters
+  more gracefully. (Blocks are always loaded properly but the text
+  representation sometimes isn't. See the "Editing PatchMaster File" section
+  of the "PatchMaster Files" help file.)
+
 * 0.0.6
 
 - Added missing note const definitions.
