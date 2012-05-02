@@ -5,6 +5,10 @@ body {
   margin-top: 0;
 }
 
+ol li {
+  margin-top: 1em;
+}
+
 div.header {
   margin-top: 0;
   padding-top: 1px;
@@ -36,11 +40,6 @@ ul#menu li {
   padding-right: 0.25em;
   text-align: center;
 }
-/* FIXME not red, but no border at all */
-ul#menu li:first {
-  border-left: 4px solid red;
-  padding-left: 0;
-}
 div.nav a:link,
 div.nav a:visited,
 div.nav a:hover,
@@ -51,14 +50,14 @@ div.nav a:active {
 
 div#lhs {
   position: fixed;
-  top: -8px;
-  left: 6px;
-  width: 20em;
+  top: 8px;
+  left: 20px;
+  width: 15em;
   z-index: -1;
 }
 
 .active-nav {
-  background-color: #eee;
+  background-color: #f3f5f7;
   color: black;
 }
 
@@ -66,7 +65,7 @@ div#table-of-contents {
   width: 40em;
   margin: auto;
 
-  background-color: #eee;
+  background-color: #f3f5f7;
   padding: 0.25em 2em 0.5em 2em;
   margin-left: -2em;
   margin-right: -2em;
