@@ -26,7 +26,7 @@ class Trigger
   end
 
   def to_s
-    "#{@bytes.inspect} => #{@text ? @text.gsub(/\n\s*/, '; ') : ''}"
+    "#{@bytes.inspect} => #{(@text || '# no block text found').gsub(/\n\s*/, '; ')}"
   end
 end
 end

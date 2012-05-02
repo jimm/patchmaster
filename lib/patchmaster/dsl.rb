@@ -266,7 +266,7 @@ class DSL
         end
       end
     end
-    containers.each { |thing| thing.text.strip! }
+    containers.each { |thing| thing.text.strip! if thing.text }
   end
 
 end
