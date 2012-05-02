@@ -16,8 +16,8 @@ yourself with powerful tools, and look good doing it.\\
 - Need better CSS for Web site so left margin of content moves when site
   made bigger and LHS grows into it.
 
-# None known, though many are assumed to exist. Please send bug reports to [[mailto:jim@jimmenard.com][Jim
-# Menard]].
+- Trigger and filter block text isn't read properly when triggers or filters
+  are created in a loop, the blocks are not indented properly, etc.
 
 * New Features
 
@@ -29,6 +29,10 @@ but the most crucial features.\\
 #+end_quote
 
 - Need a logo.
+
+- Add convenience methods to PM::PatchMaster (so they are available to
+  trigger and filter blocks) for things like clamping byte values to
+  (0..127) and limiting min/max values.
 
 - Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?

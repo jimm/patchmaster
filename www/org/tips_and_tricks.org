@@ -81,11 +81,44 @@ and instance variables --- for example, @outputs is the array of all output
 instruments.
 
 #+begin_src ruby
-  def output_silly_bytes
-    @outputs.each { |out| out.midi_out([1, 2, 3] } # Don't really send that
+  def output_reset
+    @outputs.each { |out| out.midi_out([SYSTEM_RESET]) }
   end
     
-  trigger :mb, [CONTROLLER, 126, 127] { output_silly_bytes }
+  trigger :mb, [CONTROLLER, 126, 127] { output_reset }
+#+end_src
+
+* Time Lord
+
+Use the time to modify the MIDI data. Here's an example filter that
+increases or decreases volume based on the time --- essentially an LFO
+that is modulating amplitude.
+
+#+begin_src ruby
+  def time_based_volume
+    t = Time.now.to_f             # to_f gives sub-second accuracy
+    unit_offset = Math.sin(t)     # -1 .. 1
+    volume = (unit_offset * 64) + 64
+    if volume < 0
+      0
+    elsif volume > 127
+      127
+    else
+      volume
+    end
+  end
+  
+  song "s1" do
+    patch "p1" do
+      fiter do |c, b|
+        # Add more bytes to outgoing b array
+        b << CONTROLLER + @output_chan
+        b << CC_VOLUME
+        b << time_based_volume
+        b
+      end
+    end
+  end
 #+end_src
 
 * Tuning
