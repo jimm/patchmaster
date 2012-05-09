@@ -17,6 +17,8 @@ In programming, do, or undo. There is always try.\\
   representation sometimes isn't. See the "Editing PatchMaster File" section
   of the "PatchMaster Files" help file.)
 
+- Added a Gemfile, thanks to shaiguitar (https://github.com/shaiguitar).
+
 * 0.0.6
 
 - Added missing note const definitions.
