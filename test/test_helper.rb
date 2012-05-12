@@ -1,6 +1,5 @@
 require 'test/unit'
 require 'patchmaster'
-require 'midi-eye'
 
 # For all tests, make sure mock I/O MIDI ports are used.
 PM::PatchMaster.instance.no_midi!
