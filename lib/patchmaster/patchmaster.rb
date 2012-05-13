@@ -22,7 +22,8 @@ class PatchMaster < SimpleDelegator
 
   attr_reader :inputs, :outputs, :all_songs, :song_lists
   attr_reader :messages
-  attr_reader :no_midi, :no_gui
+  attr_reader :no_midi
+  attr_accessor :gui
 
   # A Cursor to which we delegate incoming position methods (#song_list,
   # #song, #patch, #next_song, #prev_patch, etc.)
@@ -32,7 +33,7 @@ class PatchMaster < SimpleDelegator
     @cursor = Cursor.new(self)
     super(@cursor)
     @no_midi = false
-    @no_gui = false
+    @gui = nil
 
     if $DEBUG
       @debug_file = File.open(DEBUG_FILE, 'a')
@@ -58,6 +59,7 @@ class PatchMaster < SimpleDelegator
     @cursor.mark
     init_data
     DSL.new(@no_midi).load(file)
+    @loaded_file = file
     @cursor.restore
 
     if restart
@@ -71,6 +73,7 @@ class PatchMaster < SimpleDelegator
 
   def save(file)
     DSL.new(@no_midi).save(file)
+    @loaded_file = file
   rescue => ex
     raise("error saving #{file}: #{ex}" + caller.join("\n"))
   end
@@ -102,16 +105,20 @@ class PatchMaster < SimpleDelegator
     @running = false
   end
 
-  # Run PatchMaster without the GUI. Don't use this when using PM::Main.
-  #
-  # Call #start, wait for inputs' MIDIEye listener threads to finish, then
-  # call #stop. Note that normally nothing stops those threads, so this is
-  # used as a way to make sure the script doesn't quit until killed by
-  # something like SIGINT.
+  # Run PatchMaster without the GUI. Don't use this when using PM::Main. If
+  # there is a GUI then forward this request to it. Otherwise, call #start,
+  # wait for inputs' MIDIEye listener threads to finish, then call #stop.
+  # Note that normally nothing stops those threads, so this is used as a way
+  # to make sure the script doesn't quit until killed by something like
+  # SIGINT.
   def run
-    start(true)
-    @inputs.each { |input| input.listener.join }
-    stop
+    if @gui
+      @gui.run
+    else
+      start(true)
+      @inputs.each { |input| input.listener.join }
+      stop
+    end
   end
 
   def running?

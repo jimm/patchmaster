@@ -51,8 +51,8 @@ class DSL
   end
 
   def message_key(name, key_or_sym)
-    if !@pm.no_gui              # TODO get rid of double negative
-      PM::Main.instance.bind_message(name, key_or_sym)
+    if @pm.gui
+      @pm.gui.bind_message(name, key_or_sym)
     end
   end
 
