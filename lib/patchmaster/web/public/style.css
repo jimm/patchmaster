@@ -14,9 +14,14 @@ table {
   width: 100%;
   height: 100%;
 }
-td {
+tr, td, th {
   border: 1px solid black;
   vertical-align: top;
+}
+th {
+  background-color: black;
+  color: white;
+  border-right: 1px solid #888;
 }
 td#appname {
   background-color: black;
