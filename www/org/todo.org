@@ -28,6 +28,10 @@ but the most crucial features.\\
 -- Steve Jobs
 #+end_quote
 
+- Working on Web interface using Sinatra and Swing interface for JRuby. I'll
+  probably concentrate on the Web interface. See the two branches "webgui"
+  and "swing", but be warned that they are both experimental right now.
+
 - Need a logo.
 
 - Add convenience methods to PM::PatchMaster (so they are available to
