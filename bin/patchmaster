@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# usage: patchmaster [-n] [-t] [-d] [pm_file]
+# usage: patchmaster [-n] [-w] [-t] [-d] [pm_file]
 #
 # Starts PatchMaster and optionally loads pm_file.
 #
@@ -9,17 +9,21 @@
 # ignored, and no MIDI data is sent/received. That is useful if you want to
 # run PatchMaster without actually talking to any MIDI instruments.
 #
+# To run PatchMaster under JRuby using a Web browser GUI use -w and point
+# your browser at http://localhost:4567.
+#
 # To run PatchMaster without a GUI use -t.
 
 require 'optparse'
 
 use_midi = true
-use_gui = true
+gui = :curses
 OptionParser.new do |opts|
   opts.banner = "usage: patchmaster [options] [pm_file]"
   opts.on("-d", "--debug", "Turn on debug mode") { $DEBUG = true }
   opts.on("-n", "--no-midi", "Turn off MIDI processing") { use_midi = false }
-  opts.on("-t", "--text", "--nw", "--no-window", "No windows") { use_gui = false }
+  opts.on("-w", "--web", "Use a Web browser GUI") { gui = :web }
+  opts.on("-t", "--text", "--nw", "--no-window", "No windows") { gui = :text }
   opts.on_tail("-h", "-?", "--help", "Show this message") do
     puts opts
     exit 0
@@ -30,8 +34,15 @@ end.parse!(ARGV)
 # initialize code checks $DEBUG.
 require 'patchmaster'
 
-app = use_gui ? PM::Main.instance : PM::PatchMaster.instance
-app.no_gui! if !use_gui
-app.no_midi! if !use_midi
-app.load(ARGV[0]) if ARGV[0]
-app.run
+pm = PM::PatchMaster.instance
+pm.no_midi! if !use_midi
+pm.load(ARGV[0]) if ARGV[0]
+pm.gui = case gui
+         when :curses
+           require 'patchmaster/app/main'
+           PM::Main.instance
+         when :web
+           require 'patchmaster/web/sinatra_app'
+           PM::SinatraApp.instance
+         end
+pm.run
