@@ -21,6 +21,7 @@ def return_status(opts = nil)
   pm = pm()
   status = {
     :lists => pm.song_lists.map(&:name),
+    :list => pm.song_list.name,
     :songs => pm.song_list.songs.map(&:name),
     :triggers => pm.inputs.collect do |instrument|
       instrument.triggers.collect { |trigger| ":#{instrument.sym} #{trigger.to_s}" }
@@ -39,7 +40,7 @@ def return_status(opts = nil)
             :input => conn.input.name,
             :input_chan => conn.input_chan ? conn.input_chan + 1 : 'all',
             :output => conn.output.name,
-            :output_chan => conn.output_chan,
+            :output_chan => conn.output_chan + 1,
             :pc => conn.pc_prog.to_s,
             :zone => conn.zone ? [conn.note_num_to_name(conn.zone.begin),
                                   conn.note_num_to_name(conn.zone.end)] : '',
