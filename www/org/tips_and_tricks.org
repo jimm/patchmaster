@@ -41,12 +41,13 @@ filter that turns one message into multiple like this:
   filter { |conn, bytes|
     if bytes.note?
       bytes += bytes    # duplicate note message
-      byte.last += 12   # add octave to second note's value
+      bytes[-1] += 12   # add octave to second note's value
     end
+    bytes
   }
 #+end_src
 
-This also shows the use of the predicate method #note? which returns true
+This also shows the use of the predicate method =note?= which returns true
 for note on, note off, and poly pressure messages.
 
 * This One Goes to 11
