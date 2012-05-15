@@ -3,6 +3,8 @@
     <title>PatchMaster</title>
     <script src="js/jquery-1.4.2.js"></script>
     <script src="js/jquery.hotkeys.js"></script>
+    <script src="js/patchmaster.js"></script>
+    <link rel="stylesheet" href="/style.css" type="text/css" />
   </head>
   <body>
     <h1>PatchMaster</h1>
@@ -10,24 +12,51 @@
       <tr height="66%">
         <td>
           <h1>Song Lists</h1>
+            <ul id="song-lists">
+            </ul>
           <h1>Songs</h1>
+            <ul id="songs">
+            </ul>
         </td>
         <td>
           <h1>Song</h1>
-          patches...
+            <ul id="song">
+            </ul>
         </td>
         <td>
           <h1>Info</h1>
+<pre>
+j, down, space  - next patch
+k, up           - prev patch
+n, left         - next song
+p, right        - prev song
+
+g   - goto song
+t   - goto song list
+
+h   - help
+ESC - panic
+
+l   - load
+s   - save
+e   - edit
+
+q   - quit
+</pre>
           <h1>Triggers</h1>
+            <ul id="triggers">
+            </ul>
         </td>
       </tr>
       <tr height="30%">
         <td colspan="3">
           <h1>Connections</h1>
+            <ul id="patch">
+            </ul>
         </td>
       </tr>
       <tr height="4%">
-        <td colspan="3">
+        <td id='message' colspan="3">
           Message Window
         </td>
       </tr>

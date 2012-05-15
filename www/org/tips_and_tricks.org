@@ -126,8 +126,8 @@ that is modulating amplitude.
 
 You might want to set up a song that helps you tune your instruments
 by sending the proper program changes and entering note on and note
-off commands that play the tuning note on different synths. (<i>Yes,
-you actually had to tune most older synths.</i>) For example,
+off commands that play the tuning note on different synths. (Yes,
+you actually had to tune most older synths.) For example,
 
 1. Patch One
 

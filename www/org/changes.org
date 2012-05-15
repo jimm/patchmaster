@@ -19,6 +19,8 @@ In programming, do, or undo. There is always try.\\
 
 - Added a Gemfile, thanks to shaiguitar (https://github.com/shaiguitar).
 
+- The beginnings of a browser-based GUI.
+
 * 0.0.6
 
 - Added missing note const definitions.

@@ -52,6 +52,7 @@ is [[https://github.com/jimm/patchmaster][here]].
   - [[https://github.com/arirusso/midi-message][midi-message]]
   - [[https://github.com/arirusso/nibbler][nibbler]]
   - [[https://github.com/arirusso/unimidi][unimidi]]
+- The [[http://www.sinatrarb.com/][sinatra]] gem, if you want to use PatchMaster's browser GUI
 - Ruby 1.9 (because UniMIDI requires it)
 - Curses (comes with Ruby, but I'm not sure about JRuby)
 
@@ -75,6 +76,9 @@ The =-n= flag tells PatchMaster to not use MIDI. All MIDI errors such as not
 being able to connect to the MIDI instruments specified in pm_file are
 ignored, and no MIDI data is sent/received. That is useful if you want to
 run PatchMaster without actually talking to any MIDI instruments.
+
+The =-w= flag runs the app with a Web gui. Open your browser to
+http://localhost:4567 after starting PatchMaster from the command line.
 
 The =-t= flag runs the app without Curses windows. All output will go to the
 console. The app will run until interrupted. (If you do this, you might want

@@ -1,6 +1,6 @@
 require 'curses'
 require 'singleton'
-%w(list patch info trigger prompt).each { |w| require "patchmaster/app/#{w}_window" }
+%w(list patch info trigger prompt).each { |w| require "patchmaster/curses/#{w}_window" }
 
 module PM
 

@@ -9,8 +9,8 @@
 # ignored, and no MIDI data is sent/received. That is useful if you want to
 # run PatchMaster without actually talking to any MIDI instruments.
 #
-# To run PatchMaster under JRuby using a Web browser GUI use -w and point
-# your browser at http://localhost:4567.
+# To run PatchMaster using a Web browser GUI use -w and point your browser
+# at http://localhost:4567.
 #
 # To run PatchMaster without a GUI use -t.
 
@@ -39,7 +39,7 @@ pm.no_midi! if !use_midi
 pm.load(ARGV[0]) if ARGV[0]
 pm.gui = case gui
          when :curses
-           require 'patchmaster/app/main'
+           require 'patchmaster/curses/main'
            PM::Main.instance
          when :web
            require 'patchmaster/web/sinatra_app'

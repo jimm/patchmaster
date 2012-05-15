@@ -29,8 +29,7 @@ but the most crucial features.\\
 #+end_quote
 
 - Working on Web interface using Sinatra and Swing interface for JRuby. I'll
-  probably concentrate on the Web interface. See the two branches "webgui"
-  and "swing", but be warned that they are both experimental right now.
+  probably concentrate on the Web interface.
 
 - Need a logo.
 

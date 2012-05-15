@@ -1,4 +1,4 @@
-require 'patchmaster/app/pm_window'
+require 'patchmaster/curses/pm_window'
 
 module PM
 class PatchWindow < PmWindow
