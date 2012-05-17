@@ -96,6 +96,12 @@ get '/prev_song' do
   return_status
 end
 
+get '/panic' do
+  # TODO when panic called twice in a row, call panic(true)
+  pm.panic
+  return_status
+end
+
 # ================================================================
 # GUI class: run method
 # ================================================================
