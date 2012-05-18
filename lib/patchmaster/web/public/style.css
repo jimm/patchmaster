@@ -5,10 +5,6 @@ ul {
   list-style: none;
   padding-left: 0;
 }
-.selected {
-  background-color: black;
-  color: white;
-}
 table {
   border-collapse: collapse;
   width: 100%;
@@ -23,8 +19,58 @@ th {
   border-right: 1px solid #888;
 }
 td#appname {
-  background-color: black;
-  color: white;
   text-align: center;
   width: 100%;
+}
+
+/* ================ black on white ================ */
+.default {
+  background-color: white;
+  color: black;
+}
+.reverse-default {
+  background-color: black;
+  color: white;
+}
+.default-border {
+  border: 1px solid black;
+}
+
+/* ================ green on black ================ */
+.green {
+  background-color: black;
+  color: #0f0;
+}
+.reverse-green {
+  background-color: #0f0;
+  color: black;
+}
+.green-border {
+  border: 1px solid #0f0;
+}
+
+/* ================ amber on black ================ */
+.amber {
+  background-color: black;
+  color: #f80;
+}
+.reverse-amber {
+  background-color: #f80;
+  color: black;
+}
+.amber-border {
+  border: 1px solid #f80;
+}
+
+/* ================ white on blue ================ */
+.blue {
+  background-color: blue;
+  color: white;
+}
+.reverse-blue {
+  background-color: white;
+  color: blue;
+}
+.blue-border {
+  border: 1px solid white;
 }
