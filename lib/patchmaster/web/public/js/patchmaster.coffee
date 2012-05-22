@@ -46,6 +46,22 @@ kp = (action) ->
     message(data['message']) if data['message']?
   )
 
+cycle_colors = () ->
+  base_class = color_schemes[color_scheme_index]
+  if color_scheme_index >= 0
+    $('body').removeClass(base_class)
+    $('.selected, th, td#appname').removeClass("reverse-#{base_class}")
+    $('tr, td, th').removeClass("#{base_class}-border")
+
+  color_scheme_index = (color_scheme_index + 1) % color_schemes.length
+
+  base_class = color_schemes[color_scheme_index]
+  $('body').addClass(base_class)
+  $('.selected, th, td#appname').addClass("reverse-#{base_class}")
+  $('tr, td, th').addClass("#{base_class}-border")
+
+  color_scheme = base_class
+
 bindings =
   'j': 'next_patch'
   'down': 'next_patch'
@@ -58,5 +74,6 @@ bindings =
   'esc': 'panic'
 f = (key, val) -> $(document).bind('keydown', key, () -> kp(val))
 f(key, val) for key, val of bindings
+$(document).bind('keydown', 'c', () -> cycle_colors())
 
 kp('status')
