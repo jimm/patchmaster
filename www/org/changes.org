@@ -21,6 +21,8 @@ In programming, do, or undo. There is always try.\\
 
 - The beginnings of a browser-based GUI.
 
+- Colors scheme selections in the browser GUI.
+
 * 0.0.6
 
 - Added missing note const definitions.
