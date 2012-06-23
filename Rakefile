@@ -36,9 +36,8 @@ spec = Gem::Specification.new do |s|
   s.date        = GEM_DATE
   s.summary     = "Realtime MIDI setup configuration and MIDI filtering"
   s.description = <<EOS
-PatchMaster is realtime MIDI performance software that alloweds a musician
-to totally reconfigure a MIDI setup instantaneously and modify the MIDI data
-while it's being sent.
+PatchMaster is a MIDI processing and patching system. It allows a musician to
+reconfigure a MIDI setup instantaneously and modify the MIDI data in real time.
 EOS
   s.author      = "Jim Menard"
   s.email       = 'jim@jimmenard.com'
