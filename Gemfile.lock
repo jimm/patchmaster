@@ -1,0 +1,42 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    backports (2.6.1)
+    eventmachine (0.12.10)
+    ffi (1.0.11)
+    ffi-coremidi (0.1.7)
+      ffi (>= 1.0)
+    midi-eye (0.2.2)
+      midi-message
+      midi-nibbler
+      unimidi
+    midi-message (0.3.1)
+    midi-nibbler (0.1.1)
+      midi-message
+    rack (1.4.1)
+    rack-protection (1.2.0)
+      rack
+    rack-test (0.6.1)
+      rack (>= 1.0)
+    sinatra (1.3.2)
+      rack (~> 1.3, >= 1.3.6)
+      rack-protection (~> 1.2)
+      tilt (~> 1.3, >= 1.3.3)
+    sinatra-contrib (1.3.1)
+      backports (>= 2.0)
+      eventmachine
+      rack-protection
+      rack-test
+      sinatra (~> 1.3.0)
+      tilt (~> 1.3)
+    tilt (1.3.3)
+    unimidi (0.3.3)
+      ffi-coremidi
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  midi-eye
+  sinatra
+  sinatra-contrib
