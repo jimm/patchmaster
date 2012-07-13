@@ -28,6 +28,8 @@ but the most crucial features.\\
 -- Steve Jobs
 #+end_quote
 
+- Write a tutorial.
+
 - Working on Web interface using Sinatra and Swing interface for JRuby. I'll
   probably concentrate on the Web interface.
 
