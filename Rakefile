@@ -8,8 +8,8 @@ HERE = File.dirname(__FILE__)
 PROJECT_NAME = 'patchmaster'
 GEM_VERSION = '0.0.7'
 GEM_DATE = Time.now.strftime('%Y-%m-%d')
-WEB_SERVER = 'jimm.textdriven.com'
-WEB_DIR = 'domains/patchmaster.org'
+WEB_SERVER = 'jimmenard.com'
+WEB_DIR = 'webapps/patchmaster'
 LOCAL_HTML_TARGET = "/Library/WebServer/Documents"
 LOCAL_CGI_TARGET = "/Library/WebServer/CGI-Executables"
 
@@ -70,7 +70,7 @@ namespace :web do
 
   desc "Publish the Web site (does not call web:build)"
   task :publish do
-    system "rsync -qrlpt --del --exclude=.textdrive www/public_html #{WEB_SERVER}:#{WEB_DIR}"
+    system "rsync -qrlpt --del www/public_html/ #{WEB_SERVER}:#{WEB_DIR}"
   end
 
   desc "Copy everything to local Mac Web server"
