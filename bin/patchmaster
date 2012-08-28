@@ -12,7 +12,14 @@
 # To run PatchMaster using a Web browser GUI use -w and point your browser
 # at http://localhost:4567.
 #
-# To run PatchMaster without a GUI use -t.
+# To run PatchMaster without a GUI use -t. All output will go to the
+# console. The app will run until interrupted. (If you do this, you might
+# want to create a trigger that calls `panic', because you won't be able to
+# use the computer keyboard to do that.)
+#
+# The =-d= flag turns on debug mode. The app becomes slightly more verbose
+# and logs everything to `/tmp/pm_debug.txt'.
+
 
 require 'optparse'
 

@@ -67,7 +67,7 @@ To install as a gem, type
 * Running PatchMaster
 
 #+begin_src sh
-  patchmaster [-n] [-t] [-d] [patchmaster_file]
+  patchmaster [-n] [-w] [-t] [-d] [patchmaster_file]
 #+end_src
 
 Starts PatchMaster and optionally loads =patchmaster_file=.
@@ -80,16 +80,13 @@ run PatchMaster without actually talking to any MIDI instruments.
 The =-w= flag runs the app with a Web gui. Open your browser to
 http://localhost:4567 after starting PatchMaster from the command line.
 
-The =-t= flag runs the app without Curses windows. All output will go to the
-console. The app will run until interrupted. (If you do this, you might want
-to create a trigger that calls =panic=, because you won't be able to use the
+To run PatchMaster without a GUI use -t. All output will go to the console.
+The app will run until interrupted. (If you do this, you might want to
+create a trigger that calls =panic=, because you won't be able to use the
 computer keyboard to do that.)
 
 The =-d= flag turns on debug mode. The app becomes slightly more verbose and
 logs everything to =/tmp/pm_debug.txt=.
-
-See "Anatomy of a PatchMaster File" below for a description of the
-PatchMaster file format.
 
 * More Information
 

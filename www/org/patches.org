@@ -13,84 +13,80 @@ And dreamy lullaby!\\
 -- Sir William Gilbert, /The Mikado/
 #+end_quote
 
-Each patch contains connections and an array of start and stop bytes. Each
-connection links an input instrument to a single channel on an output
-instrument.
-
-When a patch is started (it becomes the /current patch/), each connection
-is started and passed the patch's start bytes to send to its output
+When a patch is started it becomes the /current patch/. Each connection is
+started (see below) and passed the patch's start bytes to send to its output
 instrument. When a patch is stopped, each connection is stopped and passed
 the stop bytes to send to its output.
 
 * Connections
 
-Connections have an input instrument and (optional) channel, output
-instrument and channel, and the following optional settings:
+Connections have an input instrument and (optional) input channel, output
+instrument and channel, and the following optional values:
 
-- Program change number (sent on the output instrument's channel)
-- Keyboard zone (low/high keys stored as a Ruby Range)
+- Program bank number
+- Program change number
+- Keyboard zone (low/high keys stored as a Ruby Range object)
 - Transpose
-- Filter (see "Connection Filters" below)
+- Filter (see [[*Connection%20Filters][Connection Filters]] below)
 
 If the input instrument's channel is not specified then all input from that
 instrument is run through the connection. If the channel is specified then
-any data on other channels is ignored.
+any incoming MIDI bytes on other channels are ignored.
 
 ** Start
 
 When a connection is started:
 
 - The start bytes from the patch, if any, are sent to the output instrument
-  as-is (in particular, status bytes' channels are not changed)
+  as-is (in particular, status bytes' channels are not changed)l
 
-- The program change is sent
+- The program change is sent to the output instrument (on the channel
+  defined for the output instrument, of course).
 
 - The connection adds itself to its input instrument's list of outgoing
-  connections
-
-** Running
-
-When MIDI data comes in from an instrument two things happen:
-
-- The data is sent to the instrument's triggers. Each trigger looks at the
-  data and decides if it should act by send its message (for example
-  =next_patch= or =next_song=) to PM::PatchMaster.
-
-- The data is then sent to the connections connected to the instrument, if
-  any. A patch's connections are connected to an input instrument when the
-  patch starts (becomes the active patch) and are disconnected when the
-  patch stops.
-
-While a patch is running (it is the current patch), each connection is given
-the incoming bytes to process. A connection can filter and modify the data
-on the way:
-
-- The data is ignored if it is not on the input instrument's selected
-  channel
-
-- Note messages (note on, note off, and polyphonic pressure) are transposed
-
-- Channel messages (note on, note off, polyphonic pressure, controller,
-  program change, channel pressure, and pitch bend) have their channel
-  changed to the output instrument's selected channel
-
-- If the connection has a filter, its block of code is run and the result of
-  that block becomes the bytes to be output. The filter may return an empty
-  array or nil which will prevent anything from being sent to the output
-
-- The resulting bytes, if any, are sent to the output instrument
+  connections.
 
 ** Stop
 
 When a connection is stopped:
 
 - The stop bytes from the patch, if any, are sent to the output instrument
-  as-is (in particular, status bytes' channels are not changed)
+  as-is (in particular, status bytes' channels are not changed).
 
 - The connection removes itself from its input instrument's list of outgoing
-  connections
+  connections.
 
-* Connection Filters
+* Processing Incoming MIDI Data
+
+While the current patch is running, MIDI data that comes in from an
+instrument causes two things happen:
+
+- The data is sent to the instrument's triggers. Each trigger looks at the
+  data and decides if it should act by executing its block of code.
+
+- The data is then sent to each of the connections connected to the
+  instrument.
+
+An input instrument can be used by more than one connection. Each connection
+can modify the data and send it to a different MIDI instrument.
+
+- The data is ignored if it is not on the input instrument's selected
+  channel for that connection. If no input channel is specified in a
+  connection, then all incoming data is accepted.
+
+- Note messages (note on, note off, and polyphonic pressure) are transposed.
+
+- Channel messages (note on, note off, polyphonic pressure, controller,
+  program change, channel pressure, and pitch bend) have their channel
+  changed to the output instrument's selected channel.
+
+- If the connection has a filter, its block of code is run and the result of
+  that block becomes the bytes to be output. The filter may return an empty
+  array or nil which will prevent anything from being sent to the output.
+
+- The resulting bytes, if any, are sent to the output instrument.
+
+** Connection Filters
 
 When a filter is run it is passed two arguments: the connection and an array
 of MIDI bytes. Whatever the filter returns will be sent to the output

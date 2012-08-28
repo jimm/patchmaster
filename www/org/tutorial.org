@@ -1,0 +1,39 @@
+#+title: Tutorial
+#+html: <!--#include virtual="header.html"-->
+#+options: num:nil
+
+* Tutorial
+
+This tutorial walks you through creating a PatchMaster file from scratch. It
+assumes you've installed PatchMater as a gem, which will also install
+related utilities such as =unimidi=.
+
+PatchMaster files are Ruby files. Since Ruby files typically use the
+extension ".rb", go ahead and create a new file in your favorite editor
+named "pm_tutorial.rb".
+
+* Defining Your Instruments
+
+** Find your instruments
+
+In a terminal window, type
+
+#+begin_src sh
+  unimidi list
+#+end_src
+
+This command lists all the input and output instruments that are attached to
+your Mac, whether physical or virtual. You'll need to remember the input and
+output instrument numbers listed by =unimidi=.
+
+** Add them to your PatchMaster file
+
+
+
+* Your First Song
+
+* Creating Some Messages
+
+* Creating Triggers
+
+* A Song List

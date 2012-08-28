@@ -17,65 +17,49 @@ And whether pigs have wings."\\
 
 This section describes the things that make up a PatchMaster document:
 instruments, songs, patches, connections, triggers, messages, and filters.
-Though it describes them, it doesn't tell you how to describe them to
-PatchMaster. For that, see the [[file:file_format.org][file format]] page.
+The [[file:file_format.org][file format]] page tells you how to put them all together into a
+PatchMaster file.
 
 * Instruments
 
-You have to describe your MIDI instruments' inputs and outputs to
-PatchMaster. Each instrument needs a symbol (a usually short name
-starting with ":"), specify which UNIMidi port number it uses, and
-optionally give it a name. If you don't give it a name, PatchMaster will
-display the name that UNIMidi uses.
+An intstrument represents either a MIDI input to a synth, drum machine, or
+other device or a MIDI output from a controller. Each instrument needs a
+symbol (a usually short name starting with ":"), specifies which UNIMidi
+port number it uses, and has a name.
 
 Input instrument symbols must be unique, as must output instruments. The
-same symbol can be used for an input and an output, however.
+same symbol can be used for an input and an output, however. You'd usually
+do that if you have an instrument such as a keyboard that can act as both a
+controller (an output instrument) and a sound module (an input instrument).
 
-As ane example, say you have a keyboard controller that doesn't generate any
-sound on port 0 of your MIDI interface, a typical keyboard synth (both
-controller and sound generator) on purt 1, and a rack-mount sound generator
-on port 2. Here's what that might look like in your PatchMaster file:
+If you don't give an instrument a name, PatchMaster will display the name
+that UNIMidi uses. This isn't always what you want, because if you're using
+a MIDI interface such as the Unitor amt8, UNIMidi will use the names of the
+ports themselves, not the instruments plugged in to them (for example,
+"Unitor Port 0", "Unitor Port 1", ...).
+
+** Example
+
+Let's say you have a keyboard controller that doesn't generate any sound on
+port 0 of your MIDI interface, a typical keyboard synth (both controller and
+sound generator) on purt 1, and a rack-mount sound generator on port 2.
+Here's what that might look like in your PatchMaster file:
 
 #+begin_src ruby
-  input  0, :controller, 'My Controller'
+  input  0, :con, 'My Controller'
   input  1, :kbd, 'The Keyboard'
   output 1, :kbd, 'The Keyboard'
   output 2, :rack                 # Will use UNIMidi name
 #+end_src
 
-* Messages
-
-A message is a named array of MIDI bytes. Messages can be sent using message
-keys, via triggers, or even from filters. Messages are sent to all output
-instruments.
-
-** Message Keys
-
-You can assign messages to keys when using the PatchMaster GUI. Whenever the
-assigned key is pressed, the corresponding message is sent.
-
-* Triggers
-
-A trigger looks for a particular incoming MIDI message from a paticular
-input instrument and runs a block of code when it is seen. The blocks can
-contain any Ruby code. Typically triggers are used for navigation or sending
-named messages.
-
-All triggers are executed by the =PM::PatchMaster= instance. Practially
-speaking this means you can call any of the methods of that object or its
-=PM::Cursor= object, including but not limited to
-
-- =next_song=, =prev_song=, =next_patch=, =prev_patch=
-- =goto_song=
-- =send_message=
-- =panic=
-
 * Songs
 
-A song is a named collection of patches that allow you to control your MIDI
-setup. A song can have any number of patches. You can step forward and
-backward through the patches in a song using the GUI movement keys or
-triggers.
+A song is a named list of patches that allow you to control your MIDI setup.
+A song can have any number of patches. You can step forward and backward
+through the patches in a song using the GUI movement keys or [[*Triggers][triggers]].
+
+When a song becomes the current song, its first patch is made the current
+patch.
 
 * Patches
 
@@ -88,7 +72,7 @@ on a single channel.
 A patch also has optional /start bytes/ and /stop bytes/. These are arrays
 of MIDI bytes that can contain any MIDI data such as patch changes, volume
 controller settings, note on or off messages (for those looong drones), and
-system exclusive messages.
+System Exclusive messages.
 
 * Connections
 
@@ -116,7 +100,10 @@ notes to some synths but not others.
 
 ** Transposes
 
-A connection can transpose all notes by a fixed value.
+A connection can transpose all notes by a fixed value. If a transposition
+would cause a note number to be out of range (lower than 0 or higher than
+127), then the value is wrapped around --- a note transposed up to 128
+becomes 0, for example.
 
 ** Filters
 
@@ -139,3 +126,40 @@ thing in the block.
 A song list is a list of songs. A song can appear in more than one song
 list. One special song list called "All Songs" contains the list of all
 songs.
+
+* Named Messages
+
+A named message is an array of MIDI bytes with a name. Named messages can be
+sent using message keys, via triggers, or even from filters.
+
+Named messages are sent to all output instruments. The MIDI bytes are sent
+from PatchMaster with channels unchanged. If a named message contains
+channel messages then the receiver will of course ignore all except those on
+the channels it's configured to receive.
+
+Note: the word "message" as used in the previous sections on this page refer
+to the MIDI bytes coming from your instruments or being sent to the output
+instruments. The phrase "named message" refers to one of these things we're
+talking about here.
+
+** Message Keys
+
+You can assign named messages to keys when using the PatchMaster GUI.
+Whenever the assigned key is pressed, the corresponding message is sent. See
+[[file:file_format.org][PatchMaster Files]] for how to assign a named message to a key.
+
+* Triggers
+
+A trigger looks for a particular incoming MIDI message from a paticular
+input instrument and runs a block of code when it is seen. The blocks can
+contain any Ruby code. Typically triggers are used for navigation or sending
+named messages.
+
+All triggers are executed by the =PM::PatchMaster= instance. Practially
+speaking this means you can call any of the methods of that object or its
+=PM::Cursor= object, including but not limited to
+
+- =next_song=, =prev_song=, =next_patch=, =prev_patch=
+- =goto_song=
+- =send_message=
+- =panic=

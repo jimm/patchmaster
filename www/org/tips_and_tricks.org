@@ -41,7 +41,7 @@ filter that turns one message into multiple like this:
   filter { |conn, bytes|
     if bytes.note?
       bytes += bytes    # duplicate note message
-      bytes[-1] += 12   # add octave to second note's value
+      bytes[-2] += 12   # raise second note up an octave
     end
     bytes
   }
@@ -72,6 +72,12 @@ filter by calling
 
 #+begin_src ruby
   send_message "Message Name"
+#+end_src
+
+To get the message's bytes, for example within a filter, use
+
+#+begin_src ruby
+  messages["My Message Name".downcase]
 #+end_src
 
 * Method to Your Madness
@@ -144,6 +150,7 @@ you actually had to tune most older synths.) For example,
 
    - Start message: program change and note-on for synth D.
    - Stop message: note-offs for synth D and reference synth A.
+
 * Matching Names
 
 When you enter the name of a song list, song, or patch on the screen, you

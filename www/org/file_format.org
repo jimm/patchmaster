@@ -11,14 +11,29 @@ Source code in files. How quaint.\\
 -- Attributed to Kent Beck
 #+end_quote
 
-PatchMaster files describe your MIDI setup and define triggers, songs with
-their patches, and song lists. They are written in Ruby using a few special
-keywords (Ruby method names).
+PatchMaster files describe your MIDI setup and define named messages,
+triggers, songs with their patches, and song lists. They are written in Ruby
+using a few special keywords (Ruby method names).
+
+When your PatchMaster file is loaded, it has available all the constants and
+classes defined in the PM module. That means you can refer to things like
+the constants defined in =patchmaster/consts.rb= without having to prefix
+them with "PM::".
 
 For a sample PatchMaster file, see [[https://github.com/jimm/patchmaster/blob/master/examples/example.rb][examples/example.rb]].
 
 For a more detailed discussion of the things that can be in a PatchMaster
-file (how they work and what they're for), see [[file:components.org][Components]].
+file (how they work and what they're for), see [[file:components.org][Components]] and [[file:patches.org][Running
+Patches]].
+
+* Loading and Saving PatchMaster Files
+
+When you start PatchMaster you can specify a file to load on the command
+line. While it's running, you can (re)load a file with the 'l' key.
+
+You can save what's been loaded with the 's' key. To be honest, the
+PatchMaster save feature isn't all that useful since you can't change
+anything from within PatchMaster anyway --- yet.
 
 * Editing PatchMaster Files
 
@@ -29,6 +44,8 @@ Most editors are failed writers - but so are most writers.\\
 #+end_quote
 
 You can create and edit PatchMaster files using any text editor you like.
+
+** Editing From Within Patchmaster
 
 While running PatchMaster, the 'e' key lets you edit the file you loaded or
 most recently saved. If you have not yet loaded a file or you save the file
@@ -76,7 +93,9 @@ This simplistic solution can lead to three potential problems.
    know the text of the new code. When the trigger or filter is saved, the
    old block text will be written out.
 
-As a workaround, you'll have to avoid using PatchMaster's save feature.
+As a workaround, you'll have to avoid using PatchMaster's save feature. Make
+all your edits to triggers and filters from outside of PatchMaster, using
+your editor.
 
 To be honest, the PatchMaster save feature isn't all that useful since you
 can't change anything from within PatchMaster anyway --- yet. Once editing
@@ -99,13 +118,13 @@ Example:
 
 #+begin_src ruby
   input  0, :mb, 'midiboard'
-  input  1, :ws_in, 'WaveStation'
-  output 1, :ws_out, 'WaveStation'
+  input  1, :ws, 'WaveStation'
+  output 1, :ws, 'WaveStation'
   output 2, :kz, 'K2000R'
   output 4, :sj                   # Name will come from UNIMidi
 #+end_src
 
-** Messages
+** Named Messages
 
 #+begin_src ruby
   message name, bytes
@@ -114,23 +133,15 @@ Example:
 Stores a named MIDI message. These messages can be sent at any time using
 message keys or triggers, and can be sent from filters.
 
-Messages sent from filters are sent before the filtered bytes are sent. Make
-sure the filter returns the filtered bytes after sending your message. If
-you send the mesasge last in your filter then no other bytes will be sent.
+Example:
 
 #+begin_src ruby
-  # WRONG
-  filter do |conn, bytes|
-    bytes
-    send_message "Interesting Bytes"
-  end
-
-  # RIGHT
-  filter do |conn, bytes|
-    send_message "Interesting Bytes"
-    bytes     # pass through original bytes unchanged
-  end
+  message "Tune Request", [TUNE_REQUEST]
 #+end_src
+
+The =TUNE_REQUEST= constant is defined in =patchmaster/consts.rb=.
+
+See also [[*Named%20Messages%20in%20Filters][Named Messages in Filters]] below.
 
 ** Message Keys
 
@@ -139,8 +150,10 @@ you send the mesasge last in your filter then no other bytes will be sent.
 #+end_src
 
 Maps the named message to a key. Message keys are ignored if PatchMaster was
-started without curses. =key= may be any one-character string (for example
-'8' or 'p') or a function key symbol of the form =:f1=, =:f2=, etc.
+started without the curses GUI.
+
+=key= may be any one-character string (for example '8' or 'p') or a function
+key symbol of the form =:f1=, =:f2=, etc.
 
 ** Triggers
 
@@ -148,10 +161,11 @@ started without curses. =key= may be any one-character string (for example
   trigger input_instrument_symbol, bytes, block
 #+end_src
 
-Input MIDI messages can trigger behaviors. When =bytes= are sent from the
-given input instrument then =block= is executed. All of the methods of
-PM::PatchMaster are made available to the trigger, so for example the block
-can call methods such as #next_patch, #prev_song, or #send_message.
+Input MIDI messages can trigger blocks of code to run. When =bytes= are sent
+from the given input instrument then =block= is executed. All of the methods
+of PM::PatchMaster are made available to the trigger, so for example the
+block can call methods such as =#next_patch=, =#prev_song=, or
+=#send_message=.
 
 Example:
 
@@ -167,7 +181,7 @@ Example:
   song name block
 #+end_src
 
-A song is an list of patches.
+A song is a list of patches.
 
 Example:
 
@@ -212,9 +226,9 @@ Example:
   connection in_sym, in_chan_or_nil, out_sym, out_chan, block
 #+end_src
 
-Connects input to output. If +in_chan_or_nil+ is +nil+ then any message
-coming from that instrument will be processed, else only messages coming
-from the specified channel will be processed.
+Connects an input instrument to an output instrument. If =in_chan_or_nil= is
+=nil= then any message coming from that instrument will be processed, else
+only messages coming from the specified channel will be processed.
 
 A connection can optionally specify a program change or bank plus program
 change (sent to the output instrument on =out_chan=), a zone, a
@@ -224,6 +238,8 @@ transposition, and a filter (see below).
 - zone
 - transpose
 - filter
+
+All those values are optional; you don't have to specify them.
 
 Example:
 
@@ -255,7 +271,7 @@ specified, sends bank change then program change.
 Only one program change per connection is allowed. If there is more than one
 in a connection the last one is used.
 
-Example:
+Examples:
 
 #+begin_src ruby
   prog_chg 42        # program change only
@@ -303,6 +319,9 @@ Example:
 Specifies a note transposition that will be applied to all incoming note on,
 note off, and polyphonic pressure messages.
 
+Note that transposition occurs after a connection's zone has filtered out
+incoming data, not before.
+
 ***** Filters
 
 #+begin_src ruby
@@ -315,8 +334,8 @@ the output instrument's channel for this connection (assuming the message is
 a channel message).
 
 The filter's block must return the array of bytes you want sent to the
-output. Don't use the "return" keyword; simply add the bytes as the last
-thing in the block.
+output. Don't use the "return" keyword; simply make sure the byte array is
+the last thing in the block.
 
 Only one filter per connection is allowed. If there is more than one in a
 connection the last one is used.
@@ -340,6 +359,42 @@ Example:
   end
 #+end_src
 
+****** Named Messages in Filters
+
+Named messages sent from filters are sent before the filtered bytes are
+sent. Make sure the filter returns the filtered bytes after sending your
+message. If you send the mesasge last in your filter then no other bytes
+will be sent.
+
+#+begin_src ruby
+  # WRONG
+  filter do |conn, bytes|
+    bytes
+    send_message "Interesting Bytes"
+  end
+
+  # RIGHT
+  filter do |conn, bytes|
+    send_message "Interesting Bytes"
+    bytes     # pass through original bytes unchanged
+  end
+#+end_src
+
+Note that named messages sent from filters are sent every time any MIDI
+bytes are run through the filter --- practically speaking, every time a note
+or controller is sent through the filter.
+
+Instead of using =send_message= to send the message directly, you can copy
+the bytes into the byte array. This way, you can send the message after the
+bytes are sent, not before. Here's how:
+
+#+begin_src ruby
+  filter do |conn, bytes|
+    msg_bytes = messages["My Message Name".downcase]
+    bytes + msg_bytes             # return original bytes plus message bytes
+  end
+#+end_src
+
 ** Song Lists
 
 #+begin_src ruby
@@ -357,9 +412,9 @@ Example:
   ]
 #+end_src
 
-** Aliases
+* Aliases
 
-Many of the keywords have short versions.
+Many of the keywords in PatchMaster files have short versions.
 
 | Full Name  | Aliases  |
 |------------+----------|
