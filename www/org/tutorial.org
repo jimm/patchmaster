@@ -12,6 +12,10 @@ PatchMaster files are Ruby files. Since Ruby files typically use the
 extension ".rb", go ahead and create a new file in your favorite editor
 named "pm_tutorial.rb".
 
+The PatchMaster file we'll be creating in this tutorial is verbose. There
+are short forms of most of the commands and some of the things we include
+are optional.
+
 * Defining Your Instruments
 
 ** Find your instruments
@@ -28,12 +32,210 @@ output instrument numbers listed by =unimidi=.
 
 ** Add them to your PatchMaster file
 
+Open a file in your text editor. For each MIDI input output you want to use,
+add a line like this:
 
+#+begin_src ruby
+  input 0, :keys, 'Long Name'
+#+end_src
+
+The number is the number you got from the =unimidi list= command. ":keys" is
+any short name; it's what you will use to refer to that MIDI input. The name
+must begin with the ":" character and can not contain any spaces.
+
+The name for each instrument must be different.
+
+Likewise, for each MIDI output add a line like this:
+
+#+begin_src ruby
+  output 0, :keys, 'Long Name'
+#+end_src
+
+Output names must be unique, but can be the same as input names. For a MIDI
+instrument that uses both its input and its output you will probably want to
+use the same name.
 
 * Your First Song
 
+After the instrument inputs and outputs, add an empty song:
+
+#+begin_src ruby
+  song "My First Song" do
+  end
+#+end_src
+
+** A Patch
+
+Let's add a patch that connects the input from =:keys= to the output
+=:another= on channel 1.
+
+#+begin_src ruby
+  song "My First Song" do
+    patch "First Patch" do
+      connection :keys, nil :another, 1
+    end
+  end
+#+end_src
+
+The =nil= tells PatchMaster to pass through any channel message that comes
+from =:keys=. The 1 tells it to translate all messages from =:keys= to
+channel 1 before sending it to =:another=.
+
+Now let's connect =:keys= to the same synth on a different channel but
+modify the MIDI a bit as it goes through.
+
+#+begin_src ruby
+  song "My First Song" do
+    patch "First Patch" do
+      connection :keys, nil :another, 1
+      connection :keys, nil, :another, 2 do
+        prog_chg 42
+        transpose 12
+        zone C4, B6
+      end
+    end
+  end
+#+end_src
+
+Here we've connected =:keys= to channel 2 of =:another=, sent it a program
+change command, transposed all notes (and polyphonic pressure messages) up
+an octave, and limited the notes passed through to those in the two octaves
+from C4 to B6.
+
+*** A Filter
+
+Filters allow you to take complete control over the MIDI that gets sent
+through a connection. Let's use a filter to modify the volume of all notes
+in real time using a software LFO (Low Frequency Oscillator).
+
+First, we need
+to write a method that outputs a value between 0 and 127 and that changes
+over time. Let's put this method definition before our song.
+
+#+begin_src ruby
+  # Outputs a value from 0 to 127 based on the time.
+  def lfo
+    t = Time.now.to_f             # to_f gives sub-second accuracy
+    unit_offset = Math.sin(t)     # -1 .. 1
+    val = (unit_offset * 64) + 64
+    if val < 0
+      0
+    elsif val > 127
+      127
+    else
+      val
+    end
+  end
+
+  song "My First Song" do
+    # ...
+  end
+#+end_src
+
+Next let's add a new connection from =:keys= to =:third= that uses a filter
+to replace the volume of any note message with the current LFO value.
+
+#+begin_src ruby
+  def lfo
+    # see above
+  end
+  
+  song "My First Song" do
+    patch "First Patch" do
+      # ... first two connections skipped, see above
+      connection :keys, nil :third, 1 do
+        filter do |connection, bytes|
+          if bytes.note? && bytes[2] != 0 # not a note off
+            bytes[2] = lfo()              # LFO determines volume
+          end
+          bytes                   # Don't forget to return bytes here
+        end
+      end
+    end
+  end
+#+end_src
+
 * Creating Some Messages
+
+Messages contain arbitrary bytes that can get sent at any time. They are
+sent to all outputs. Let's define two messages. The first is a tune request
+and the second sends individual note off messages to every note on every
+channel.
+
+#+begin_src ruby
+  message "Tune Request", [TUNE_REQUEST]
+
+  full_volumes = (0...MIDI_CHANNELS).collect do |chan|
+    [CONTROLLER + chan, CC_VOLUME, 127]
+  end.flatten
+  message "Full Volume", full_volumes
+#+end_src
+
+We can bind messages to computer keys. Here we'll bind the tune request
+message to F1 and the full volume message to F2. The names here must match
+the names you gave the messages above.
+
+#+begin_src ruby
+  message_key "Tune Request", :f1
+  message_key "Full Volume", :f2
+#+end_src
 
 * Creating Triggers
 
 * A Song List
+
+* The Whole File
+
+The whole file should look something like this. Blank lines don't matter.
+
+#+begin_src ruby
+  input 0, :keys, 'Long Name'
+
+  output 0, :keys, 'Long Name'
+  output 1, :another, 'Another Long Name'
+  output 2, :third, 'Rack Mount Synth'
+
+  message "Tune Request", [TUNE_REQUEST]
+
+  full_volumes = (0...MIDI_CHANNELS).collect do |chan|
+    [CONTROLLER + chan, CC_VOLUME, 127]
+  end.flatten
+  message "Full Volume", full_volumes
+
+  message_key "Tune Request", :f1
+  message_key "Full Volume", :f2
+
+  # Outputs a value from 0 to 127 based on the time.
+  def lfo
+    t = Time.now.to_f             # to_f gives sub-second accuracy
+    unit_offset = Math.sin(t)     # -1 .. 1
+    val = (unit_offset * 64) + 64
+    if val < 0
+      0
+    elsif val > 127
+      127
+    else
+      val
+    end
+  end
+
+  song "My First Song" do
+    patch "First Patch" do
+      connection :keys, nil :another, 1
+      connection :keys, nil, :another, 2 do
+        prog_chg 42
+        transpose 12
+        zone C4, B6
+      end
+      connection :keys, nil :third, 1 do
+        filter do |connection, bytes|
+          if bytes.note? && bytes[2] != 0 # not a note off
+            bytes[2] = lfo()              # LFO determines volume
+          end
+          bytes
+        end
+      end
+    end
+  end
+
+#+end_src
