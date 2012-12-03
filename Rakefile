@@ -70,7 +70,7 @@ namespace :web do
 
   desc "Publish the Web site (does not call web:build)"
   task :publish do
-    system "rsync -qrlpt --del www/public_html/ #{WEB_SERVER}:#{WEB_DIR}"
+    system "rsync -qrlpt --filter='exclude .DS_Store' --del www/public_html/ #{WEB_SERVER}:#{WEB_DIR}"
   end
 
   desc "Copy everything to local Mac Web server"
