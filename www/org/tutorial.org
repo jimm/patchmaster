@@ -182,6 +182,9 @@ the names you gave the messages above.
 
 * Creating Triggers
 
+Triggers make things happen. Let's make a trigger that moves to the next
+patch and 
+
 * A Song List
 
 * The Whole File
