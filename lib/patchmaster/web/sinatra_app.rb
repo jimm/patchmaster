@@ -112,6 +112,7 @@ class SinatraApp
 
   include Singleton
 
+  attr_accessor :port
   attr_reader :pm
 
   def initialize
@@ -119,6 +120,7 @@ class SinatraApp
   end
 
   def run
+    set(:port, @port) if @port
     @pm.start
   ensure
     @pm.stop

@@ -67,7 +67,7 @@ To install as a gem, type
 * Running PatchMaster
 
 #+begin_src sh
-  patchmaster [-n] [-w] [-t] [-d] [patchmaster_file]
+  patchmaster [-n] [-w] [-p port] [-t] [-d] [patchmaster_file]
 #+end_src
 
 Starts PatchMaster and optionally loads =patchmaster_file=.
@@ -78,7 +78,8 @@ ignored, and no MIDI data is sent/received. That is useful if you want to
 run PatchMaster without actually talking to any MIDI instruments.
 
 The =-w= flag runs the app with a Web gui. Open your browser to
-http://localhost:4567 after starting PatchMaster from the command line.
+http://localhost:4567 after starting PatchMaster from the command line. To
+change the port, use =-p=.
 
 To run PatchMaster without a GUI use -t. All output will go to the console.
 The app will run until interrupted. (If you do this, you might want to
