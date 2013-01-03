@@ -10,7 +10,7 @@ GEM_VERSION = '0.0.7'
 GEM_DATE = Time.now.strftime('%Y-%m-%d')
 WEB_SERVER = 'jimmenard.com'
 WEB_DIR = 'webapps/patchmaster'
-LOCAL_HTML_TARGET = "/Library/WebServer/Documents"
+LOCAL_HTML_TARGET = "/tmp/patchmaster"
 LOCAL_CGI_TARGET = "/Library/WebServer/CGI-Executables"
 
 # Default is defined below after namespace definitions.
@@ -73,10 +73,22 @@ namespace :web do
     system "rsync -qrlpt --filter='exclude .DS_Store' --del www/public_html/ #{WEB_SERVER}:#{WEB_DIR}"
   end
 
-  desc "Copy everything to local Mac Web server"
+  desc "Copy everything to local static site in /tmp/patchmaster"
   task :local do
-    system("rm -rf #{LOCAL_HTML_TARGET}/* #{LOCAL_CGI_TARGET}/*")
-    system("cp -r www/public_html/* #{LOCAL_HTML_TARGET}")
+    require 'fileutils'
+    FileUtils.rm_rf LOCAL_HTML_TARGET
+    FileUtils.mkdir_p LOCAL_HTML_TARGET
+    FileUtils.cp "www/public_html/style.css", LOCAL_HTML_TARGET
+    FileUtils.cp_r "www/public_html/images", LOCAL_HTML_TARGET
+
+    header = IO.read('www/public_html/header.html')
+    Dir['www/public_html/*.html'].each do |path|
+      base = File.basename(path)
+      next if base == 'header.html'
+
+      contents = IO.read(path).sub('<!--#include virtual="header.html"-->', header)
+      IO.write(File.join(LOCAL_HTML_TARGET, File.basename(path)), contents)
+    end
   end
 end
 
