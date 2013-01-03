@@ -22,8 +22,12 @@ div.header h1 a:active {
 }
 
 div.nav {
-  background-color: black;
-  color: white;
+  position: fixed;
+  top: 8px;
+  left: 20px;
+  width: 15em;
+  background-color: white;
+  color: black;
 }
 
 div.nav ul {
@@ -32,33 +36,33 @@ div.nav ul {
   margin-left: 0;
   padding-bottom: 0.5em;
   list-style: none;
-  align: center;
+  font-size: 1.25em;
 }
 ul#menu li {
-  border-left: 1px solid #888;
-  padding-left: 0.5em;
-  padding-right: 0.25em;
-  text-align: center;
+  width: 100%;
+  padding-left: 1em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  width: 100%;
 }
 div.nav a:link,
 div.nav a:visited,
-div.nav a:hover,
 div.nav a:active {
   text-decoration: none;
-  color: white;
+  color: black;
 }
 
-div#lhs {
-  position: fixed;
-  top: 8px;
-  left: 20px;
-  width: 15em;
-  z-index: -1;
-}
-
+div.nav a:hover,
 .active-nav {
   background-color: #f3f5f7;
   color: black;
+}
+
+div#rhs {
+  position: fixed;
+  top: 8px;
+  right: 20px;
+  width: 15em;
 }
 
 div#table-of-contents {
