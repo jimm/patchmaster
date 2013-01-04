@@ -86,7 +86,9 @@ namespace :web do
       base = File.basename(path)
       next if base == 'header.html'
 
-      contents = IO.read(path).sub('<!--#include virtual="header.html"-->', header)
+      contents = IO.read(path)
+      contents.sub!('<!--#include virtual="header.html"-->', header)
+      contents.sub!(/(loc = window\.location\.pathname;)/, '\1 if (loc.indexOf("/tmp/patchmaster") == 0) { loc = loc.substring(16); console.log(loc); }')
       IO.write(File.join(LOCAL_HTML_TARGET, File.basename(path)), contents)
     end
   end
