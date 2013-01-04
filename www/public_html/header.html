@@ -8,12 +8,12 @@ conn <span style="color: #008b8b;">:mb</span>, 1, <span style="color: #008b8b;">
 
 conn <span style="color: #008b8b;">:mb</span>, 1, <span style="color: #008b8b;">:kzwl,</span> 1 <span style="color: #7f007f;">do</span>
   zone <span style="color: #228b22;">C4</span>..<span style="color: #228b22;">B8</span>
-  filter <span style="color: #7f007f;">do</span> |c,b|
-    <span style="color: #7f007f;">if</span> b.note?
-      b[2] *= 2
-      b[2] &amp;= 0x7f
+  filter <span style="color: #7f007f;">do</span> |conn, bytes|
+    <span style="color: #7f007f;">if</span> bytes.note?
+      bytes[2] *= 2
+      bytes[2] &amp;= 0x7f
     <span style="color: #7f007f;">end</span>
-    b
+    bytes
   <span style="color: #7f007f;">end</span>
 <span style="color: #7f007f;">end</span>
 </pre>
