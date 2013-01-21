@@ -108,9 +108,13 @@ Filters allow you to take complete control over the MIDI that gets sent
 through a connection. Let's use a filter to modify the volume of all notes
 in real time using a software LFO (Low Frequency Oscillator).
 
-First, we need
-to write a method that outputs a value between 0 and 127 and that changes
-over time. Let's put this method definition before our song.
+*NOTE* This LFO only sets the velocity of each note. It doesn't change the
+overall volume over time (/e.g./, tremolo). To do that you'd need to create
+a method that gets called regularly, probably in a separate thread, and that
+sends volume control change messages.
+
+First, we need to write a method that outputs a value between 0 and 127 and
+that changes over time. Let's put this method definition before our song.
 
 #+begin_src ruby
   # Outputs a value from 0 to 127 based on the time.
@@ -183,9 +187,16 @@ the names you gave the messages above.
 * Creating Triggers
 
 Triggers make things happen. Let's make a trigger that moves to the next
-patch and 
+patch and one that sends a tune request message.
+
+[TODO: finish this section]
+
+Bonus exercise: Write triggers that move to the next song, the previous
+patch and the previous song.
 
 * A Song List
+
+[TODO: write this section]
 
 * The Whole File
 

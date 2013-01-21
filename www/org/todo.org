@@ -28,14 +28,17 @@ but the most crucial features.\\
 -- Steve Jobs
 #+end_quote
 
+- Finish the "Creating Triggers" and "Song List"sections of
+  file:tutorial.org.
+
 - Working on Web interface using Sinatra and Swing interface for JRuby. I'll
   probably concentrate on the Web interface.
 
 - Need a logo.
 
 - Add convenience methods to PM::PatchMaster (so they are available to
-  trigger and filter blocks) for things like clamping byte values to
-  (0..127) and limiting min/max values.
+  trigger locks) for things nd filter like clamping byte values to (0..127)
+  and limiting min/max values.
 
 - Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
