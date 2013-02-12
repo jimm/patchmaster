@@ -11,10 +11,12 @@ CONN_HEADERS = """
                  <th>Filter</th>
                </tr>
                """
+COLOR_SCHEMES = ['default', 'green', 'amber', 'blue'];
+color_scheme_index = 0;
 
 list_item = (val, highlighted_value) ->
-  li_class = if val == highlighted_value then ' class="selected"' else ''
-  "<li #{li_class}>#{val}</li>"
+  classes = if val == highlighted_value then "selected reverse-#{COLOR_SCHEMES[color_scheme_index]}" else ''
+  "<li class=\"#{classes}\">#{val}</li>"
 
 list = (id, vals, highlighted_value) ->
   lis = (list_item(val, highlighted_value) for val in vals)
@@ -47,15 +49,15 @@ kp = (action) ->
   )
 
 cycle_colors = () ->
-  base_class = color_schemes[color_scheme_index]
+  base_class = COLOR_SCHEMES[color_scheme_index]
   if color_scheme_index >= 0
     $('body').removeClass(base_class)
     $('.selected, th, td#appname').removeClass("reverse-#{base_class}")
     $('tr, td, th').removeClass("#{base_class}-border")
 
-  color_scheme_index = (color_scheme_index + 1) % color_schemes.length
+  color_scheme_index = (color_scheme_index + 1) % COLOR_SCHEMES.length
 
-  base_class = color_schemes[color_scheme_index]
+  base_class = COLOR_SCHEMES[color_scheme_index]
   $('body').addClass(base_class)
   $('.selected, th, td#appname').addClass("reverse-#{base_class}")
   $('tr, td, th').addClass("#{base_class}-border")
