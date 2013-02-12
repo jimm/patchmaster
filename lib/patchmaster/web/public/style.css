@@ -22,6 +22,9 @@ td#appname {
   text-align: center;
   width: 100%;
 }
+table h1, table li, table pre {
+  padding: 0 0.5em 0 0.5em;
+}
 
 /* ================ black on white ================ */
 .default {
