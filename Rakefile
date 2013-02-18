@@ -13,6 +13,19 @@ WEB_DIR = 'webapps/patchmaster'
 LOCAL_HTML_TARGET = "/tmp/patchmaster"
 LOCAL_CGI_TARGET = "/Library/WebServer/CGI-Executables"
 
+ORGS = Dir[File.join(HERE, 'www/org/*.org')]
+
+def html_for(orgfile)
+  File.join(HERE, 'www/public_html', File.basename(orgfile)).sub(/\.org$/, '.html')
+end
+
+def web_build_needed?
+  ORGS.detect do |orgfile|
+    htmlfile = html_for(orgfile)
+    File.mtime(htmlfile) < File.mtime(orgfile)
+  end
+end
+
 # Default is defined below after namespace definitions.
 
 Rake::TestTask.new do |t|
@@ -65,11 +78,11 @@ end
 namespace :web do
   desc "Export Org-mode files to HTML"
   task :build do
-    system("/Applications/Emacs.app/Contents/MacOS/Emacs --batch --load ~/.emacs --find-file www/org/file_format.org --eval '(org-publish (assoc \"patchmaster\" org-publish-project-alist) t)'")
+    system("/Applications/Emacs.app/Contents/MacOS/Emacs --batch --load ~/.emacs --find-file www/org/file_format.org --eval '(org-publish (assoc \"patchmaster\" org-publish-project-alist) t)'") if web_build_needed?
   end
 
   desc "Publish the Web site (does not call web:build)"
-  task :publish do
+  task :publish => :build do
     system "rsync -qrlpt --filter='exclude .DS_Store' --del www/public_html/ #{WEB_SERVER}:#{WEB_DIR}"
   end
 
