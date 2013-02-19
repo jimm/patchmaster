@@ -81,13 +81,13 @@ namespace :web do
     system("/Applications/Emacs.app/Contents/MacOS/Emacs --batch --load ~/.emacs --find-file www/org/file_format.org --eval '(org-publish (assoc \"patchmaster\" org-publish-project-alist) t)'") if web_build_needed?
   end
 
-  desc "Publish the Web site (does not call web:build)"
+  desc "Publish the Web site"
   task :publish => :build do
     system "rsync -qrlpt --filter='exclude .DS_Store' --del www/public_html/ #{WEB_SERVER}:#{WEB_DIR}"
   end
 
   desc "Copy everything to local static site in /tmp/patchmaster"
-  task :local do
+  task :local => :build do
     require 'fileutils'
     FileUtils.rm_rf LOCAL_HTML_TARGET
     FileUtils.mkdir_p LOCAL_HTML_TARGET
