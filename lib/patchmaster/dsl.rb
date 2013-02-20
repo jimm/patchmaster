@@ -7,18 +7,23 @@ class DSL
 
   include PM
 
-  def initialize(no_midi=false)
-    @no_midi = no_midi
+  def initialize
     @pm = PatchMaster.instance
+    init
   end
 
-  def load(file)
-    contents = IO.read(file)
+  # Initialize state used for reading.
+  def init
     @inputs = {}
     @outputs = {}
     @triggers = []
     @filters = []
     @songs = {}                 # key = name, value = song
+  end
+
+  def load(file)
+    contents = IO.read(file)
+    init
     instance_eval(contents)
     read_triggers(contents)
     read_filters(contents)
@@ -27,22 +32,22 @@ class DSL
   def input(port_num, sym, name=nil)
     raise "input: two inputs can not have the same symbol (:#{sym})" if @inputs[sym]
 
-    input = InputInstrument.new(sym, name, port_num, @no_midi)
+    input = InputInstrument.new(sym, name, port_num, @pm.use_midi?)
     @inputs[sym] = input
     @pm.inputs << input
   rescue => ex
-    raise "input: error creating input instrument \"#{name}\" on input port #{port_num}: #{ex}"
+    raise "input: error creating input instrument \"#{name || sym}\" on input port #{port_num}: #{ex}"
   end
   alias_method :in, :input
 
   def output(port_num, sym, name=nil)
     raise "output: two outputs can not have the same symbol (:#{sym})" if @outputs[sym]
 
-    output = OutputInstrument.new(sym, name, port_num, @no_midi)
+    output = OutputInstrument.new(sym, name, port_num, @pm.use_midi?)
     @outputs[sym] = output
     @pm.outputs << output
   rescue => ex
-    raise "output: error creating output instrument \"#{name}\" on output port #{port_num}: #{ex}"
+    raise "output: error creating output instrument \"#{name || sym}\" on output port #{port_num}: #{ex}"
   end
   alias_method :out, :output
 

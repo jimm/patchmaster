@@ -44,7 +44,7 @@ end.parse!(ARGV)
 require 'patchmaster'
 
 pm = PM::PatchMaster.instance
-pm.no_midi! if !use_midi
+pm.use_midi = use_midi
 pm.load(ARGV[0]) if ARGV[0]
 pm.gui = case gui
          when :curses

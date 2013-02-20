@@ -20,10 +20,6 @@ class Main
     @message_bindings = {}
   end
 
-  def no_midi!
-    @pm.no_midi!
-  end
-
   def run
     @pm.start
     begin

@@ -3,8 +3,8 @@ require 'test_helper'
 class ConnectionTest < Test::Unit::TestCase
 
   def setup
-    @in_instrument = PM::InputInstrument.new(:tin, 'test_in', 0, true)
-    @out_instrument = PM::OutputInstrument.new(:tout, 'test_out', 0, true)
+    @in_instrument = PM::InputInstrument.new(:tin, 'test_in', 0, false)
+    @out_instrument = PM::OutputInstrument.new(:tout, 'test_out', 0, false)
     @options = {:pc_prog => 3, :zone => (40..60), :xpose => 12}
     @conn = PM::Connection.new(@in_instrument, nil, @out_instrument, 2, nil, @options)
   end

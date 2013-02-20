@@ -2,7 +2,7 @@ require 'test/unit'
 require 'patchmaster'
 
 # For all tests, make sure mock I/O MIDI ports are used.
-PM::PatchMaster.instance.no_midi!
+PM::PatchMaster.instance.use_midi = false
 
 module PM
 

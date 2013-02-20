@@ -22,7 +22,8 @@ class PatchMaster < SimpleDelegator
 
   attr_reader :inputs, :outputs, :all_songs, :song_lists
   attr_reader :messages
-  attr_reader :no_midi
+  attr_accessor :use_midi
+  alias_method :use_midi?, :use_midi
   attr_accessor :gui
 
   # A Cursor to which we delegate incoming position methods (#song_list,
@@ -32,7 +33,7 @@ class PatchMaster < SimpleDelegator
   def initialize
     @cursor = Cursor.new(self)
     super(@cursor)
-    @no_midi = false
+    @use_midi = true
     @gui = nil
 
     if $DEBUG
@@ -40,10 +41,6 @@ class PatchMaster < SimpleDelegator
     end
 
     init_data
-  end
-
-  def no_midi!
-    @no_midi = true
   end
 
   def no_gui!
@@ -58,7 +55,7 @@ class PatchMaster < SimpleDelegator
 
     @cursor.mark
     init_data
-    DSL.new(@no_midi).load(file)
+    DSL.new.load(file)
     @loaded_file = file
     @cursor.restore
 
@@ -72,7 +69,7 @@ class PatchMaster < SimpleDelegator
   end
 
   def save(file)
-    DSL.new(@no_midi).save(file)
+    DSL.new.save(file)
     @loaded_file = file
   rescue => ex
     raise("error saving #{file}: #{ex}" + caller.join("\n"))

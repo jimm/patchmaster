@@ -22,8 +22,8 @@ class InputInstrument < Instrument
   attr_reader :listener
 
   # If +port+ is nil (the normal case), creates either a real or a mock port
-  def initialize(sym, name, port_num, no_midi=false)
-    super(sym, name, port_num, input_port(port_num, no_midi))
+  def initialize(sym, name, port_num, use_midi=true)
+    super(sym, name, port_num, input_port(port_num, use_midi))
     @connections = []
     @triggers = []
   end
@@ -61,11 +61,11 @@ class InputInstrument < Instrument
 
   private
 
-  def input_port(port_num, no_midi=false)
-    if no_midi
-      MockInputPort.new(port_num)
-    else
+  def input_port(port_num, use_midi=true)
+    if use_midi
       UniMIDI::Input.all[port_num].open
+    else
+      MockInputPort.new(port_num)
     end
   end
 
@@ -73,8 +73,8 @@ end
 
 class OutputInstrument < Instrument
 
-  def initialize(sym, name, port_num, no_midi=false)
-    super(sym, name, port_num, output_port(port_num, no_midi))
+  def initialize(sym, name, port_num, use_midi=true)
+    super(sym, name, port_num, output_port(port_num, use_midi))
   end
 
   def midi_out(bytes)
@@ -83,11 +83,11 @@ class OutputInstrument < Instrument
 
   private
 
-  def output_port(port_num, no_midi)
-    if no_midi
-      MockOutputPort.new(port_num)
-    else
+  def output_port(port_num, use_midi)
+    if use_midi
       UniMIDI::Output.all[port_num].open
+    else
+      MockOutputPort.new(port_num)
     end
   end
 end

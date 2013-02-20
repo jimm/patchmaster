@@ -4,9 +4,9 @@ class InstrumentTest < Test::Unit::TestCase
 
   def setup
     @data = [1, 2, 3]
-    @in_instrument = PM::InputInstrument.new(:tin, 'test_in', 0, true)
+    @in_instrument = PM::InputInstrument.new(:tin, 'test_in', 0, false)
     @in_instrument.port.data_to_send = @data
-    @out_instrument = PM::OutputInstrument.new(:tout, 'test_out', 0, true)
+    @out_instrument = PM::OutputInstrument.new(:tout, 'test_out', 0, false)
     @conn = TestConnection.new(@in_instrument, nil, @out_instrument, 2)
   end
 
@@ -22,7 +22,7 @@ class InstrumentTest < Test::Unit::TestCase
   end
 
   def test_midi_in_sends_to_multiple_connections
-    conn2 = TestConnection.new(@in_instrument, nil, PM::OutputInstrument.new(:tout2, 'test_out2', 0, true), 2)
+    conn2 = TestConnection.new(@in_instrument, nil, PM::OutputInstrument.new(:tout2, 'test_out2', 0, false), 2)
     @in_instrument.add_connection(@conn)
     @in_instrument.add_connection(conn2)
 

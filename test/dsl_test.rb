@@ -8,7 +8,7 @@ class DSLTest < Test::Unit::TestCase
   def setup
     @pm = PM::PatchMaster.instance
     @pm.init_data
-    @dsl = PM::DSL.new(true)    # no MIDI (ignore errors, no-op ports)
+    @dsl = PM::DSL.new
   end
 
   def teardown

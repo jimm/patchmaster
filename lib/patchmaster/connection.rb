@@ -89,6 +89,7 @@ class Connection
     str << "; pc #@pc_prog" if pc?
     str << "; xpose #@xpose" if @xpose
     str << "; zone #{note_num_to_name(@zone.begin)}..#{note_num_to_name(@zone.end)}" if @zone
+    str
   end
 end
 
