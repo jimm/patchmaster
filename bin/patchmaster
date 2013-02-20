@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# usage: patchmaster [-n] [-w] [-p port] [-t] [-d] [pm_file]
+# usage: patchmaster [-n] [-i] [-w] [-p port] [-t] [-d] [pm_file]
 #
 # Starts PatchMaster and optionally loads pm_file.
 #
@@ -8,6 +8,9 @@
 # being able to connect to the MIDI instruments specified in pm_file are
 # ignored, and no MIDI data is sent/received. That is useful if you want to
 # run PatchMaster without actually talking to any MIDI instruments.
+#
+# To run PatchMaster from within an IRB session use -i. See the
+# documentation for details on the commands that are available.
 #
 # To run PatchMaster using a Web browser GUI use -w and point your browser
 # at http://localhost:4567. To change the port, use -p.
@@ -30,6 +33,7 @@ OptionParser.new do |opts|
   opts.banner = "usage: patchmaster [options] [pm_file]"
   opts.on("-d", "--debug", "Turn on debug mode") { $DEBUG = true }
   opts.on("-n", "--no-midi", "Turn off MIDI processing") { use_midi = false }
+  opts.on("-i", "--irb", "Use an IRB console") { gui = :irb }
   opts.on("-w", "--web", "Use a Web browser GUI") { gui = :web }
   opts.on("-p", "--port PORT", "Web browser GUI port number") { |opt| port = opt.to_i }
   opts.on("-t", "--text", "--nw", "--no-window", "No windows") { gui = :text }
@@ -46,14 +50,18 @@ require 'patchmaster'
 pm = PM::PatchMaster.instance
 pm.use_midi = use_midi
 pm.load(ARGV[0]) if ARGV[0]
-pm.gui = case gui
-         when :curses
-           require 'patchmaster/curses/main'
-           PM::Main.instance
-         when :web
-           require 'patchmaster/web/sinatra_app'
-           app = PM::SinatraApp.instance
-           app.port = port if port
-           app
-         end
-pm.run
+case gui
+when :curses
+  require 'patchmaster/curses/main'
+  pm.gui = PM::Main.instance
+  pm.run
+when :irb
+  require 'patchmaster/irb'
+  IRB.start
+when :web
+  require 'patchmaster/web/sinatra_app'
+  app = PM::SinatraApp.instance
+  app.port = port if port
+  pm.gui = app
+  pm.run
+end
