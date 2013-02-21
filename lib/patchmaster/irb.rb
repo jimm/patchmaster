@@ -1,5 +1,6 @@
 require 'patchmaster'
 require 'irb'
+require 'tempfile'
 
 $dsl = nil
 
@@ -59,15 +60,23 @@ def method_missing(sym, *args)
   end
 end
 
-# IRB.conf[:PROMPT] = {}
-# IRB.conf[:PROMPT][:CUSTOM] = {
-#   :PROMPT_I=>"PatchMaster:%03n:%i> ",
-#   :PROMPT_N=>"PatchMaster:%03n:%i> ",
-#   :PROMPT_S=>"PatchMaster:%03n:%i%l ",
-#   :PROMPT_C=>"PatchMaster:%03n:%i* ",
-#   :RETURN=>"=> %s\n"
-# }
-# IRB.conf[:PROMPT_MODE] = :CUSTOM
+def start_patchmaster_irb
+  f = Tempfile.new('patchmaster')
+  f.write <<EOS
+  IRB.conf[:PROMPT][:CUSTOM] = {
+    :PROMPT_I=>"PatchMaster:%03n:%i> ",
+    :PROMPT_N=>"PatchMaster:%03n:%i> ",
+    :PROMPT_S=>"PatchMaster:%03n:%i%l ",
+    :PROMPT_C=>"PatchMaster:%03n:%i* ",
+    :RETURN=>"=> %s\n"
+  }
+  IRB.conf[:PROMPT_MODE] = :CUSTOM
 
-puts 'PatchMaster loaded'
-puts 'Type "pm_help" for help'
+  puts 'PatchMaster loaded'
+  puts 'Type "pm_help" for help'
+EOS
+  f.close
+  ENV['IRBRC'] = f.path
+  IRB.start
+  f.unlink
+end

@@ -30,6 +30,10 @@ but the most crucial features.\\
 
 - Document use of the -i IRB switch.
 
+- In the =connection= statement, shouldn't need to specify anything if input
+  channel is =nil=. "connection :in_sym, :out_sym, 1" should be same as
+  "connection :in_sym, nil, :out_sym, 1".
+
 - Aliases for inputs and outputs, or at least a way to specify more than one
   symbol. This lets you give two different names to two different
   instruments on the same MIDI port. Example syntax: "input 1, [:ws, :rx5]".

@@ -57,7 +57,7 @@ when :curses
   pm.run
 when :irb
   require 'patchmaster/irb'
-  IRB.start
+  start_patchmaster_irb
 when :web
   require 'patchmaster/web/sinatra_app'
   app = PM::SinatraApp.instance

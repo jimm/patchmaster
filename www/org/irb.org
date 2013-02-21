@@ -1,0 +1,16 @@
+#+title: IRB Mode
+#+html: <!--#include virtual="header.html"-->
+#+options: num:nil
+
+* IRB Mode
+
+live: no songs or patches
+
+Use the =-i= flag to start PatchMaster within an IRB console. The commands
+available to you are smiliar to those in a PatchMaster file, but are
+modified to 
+
+* Hints
+
+Store your setup in a Ruby file, then =require= that file. Saves you having
+to type input and output statements.
