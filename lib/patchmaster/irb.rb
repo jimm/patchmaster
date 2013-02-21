@@ -49,8 +49,8 @@ def method_missing(sym, *args)
   if dsl.respond_to?(sym)
     patch.stop
     dsl.send(sym, *args)
-    if sym == :input || sym == :in
-      pm.instance.inputs.last.start
+    if sym == :input || sym == :inp
+      pm.inputs.last.start
     end
     patch.start
   elsif pm.respond_to?(sym)
