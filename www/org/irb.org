@@ -4,6 +4,10 @@
 
 * IRB Mode
 
+*Warning*: this feature of PatchMaster is brand new. The commands or their
+syntax may change as I play with IRB mode. So, please give me your
+[[mailto:jim@jimmenard.com][feedback]].
+
 PatchMaster's IRB mode lets you interactively define connections, send patch
 changes, and transpose and otherwise filter your MIDI setup. It's intended
 more for experimentation and jamming, where you don't know ahead of time
