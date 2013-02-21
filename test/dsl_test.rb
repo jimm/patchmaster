@@ -63,6 +63,14 @@ class DSLTest < Test::Unit::TestCase
     conn = patch.connections[1]
     assert_equal 2, conn.bank
     assert_equal 100, conn.pc_prog
+
+    # Make sure that we can skip the second input_chan argument and things
+    # are still assigned properly.
+    conn = @pm.all_songs.find('Second Song').patches[0].connections[0]
+    assert_equal mb, conn.input
+    assert_nil conn.input_chan
+    assert_equal sj, conn.output
+    assert_equal 3, conn.output_chan
   end
 
   def test_save

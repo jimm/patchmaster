@@ -209,7 +209,7 @@ Example:
   song "My First Song" do
     patch "First Song, First Patch" do
       start_bytes [TUNE_REQUEST]
-      connection :mb, nil, :kz, 2 do  # all chans from :mb, out to ch 2 on :kz
+      connection :mb, :kz, 2 do  # all chans from :mb, out to ch 2 on :kz
         # ...
       end
       connection :ws, 6, :sj, 4 do  # only ch 6 from :ws_kbd, out to ch 4 on :sj
@@ -223,16 +223,19 @@ Example:
 **** Connections
 
 #+begin_src ruby
-  connection in_sym, in_chan_or_nil, out_sym, out_chan, block
+  connection in_sym, in_chan, out_sym, out_chan, block
+  connection in_sym, nil, out_sym, out_chan, block
+  connection in_sym, out_sym, out_chan, block
 #+end_src
 
-Connects an input instrument to an output instrument. If =in_chan_or_nil= is
-=nil= then any message coming from that instrument will be processed, else
-only messages coming from the specified channel will be processed.
+Connects an input instrument to an output instrument. If =in_chan= is =nil=
+or is skipped then any message coming from that instrument will be
+processed, else only messages coming from the specified channel will be
+processed.
 
-A connection can optionally specify a program change or bank plus program
-change (sent to the output instrument on =out_chan=), a zone, a
-transposition, and a filter (see below).
+A connection can optionally take a block that specifies a program change or
+bank plus program change (sent to the output instrument on =out_chan=), a
+zone, a transposition, and a filter (see below).
 
 - prog_chg
 - zone
@@ -416,12 +419,12 @@ Example:
 
 Many of the keywords in PatchMaster files have short versions.
 
-| Full Name  | Aliases  |
-|------------+----------|
-| input      | in       |
-| output     | out      |
-| connection | conn, c  |
-| prog_chg   | pc       |
-| zone       | z        |
-| transpose  | xpose, x |
-| filter     | f        |
+| Full Name  | Aliases  | Notes                           |
+|------------+----------+---------------------------------|
+| input      | inp      | "in" is a reserved word in Ruby |
+| output     | out      |                                 |
+| connection | conn, c  |                                 |
+| prog_chg   | pc       |                                 |
+| zone       | z        |                                 |
+| transpose  | xpose, x |                                 |
+| filter     | f        |                                 |

@@ -1,7 +1,7 @@
 input  0, :mb, 'midiboard'
-input  1, :ws_in, 'WaveStation'
+inp    1, :ws_in, 'WaveStation'
 output 1, :ws_out, 'WaveStation'
-output 2, :kz, 'K2000R'
+out    2, :kz, 'K2000R'
 output 4, :sj
 
 message "Tune Request", [TUNE_REQUEST]
@@ -44,15 +44,15 @@ end
 
 song "Second Song" do
   patch "Second Song, First Patch" do
-    c :mb, :any, :sj, 4 do
+    c :mb, :sj, 4 do
       pc 22
       z D4
     end
-    c :ws_in, :any, :ws_out, 6 do
+    c :ws_in, :ws_out, 6 do
       zone C4..B5
       filter { |c, b| b }       # no-op
     end
-    c :ws_in, :any, :kz, 3 do
+    c :ws_in, :kz, 3 do
       filter { |c, b| b[0] += 1; b }
     end
   end

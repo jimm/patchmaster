@@ -38,7 +38,7 @@ class DSL
   rescue => ex
     raise "input: error creating input instrument \"#{name || sym}\" on input port #{port_num}: #{ex}"
   end
-  alias_method :in, :input
+  alias_method :inp, :input
 
   def output(port_num, sym, name=nil)
     raise "output: two outputs can not have the same symbol (:#{sym})" if @outputs[sym]
@@ -89,9 +89,15 @@ class DSL
     @patch.stop_bytes = bytes
   end
 
-  def connection(in_sym, in_chan, out_sym, out_chan)
+  # in_chan can be skipped, so "connection :foo, :bar, 1" is the same as
+  # "connection :foo, nil, :bar, 1".
+  def connection(in_sym, in_chan, out_sym, out_chan=nil)
     input = @inputs[in_sym]
-    in_chan = nil if in_chan == :all || in_chan == :any
+    if in_chan.kind_of? Symbol
+      out_chan = out_sym
+      out_sym = in_chan
+      in_chan = nil
+    end
     raise "can't find input instrument #{in_sym}" unless input
     output = @outputs[out_sym]
     raise "can't find outputput instrument #{out_sym}" unless output

@@ -21,7 +21,7 @@ trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
 song "First Song" do
   patch "First Song, First Patch" do
     start_bytes [TUNE_REQUEST]
-    connection :mb, nil, :kz, 2 do  # all chans from :mb, out to chan 2 on :kz
+    connection :mb, :kz, 2 do  # all chans from :mb, out to chan 2 on :kz
       prog_chg 64
       zone C4, B5
       transpose 12
@@ -43,11 +43,11 @@ end
 
 song "Second Song" do
   patch "Second Song, First Patch" do
-    c :mb, :any, :sj, 4 do
+    c :mb, :sj, 4 do
       pc 22
       z D4
     end
-    c :ws_in, :any, :ws_out, 6 do
+    c :ws_in, :ws_out, 6 do
       zone C4..B5
       filter { |c, b| b }       # no-op
     end
