@@ -31,7 +31,6 @@ end
 Rake::TestTask.new do |t|
   t.libs << File.join(HERE, 'test')
   t.libs << File.join(HERE, 'lib')
-  t.ruby_opts << '-rubygems'
   t.pattern = "test/**/*_test.rb"
 end
 
