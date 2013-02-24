@@ -39,7 +39,7 @@ via a trigger, a key press, or from any filter.
 A software panic button turns off any stuck notes.
 
 PatchMaster is cross-platform: it should run on Mac OS X, Linux, JRuby, and
-Windows.
+Windows. It requires Ruby 1.9 or above, and has been tested with Ruby 2.0.
 
 PatchMaster is by [[mailto:jim@jimmenard.com][Jim Menard]]. It is a rewrite of [[http://jimmenard.com/projects/keymaster/][KeyMaster]]. The Github repo
 is [[https://github.com/jimm/patchmaster][here]].
@@ -53,7 +53,7 @@ is [[https://github.com/jimm/patchmaster][here]].
   - [[https://github.com/arirusso/nibbler][nibbler]]
   - [[https://github.com/arirusso/unimidi][unimidi]]
 - The [[http://www.sinatrarb.com/][sinatra]] gem, if you want to use PatchMaster's browser GUI
-- Ruby 1.9 (because UniMIDI requires it)
+- Ruby 1.9 (because UniMIDI requires it) or higher (including Ruby 2.0)
 - Curses (comes with Ruby, but I'm not sure about JRuby)
 
 * Installation
