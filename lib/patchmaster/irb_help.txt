@@ -1,0 +1,18 @@
+input  num, :sym[, name]                  define an input instrument
+output num, :sym[, name]                  define an output instrument
+prog_chg [bank, ] prog                    send a program change
+conn :in_sym, [chan|nil], :out_sym, chan  create a connection
+xpose num                                 set transpose for connection
+zone zone_def                             set zone for connection
+filter { ... }                            set connection filter
+clear                                     remove all connections
+panic                                     panic
+panic!                                    panic plus note-offs
+
+Alternate names:
+  input      inp
+  output     out
+  conn       c, connection
+  prog_chg   pc
+  xpose      x, transpose
+  filter     f

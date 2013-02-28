@@ -30,16 +30,7 @@ def clear
 end
 
 def pm_help
-  puts <<EOS
-input  num, :sym[, name]                  define an input instrument
-output num, :sym[, name]                  define an output instrument
-conn :in_sym, [chan|nil], :out_sym, chan  create a connection
-xpose num                                 set transpose for conn
-zone zone_def                             set zone for conn
-clear                                     remove all connections
-panic                                     panic
-panic!                                    panic plus note-offs
-EOS
+  puts IO.read(File.join(File.dirname(__FILE__), 'irb_help.txt'))
 end
 
 # The "panic" command is handled by $dsl. This version tells panic to send
