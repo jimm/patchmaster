@@ -146,12 +146,14 @@ class PatchMaster < SimpleDelegator
   def panic(individual_notes=false)
     debug("panic(#{individual_notes})")
     @outputs.each do |out|
+      buf = []
       MIDI_CHANNELS.times do |chan|
-        out.midi_out([CONTROLLER + chan, CM_ALL_NOTES_OFF, 0])
+        buf += [CONTROLLER + chan, CM_ALL_NOTES_OFF, 0]
         if individual_notes
-          128.times { |note| out.midi_out([NOTE_OFF + chan, note, 0]) }
+          buf += (0..127).collect { |note| [NOTE_OFF + chan, note, 0] }.flatten
         end
       end
+      out.midi_out(buf)
     end
   end
 

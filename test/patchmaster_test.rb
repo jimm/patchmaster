@@ -174,4 +174,30 @@ class PatchMasterTest < Test::Unit::TestCase
     end
   end
 
+  def test_panic
+    @pm.panic
+    @pm.outputs.each do |out|
+      expected = (0...PM::MIDI_CHANNELS).collect do |chan|
+        [PM::CONTROLLER + chan, PM::CM_ALL_NOTES_OFF, 0]
+      end.flatten
+      assert_equal 16 * 3, expected.length
+      # Match expected to end of buffer, since start bytes, program changes,
+      # etc. might have been sent already.
+      assert_equal expected, out.port.buffer[-expected.length..-1]
+    end
+  end
+
+  def test_panic_all_notes
+    @pm.panic(true)
+    @pm.outputs.each do |out|
+      expected = (0...PM::MIDI_CHANNELS).collect do |chan|
+        [PM::CONTROLLER + chan, PM::CM_ALL_NOTES_OFF, 0] +
+          (0..127).collect { |note| [PM::NOTE_OFF + chan, note, 0] }.flatten
+      end.flatten
+      assert_equal 16 * (3 + 128*3), expected.length
+      # Match expected to end of buffer, since start bytes, program changes,
+      # etc. might have been sent already.
+      assert_equal expected, out.port.buffer[-expected.length..-1]
+    end
+  end
 end
