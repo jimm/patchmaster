@@ -28,8 +28,6 @@ but the most crucial features.\\
 -- Steve Jobs
 #+end_quote
 
-- Document use of the -i IRB switch.
-
 - In the =connection= statement, shouldn't need to specify anything if input
   channel is =nil=. "connection :in_sym, :out_sym, 1" should be same as
   "connection :in_sym, nil, :out_sym, 1".
@@ -58,11 +56,7 @@ but the most crucial features.\\
 - Display instruments?
 
 - Alternate display that only shows song and patch names and little else?
-  This might be useful during performance. Already have console-only
-  version.
-
-- Console version: output song and patch name whenever switch is made and in
-  console mode.
+  This might be useful during performance. Already have IRB mode.
 
 - Do I need to handle running bytes in Connection#midi_in, or does UniMIDI
   take care of that?

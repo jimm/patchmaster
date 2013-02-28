@@ -67,7 +67,7 @@ To install as a gem, type
 * Running PatchMaster
 
 #+begin_src sh
-  patchmaster [-n] [-w] [-p port] [-t] [-d] [patchmaster_file]
+  patchmaster [-n] [-i] [-w] [-p port] [-d] [patchmaster_file]
 #+end_src
 
 Starts PatchMaster and optionally loads =patchmaster_file=.
@@ -81,10 +81,9 @@ The =-w= flag runs the app with a Web gui. Open your browser to
 http://localhost:4567 after starting PatchMaster from the command line. To
 change the port, use =-p=.
 
-To run PatchMaster without a GUI use -t. All output will go to the console.
-The app will run until interrupted. (If you do this, you might want to
-create a trigger that calls =panic=, because you won't be able to use the
-computer keyboard to do that.)
+To run PatchMaster from within an IRB session use -i. Reads ./.patchmasterrc
+if it exists, $HOME/.patchmasterrc if not. See [[file:irb.org][IRB mode]] for details on the
+commands that are available.
 
 The =-d= flag turns on debug mode. The app becomes slightly more verbose and
 logs everything to =/tmp/pm_debug.txt=.
@@ -95,7 +94,7 @@ logs everything to =/tmp/pm_debug.txt=.
   and more
 - All about [[file:patches.org][patches and connections]] --- what happens when they run
 - The [[file:file_format.org][PatchMaster file format]]
-- [[file:irb.org][IRB Mode]]
+- [[file:irb.org][IRB mode]]
 - [[file:tips_and_tricks.org][Tips and tricks]]
 - [[file:screenshots.org][Screen Shots]]
 - [[file:changes.org][Changes]] between PatchMaster versions

@@ -21,6 +21,10 @@ that is constantly being redefined as you add connections.
 
 Use the =-i= flag to start PatchMaster within an IRB console.
 
+On startup IRB mode looks for the file .patchmasterrc in the current
+directory and loads that file. If it does not exist, IRB mode looks for the
+file $HOME/.patchmasterrc.
+
 * Commands
 
 Type "pm_help" to get a list of all the PatchMaster commands available. The

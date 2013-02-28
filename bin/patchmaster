@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# usage: patchmaster [-n] [-i] [-w] [-p port] [-t] [-d] [pm_file]
+# usage: patchmaster [-n] [-i] [-w] [-p port] [-d] [pm_file]
 #
 # Starts PatchMaster and optionally loads pm_file.
 #
@@ -15,11 +15,6 @@
 #
 # To run PatchMaster using a Web browser GUI use -w and point your browser
 # at http://localhost:4567. To change the port, use -p.
-#
-# To run PatchMaster without a GUI use -t. All output will go to the
-# console. The app will run until interrupted. (If you do this, you might
-# want to create a trigger that calls `panic', because you won't be able to
-# use the computer keyboard to do that.)
 #
 # The =-d= flag turns on debug mode. The app becomes slightly more verbose
 # and logs everything to `/tmp/pm_debug.txt'.
@@ -37,7 +32,6 @@ OptionParser.new do |opts|
   opts.on("-i", "--irb", "Use an IRB console") { gui = :irb }
   opts.on("-w", "--web", "Use a Web browser GUI") { gui = :web }
   opts.on("-p", "--port PORT", "Web browser GUI port number") { |opt| port = opt.to_i }
-  opts.on("-t", "--text", "--nw", "--no-window", "No windows") { gui = :text }
   opts.on_tail("-h", "-?", "--help", "Show this message") do
     puts opts
     exit 0
