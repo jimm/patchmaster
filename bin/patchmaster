@@ -21,7 +21,6 @@
 # The =-d= flag turns on debug mode. The app becomes slightly more verbose
 # and logs everything to `/tmp/pm_debug.txt'.
 
-
 require 'optparse'
 
 use_midi = true
