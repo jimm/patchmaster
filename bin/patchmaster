@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 #
-# usage: patchmaster [-n] [-i] [-w] [-p port] [-d] [pm_file]
+# usage: patchmaster [-v] [-n] [-i] [-w] [-p port] [-d] [pm_file]
 #
 # Starts PatchMaster and optionally loads pm_file.
+#
+# -v outputs the version number and exits.
 #
 # The -n flag tells PatchMaster to not use MIDI. All MIDI errors such as not
 # being able to connect to the MIDI instruments specified in pm_file are
@@ -32,6 +34,12 @@ OptionParser.new do |opts|
   opts.on("-i", "--irb", "Use an IRB console") { gui = :irb }
   opts.on("-w", "--web", "Use a Web browser GUI") { gui = :web }
   opts.on("-p", "--port PORT", "Web browser GUI port number") { |opt| port = opt.to_i }
+  opts.on("-v", "--version", "Show version number and exit") do
+    version_line = IO.readlines(File.join(File.dirname(__FILE__), '../Rakefile')).grep(/GEM_VERSION\s*=/).first
+    version_line =~ /(\d+\.\d+\.\d+)/
+    puts "patchmaster #{$1}"
+    exit 0
+  end
   opts.on_tail("-h", "-?", "--help", "Show this message") do
     puts opts
     exit 0
