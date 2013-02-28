@@ -4,7 +4,7 @@ require 'tempfile'
 
 $dsl = nil
 
-# For bin/patchmaster. Does nothing
+# For bin/patchmaster. Does nothing.
 def run
 end
 
@@ -17,10 +17,12 @@ def dsl
   $dsl
 end
 
+# Return the current (only) patch.
 def patch
   dsl.instance_variable_get(:@patch)
 end
 
+# Stop and delete all connections.
 def clear
   patch.stop
   patch.connections = []
@@ -29,17 +31,19 @@ end
 
 def pm_help
   puts <<EOS
-input  num, :sym[, name]                          define an input instrument
-output num, :sym[, name]                          define an output instrument
-conn :in_sym, [chan|nil], :out_sym, [chan|nil]    create a connection
-xpose num                                         set transpose for conn
-zone zone_def                                     set zone for conn
-clear                                             remove all connections
-panic                                             panic
-panic!                                            panic plus note-offs
+input  num, :sym[, name]                  define an input instrument
+output num, :sym[, name]                  define an output instrument
+conn :in_sym, [chan|nil], :out_sym, chan  create a connection
+xpose num                                 set transpose for conn
+zone zone_def                             set zone for conn
+clear                                     remove all connections
+panic                                     panic
+panic!                                    panic plus note-offs
 EOS
 end
 
+# The "panic" command is handled by $dsl. This version tells panic to send
+# all all-notes-off messages.
 def panic!
   PM::PatchMaster.instance.panic(true)
 end
@@ -60,23 +64,7 @@ def method_missing(sym, *args)
   end
 end
 
-def start_patchmaster_irb
-  f = Tempfile.new('patchmaster')
-  f.write <<EOS
-  IRB.conf[:PROMPT][:CUSTOM] = {
-    :PROMPT_I=>"PatchMaster:%03n:%i> ",
-    :PROMPT_N=>"PatchMaster:%03n:%i> ",
-    :PROMPT_S=>"PatchMaster:%03n:%i%l ",
-    :PROMPT_C=>"PatchMaster:%03n:%i* ",
-    :RETURN=>"=> %s\n"
-  }
-  IRB.conf[:PROMPT_MODE] = :CUSTOM
-
-  puts 'PatchMaster loaded'
-  puts 'Type "pm_help" for help'
-EOS
-  f.close
-  ENV['IRBRC'] = f.path
+def start_patchmaster_irb(init_file=nil)
+  ENV['IRBRC'] = init_file if init_file
   IRB.start
-  f.unlink
 end

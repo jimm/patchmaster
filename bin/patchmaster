@@ -9,7 +9,8 @@
 # ignored, and no MIDI data is sent/received. That is useful if you want to
 # run PatchMaster without actually talking to any MIDI instruments.
 #
-# To run PatchMaster from within an IRB session use -i. See the
+# To run PatchMaster from within an IRB session use -i. Reads
+# ./.patchmasterrc if it exists, $HOME/.patchmasterrc if not. See the
 # documentation for details on the commands that are available.
 #
 # To run PatchMaster using a Web browser GUI use -w and point your browser
@@ -57,7 +58,7 @@ when :curses
   pm.run
 when :irb
   require 'patchmaster/irb'
-  start_patchmaster_irb
+  start_patchmaster_irb(File.join(File.dirname(__FILE__), 'irb_init.rb'))
 when :web
   require 'patchmaster/web/sinatra_app'
   app = PM::SinatraApp.instance
