@@ -79,10 +79,11 @@ then sends individual note-off messages for all notes on all channels.
 
 * Tips & Tricks
 
-** Common Configurations
+** Initial Setup
 
-Store your setup in a Ruby file, then =require= that file. Saves you having
-to type input and output statements.
+Store your setup (input, output, alias_output, etc.) in ~/.patchmasterrc.
+
+** Common Configurations
 
 Have a few favorite connection configurations? Shove them into a file,
 either one configuration in each file or all in one file in different
