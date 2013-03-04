@@ -58,7 +58,7 @@ when :curses
   pm.gui = PM::Main.instance
   pm.run
 when :irb
-  require 'patchmaster/irb'
+  require 'patchmaster/irb/irb'
   start_patchmaster_irb(File.join(File.dirname(__FILE__), 'irb_init.rb'))
 when :web
   require 'patchmaster/web/sinatra_app'
