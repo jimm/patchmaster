@@ -9,8 +9,8 @@ PROJECT_NAME = 'patchmaster'
 GEM_VERSION = '1.1.0'
 GEM_DATE = Time.now.strftime('%Y-%m-%d')
 WEB_SERVER = 'jimmenard.com'
-WEB_DIR = 'webapps/patchmaster'
-LOCAL_HTML_TARGET = "/tmp/patchmaster"
+WEB_DIR = "webapps/#{PROJECT_NAME}"
+LOCAL_HTML_TARGET = "/tmp/#{PROJECT_NAME}"
 LOCAL_CGI_TARGET = "/Library/WebServer/CGI-Executables"
 
 ORGS = Dir[File.join(HERE, 'www/org/*.org')]
@@ -56,7 +56,7 @@ EOS
   s.executables << PROJECT_NAME
   s.files       = FileList["bin/*", "lib/**/*"].to_a
   s.test_files  = FileList["test/**/test*.rb"].to_a
-  s.homepage    = "http://www.patchmaster.org/"
+  s.homepage    = "http://www.#{PROJECT_NAME}.org/"
   s.add_runtime_dependency 'midi-eye'
   s.license     = 'Ruby'
 end
@@ -77,7 +77,7 @@ end
 namespace :web do
   desc "Export Org-mode files to HTML"
   task :build do
-    system("/Applications/Emacs.app/Contents/MacOS/Emacs --batch --load ~/.emacs --find-file www/org/file_format.org --eval '(org-publish (assoc \"patchmaster\" org-publish-project-alist) t)'") if web_build_needed?
+    system("/Applications/Emacs.app/Contents/MacOS/Emacs --batch --load ~/.emacs --find-file www/org/file_format.org --eval '(org-publish (assoc \"#{PROJECT_NAME}\" org-publish-project-alist) t)'") if web_build_needed?
   end
 
   desc "Publish the Web site"
@@ -85,7 +85,7 @@ namespace :web do
     system "rsync -qrlpt --filter='exclude .DS_Store' --del www/public_html/ #{WEB_SERVER}:#{WEB_DIR}"
   end
 
-  desc "Copy everything to local static site in /tmp/patchmaster"
+  desc "Copy everything to local static site in /tmp/#{PROJECT_NAME}"
   task :local => :build do
     require 'fileutils'
     FileUtils.rm_rf LOCAL_HTML_TARGET
@@ -100,7 +100,7 @@ namespace :web do
 
       contents = IO.read(path)
       contents.sub!('<!--#include virtual="header.html"-->', header)
-      contents.sub!(/(loc = window\.location\.pathname;)/, '\1 if (loc.indexOf("/tmp/patchmaster") == 0) { loc = loc.substring(16); console.log(loc); }')
+      contents.sub!(/(loc = window\.location\.pathname;)/, '\1 if (loc.indexOf("/tmp/#{PROEJCT_NAME}") == 0) { loc = loc.substring(16); console.log(loc); }')
       IO.write(File.join(LOCAL_HTML_TARGET, File.basename(path)), contents)
     end
   end

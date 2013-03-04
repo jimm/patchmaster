@@ -1,4 +1,3 @@
-
 # Set IRB prompt
 IRB.conf[:PROMPT][:CUSTOM] = {
   :PROMPT_I=>"PatchMaster:%03n:%i> ",
