@@ -156,6 +156,14 @@ class DSL
     end
   end
 
+  def alias_input(new_sym, old_sym)
+    @inputs[new_sym] = @inputs[old_sym]
+  end
+
+  def alias_output(new_sym, old_sym)
+    @outputs[new_sym] = @outputs[old_sym]
+  end
+
   # ****************************************************************
 
   def save(file)
