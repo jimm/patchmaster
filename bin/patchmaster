@@ -18,8 +18,8 @@
 # To run PatchMaster using a Web browser GUI use -w and point your browser
 # at http://localhost:4567. To change the port, use -p.
 #
-# The =-d= flag turns on debug mode. The app becomes slightly more verbose
-# and logs everything to `/tmp/pm_debug.txt'.
+# The -d flag turns on debug mode. The app becomes slightly more verbose and
+# logs everything to `/tmp/pm_debug.txt'.
 
 require 'optparse'
 
