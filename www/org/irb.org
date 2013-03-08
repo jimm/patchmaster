@@ -27,9 +27,7 @@ file $HOME/.patchmasterrc.
 
 * Commands
 
-Type "pm_help" to get a list of all the PatchMaster commands available. The
-only new one is "clear", which deletes all connections.
-
+Type "pm_help" to get a list of all the PatchMaster commands available.
 There are a few new commands, and a few that behave slightly differently
 then when they're in a PatchMaster file.
 
