@@ -95,11 +95,13 @@ the following:
   output 1, :module2, 'YAMM'
 
   def vanilla
+    clear
     connection :kbd, :module1, 1
     connection :kbd, :module2, 2
   end
 
   def chocolate
+    clear
     connection :kbd,  :module1, 1
     connection :kbd2, :module1, 3
   end
