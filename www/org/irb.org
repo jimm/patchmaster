@@ -109,9 +109,9 @@ the following:
   end
 #+end_src
 
-Then you can =require "myfile"= (or =require "/path/to/myfile"= if it's not
-in your load path) and simply type "vanilla" or "chocolate" to switch
-between the setups.
+Then you can @<code>require "myfile"@</code> (or @<code>require
+"/path/to/myfile"@</code> if it's not in your load path) and simply type
+"vanilla" or "chocolate" to switch between the setups.
 
 ** Loading Files
 
