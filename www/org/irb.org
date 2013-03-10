@@ -46,11 +46,13 @@ the most recently defined connection. So for example, these two are
 equivalent:
 
 #+begin_src ruby
+  # From a PatchMaster file
   connection :mb, :kz, 1 do
     transpose 12
     zone C4, B5
   end
 
+  # IRB mode equivalent
   connection :mb, :kz, 1
   transpose 12
   zone C4, B5
