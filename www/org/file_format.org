@@ -131,9 +131,9 @@ you'd like to refer to them by two different names. In that case, you can
 use =alias_input= or =alias_output=.
 
 Both commands have the same format: =alias_input :new_sym, :old_sym=. For
-example, if you have a MIDI input going into a keyboard, then you use the
-"thru" MIDI port to go out to a drum machine, you could define them like
-this:
+example, if you have a MIDI output going into a keyboard and the "thru" MIDI
+port from that keyboard goes out to a drum machine, you could define them
+like this:
 
 #+begin_src ruby
   output 1, :kbd, 'My Keyboard and Drum Machine'
