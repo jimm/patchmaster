@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    alsa-rawmidi (0.2.14)
+      ffi (>= 1.0)
     backports (2.6.1)
     eventmachine (0.12.10)
     ffi (1.0.11)
@@ -10,9 +12,12 @@ GEM
       midi-message
       midi-nibbler
       unimidi
+    midi-jruby (0.0.12)
     midi-message (0.3.1)
     midi-nibbler (0.1.1)
       midi-message
+    midi-winmm (0.1.10)
+      ffi (>= 1.0)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
@@ -37,6 +42,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  alsa-rawmidi
   midi-eye
+  midi-jruby
+  midi-winmm
   sinatra
   sinatra-contrib
