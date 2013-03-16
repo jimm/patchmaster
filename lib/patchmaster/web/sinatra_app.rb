@@ -17,7 +17,7 @@ def pm
   @pm ||= PM::SinatraApp.instance.pm
 end
 
-def return_status(opts = nil)
+def return_status(opts={})
   pm = pm()
   status = {
     :lists => pm.song_lists.map(&:name),
@@ -51,9 +51,7 @@ def return_status(opts = nil)
       }
     end
   end
-  status.merge(opts) if opts
-
-  json status
+  json status.merge(opts)
 end
 
 # ================================================================
