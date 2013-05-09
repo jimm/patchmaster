@@ -28,13 +28,9 @@ but the most crucial features.\\
 -- Steve Jobs
 #+end_quote
 
-- Song notes, displayed in help area.
+- Document song notes feature.
 
-- Aliases for inputs and outputs, or at least a way to specify more than one
-  symbol. This lets you give two different names to two different
-  instruments on the same MIDI port. Example syntax: "input 1, [:ws, :rx5]".
-
-- Finish the "Creating Triggers" and "Song List"sections of
+- Finish the "Creating Triggers" and "Song List" sections of
   file:tutorial.org.
 
 - Working on Web interface using Sinatra and Swing interface for JRuby. I'll

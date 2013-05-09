@@ -75,6 +75,10 @@ class DSL
     yield @song if block_given?
   end
 
+  def notes(txt)
+    @song.notes = txt
+  end
+
   def patch(name)
     @patch = Patch.new(name)
     @song << @patch

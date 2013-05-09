@@ -133,9 +133,8 @@ class Main
 
     @message_win.scrollok(false)
 
-    # These two windows don't get redrawn by #refresh_all
+    # This window doesn't get redrawn by #refresh_all
     @trigger_win.draw
-    @info_win.draw
   end
 
   def resize_windows
@@ -149,9 +148,8 @@ class Main
     g.move_and_resize(@trigger_win, g.trigger_rect)
     g.move_and_resize(@info_win, g.info_rect)
 
-    # These two windows don't get redrawn by #refresh_all
+    # This window doesn't get redrawn by #refresh_all
     @trigger_win.draw
-    @info_win.draw
   end
 
   def load(file)
@@ -205,7 +203,7 @@ class Main
 
   def refresh_all
     set_window_data
-    wins = [@song_lists_win, @song_list_win, @song_win, @patch_win, @info_win, @trigger_win]
+    wins = [@song_lists_win, @song_list_win, @song_win, @patch_win, @info_win, @trigger_win, @info_win]
     wins.map(&:draw)
     ([stdscr] + wins).map(&:refresh)
   end
@@ -219,10 +217,12 @@ class Main
     song = @pm.song
     if song
       @song_win.set_contents(song.name, song.patches, :patch)
+      @info_win.text = song.notes
       patch = @pm.patch
       @patch_win.patch = patch
     else
       @song_win.set_contents(nil, nil, :patch)
+      @info_win.text = nil
       @patch_win.patch = nil
     end
   end

@@ -3,7 +3,7 @@ module PM
 # A Song is a named list of Patches with a cursor.
 class Song
 
-  attr_accessor :name, :patches
+  attr_accessor :name, :patches, :notes
 
   def initialize(name)
     @name = name

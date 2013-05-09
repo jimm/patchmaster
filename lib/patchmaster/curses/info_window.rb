@@ -2,29 +2,38 @@ require 'curses'
 require 'delegate'
 
 module PM
-class InfoWindow < SimpleDelegator
+class InfoWindow < PmWindow
 
   CONTENTS = File.join(File.dirname(__FILE__), 'info_window_contents.txt')
 
   include Curses
 
-  attr_reader :win, :text
-
-  TITLE = ' PatchMaster '
+  attr_reader :text
 
   def initialize(rows, cols, row, col)
-    @win = Window.new(rows, cols, row, col)
-    super(@win)
-    @text = IO.read(CONTENTS)
+    super(rows, cols, row, col, 'PatchMaster')
+    @info_text = IO.read(CONTENTS)
+    self.text=(nil)
+  end
+
+  def text=(str)
+    if str
+      @text = str
+      @title = 'Song Notes'
+    else
+      @text = @info_text
+      @title = 'Help'
+    end
   end
 
   def draw
-    @win.setpos(0, (@win.maxx() - TITLE.length) / 2)
-    @win.attron(A_REVERSE) {
-      @win.addstr(TITLE)
-    }
-    @win.addstr("\n")
-    @text.each_line { |line| @win.addstr(line) }
+    super
+    i = 0
+    @text.each_line do |line|
+      @win.setpos(i+1, 1)
+      @win.addstr(make_fit(line))
+      i += 1
+    end
   end
 
 end

@@ -25,6 +25,30 @@ trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_8, 127] { prev_song }
 trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
 
 song "First Song" do
+
+  notes <<EOS
+  C
+These are the words
+          F            C
+They are very clever words
+     Ab mi
+And deep
+        G7
+Oh, so deep
+
+        C         C/B
+This chorus does not
+ C7/Bb     Ami
+Refer to itself
+        F
+Don't think too hard, or
+       G7
+Your head
+Will
+  C
+Explode
+EOS
+
   patch "First Song, First Patch" do
     start_bytes [TUNE_REQUEST]
     connection :mb, :kz, 2 do  # all chans from :mb, out to chan 2 on :kz
