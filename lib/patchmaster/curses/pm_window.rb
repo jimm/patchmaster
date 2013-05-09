@@ -1,7 +1,8 @@
 require 'curses'
+require 'delegate'
 
 module PM
-class PmWindow
+class PmWindow < SimpleDelegator
 
   include Curses
 
@@ -11,12 +12,14 @@ class PmWindow
   # If title is nil then list's name will be used
   def initialize(rows, cols, row, col, title_prefix)
     @win = Window.new(rows, cols, row, col)
+    super(@win)
     @title_prefix = title_prefix
-    @max_contents_len = @win.maxx - 3 # 2 for borders
+    set_max_contents_len(cols)
   end
 
-  def refresh
-    @win.refresh
+  def resize(rows, cols)
+    @win.resize(rows, cols)
+    set_max_contents_len(cols)
   end
 
   def draw
@@ -31,6 +34,10 @@ class PmWindow
       @win.addstr(@title) if @title
       @win.addch(' ')
     }
+  end
+
+  def set_max_contents_len(cols)
+    @max_contents_len = cols - 3 # 2 for borders
   end
 
   def make_fit(str)

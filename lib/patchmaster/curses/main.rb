@@ -4,10 +4,13 @@ require 'singleton'
 
 module PM
 
+
 class Main
 
   include Singleton
   include Curses
+
+  Geometry = Struct.new(:top_height, :bot_height, :top_width, :sls_height, :sl_height, :third_height, :width, :left)
 
   FUNCTION_KEY_SYMBOLS = {}
   12.times do |i|
@@ -82,6 +85,8 @@ class Main
             end
           when 'q'
             break
+          when Key::RESIZE
+            resize_windows
           end
           @prev_cmd = ch
         rescue => ex
@@ -118,30 +123,47 @@ class Main
   end
 
   def create_windows
-    top_height = (lines() - 1) * 2 / 3
-    bot_height = (lines() - 1) - top_height
-    top_width = cols() / 3
-
-    sls_height = top_height / 3
-    sl_height = top_height - sls_height
+    g = geometry()
     
-    @song_lists_win = ListWindow.new(sls_height, top_width, 0, 0, nil)
-    @song_list_win = ListWindow.new(sl_height, top_width, sls_height, 0, 'Song List')
-    @song_win = ListWindow.new(top_height, top_width, 0, top_width, 'Song')
-    @patch_win = PatchWindow.new(bot_height, cols(), top_height, 0, 'Patch')
+    @song_lists_win = ListWindow.new(g.sls_height, g.top_width, 0, 0, nil)
+    @song_list_win = ListWindow.new(g.sl_height, g.top_width, g.sls_height, 0, 'Song List')
+    @song_win = ListWindow.new(g.top_height, g.top_width, 0, g.top_width, 'Song')
+    @patch_win = PatchWindow.new(g.bot_height, cols(), g.top_height, 0, 'Patch')
     @message_win = Window.new(1, cols(), lines()-1, 0)
     @message_win.scrollok(false)
 
-    third_height = top_height / 3
-    width = cols() - (top_width * 2) - 1
-    left = top_width * 2 + 1
-
-    @trigger_win = TriggerWindow.new(third_height, width, third_height * 2, left)
+    @trigger_win = TriggerWindow.new(g.third_height, g.width, g.third_height * 2, g.left)
     @trigger_win.draw
 
-    @info_win = InfoWindow.new(third_height * 2, width, 0, left)
+    @info_win = InfoWindow.new(g.third_height * 2, g.width, 0, g.left)
     @info_win.draw
+  end
 
+  def resize_windows
+    g = geometry()
+
+    @song_lists_win.move(0, 0)
+    @song_lists_win.resize(g.sls_height, g.top_width)
+
+    @song_list_win.move(g.sls_height, 0)
+    @song_list_win.resize(g.sl_height, g.top_width)
+
+    @song_win.move(0, g.top_width)
+    @song_win.resize(g.top_height, g.top_width)
+
+    @patch_win.move(g.top_height, 0)
+    @patch_win.resize(g.bot_height, cols())
+
+    @message_win.move(lines()-1, 0)
+    @message_win.resize(1, cols())
+
+    @trigger_win.move(g.third_height * 2, g.left)
+    @trigger_win.resize(g.third_height, g.width)
+    @trigger_win.draw
+
+    @info_win.move(0, g.left)
+    @info_win.resize(g.third_height * 2, g.width)
+    @info_win.draw
   end
 
   def load(file)
@@ -198,6 +220,21 @@ class Main
     wins = [@song_lists_win, @song_list_win, @song_win, @patch_win, @info_win, @trigger_win]
     wins.map(&:draw)
     ([stdscr] + wins).map(&:refresh)
+  end
+
+  def geometry
+    top_height = (lines() - 1) * 2 / 3
+    bot_height = (lines() - 1) - top_height
+    top_width = cols() / 3
+
+    sls_height = top_height / 3
+    sl_height = top_height - sls_height
+
+    third_height = top_height / 3
+    width = cols() - (top_width * 2) - 1
+    left = top_width * 2 + 1
+
+    Geometry.new(top_height, bot_height, top_width, sls_height, sl_height, third_height, width, left)
   end
 
   def set_window_data

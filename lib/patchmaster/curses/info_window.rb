@@ -1,7 +1,8 @@
 require 'curses'
+require 'delegate'
 
 module PM
-class InfoWindow
+class InfoWindow < SimpleDelegator
 
   CONTENTS = File.join(File.dirname(__FILE__), 'info_window_contents.txt')
 
@@ -13,6 +14,7 @@ class InfoWindow
 
   def initialize(rows, cols, row, col)
     @win = Window.new(rows, cols, row, col)
+    super(@win)
     @text = IO.read(CONTENTS)
   end
 
@@ -23,10 +25,6 @@ class InfoWindow
     }
     @win.addstr("\n")
     @text.each_line { |line| @win.addstr(line) }
-  end
-
-  def refresh
-    @win.refresh
   end
 
 end
