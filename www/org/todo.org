@@ -28,6 +28,8 @@ but the most crucial features.\\
 -- Steve Jobs
 #+end_quote
 
+- Song notes, displayed in help area.
+
 - Aliases for inputs and outputs, or at least a way to specify more than one
   symbol. This lets you give two different names to two different
   instruments on the same MIDI port. Example syntax: "input 1, [:ws, :rx5]".
@@ -41,8 +43,8 @@ but the most crucial features.\\
 - Need a logo.
 
 - Add convenience methods to PM::PatchMaster (so they are available to
-  trigger locks) for things nd filter like clamping byte values to (0..127)
-  and limiting min/max values.
+  trigger locks) for things like clamping byte values to (0..127) and
+  limiting min/max values.
 
 - Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
@@ -62,8 +64,6 @@ but the most crucial features.\\
 - Help screen.
 
 - Documentation for screen commands.
-
-- Handle window resizing (SIGWINCH). How do I get new screen size?
 
 - Trap signals like ^C. Don't do work, just set flag to be handled next time
   through loop.
