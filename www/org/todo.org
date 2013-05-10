@@ -13,6 +13,11 @@ yourself with powerful tools, and look good doing it.\\
 -- markg@be.com
 #+end_quote
 
+- When iTerm is full-screen (command-return) and then becomes not full
+  screen (command-return), the curses windows dono't get redrawn properly.
+  As a workaround you can manually resize the iTerm window, which will fix
+  the curses windows.
+
 - IRB code should =include PM=.
 
 - There's no way to cancel out of a PromptWindow (file load/save).
