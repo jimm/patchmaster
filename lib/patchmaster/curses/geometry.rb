@@ -19,16 +19,16 @@ class Geometry
     @info_left = @top_width * 2
   end
 
-  def song_lists_rect
-    [@sls_height, @top_width, 0, 0]
+  def song_list_rect
+    [@sl_height, @top_width, 0, 0]
   end
 
-  def song_list_rect
-    [@sl_height, @top_width, @sls_height, 0]
+  def song_lists_rect
+    [@sls_height, @top_width, @sl_height, 0]
   end
 
   def song_rect
-    [@top_height, @top_width, 0, @top_width]
+    [@info_height, @top_width, 0, @top_width]
   end
 
   def patch_rect
@@ -40,11 +40,11 @@ class Geometry
   end
 
   def info_rect
-    [@info_height, @info_width, 0, @info_left]
+    [@top_height, @info_width, 0, @info_left]
   end
 
   def trigger_rect
-    [@top_height - @info_height, @info_width, @info_height, @info_left]
+    [@top_height - @info_height, @top_width, @info_height, @top_width]
   end
 
   def help_rect
