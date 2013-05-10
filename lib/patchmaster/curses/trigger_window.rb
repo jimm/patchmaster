@@ -14,7 +14,6 @@ class TriggerWindow < PmWindow
     super
     pm = PM::PatchMaster.instance
     i = 0
-    visible_height = @win.maxy - 2
     pm.inputs.each do |instrument|
       instrument.triggers.each do |trigger|
         if i < visible_height

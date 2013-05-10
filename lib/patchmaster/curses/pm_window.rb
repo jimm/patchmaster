@@ -37,6 +37,11 @@ class PmWindow < SimpleDelegator
     }
   end
 
+  # Visible height is height of window minus 2 for the borders.
+  def visible_height
+    @win.maxy - 2
+  end
+
   def set_max_contents_len(cols)
     @max_contents_len = cols - 3 # 2 for borders
   end

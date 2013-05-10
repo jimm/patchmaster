@@ -23,7 +23,6 @@ class ListWindow < PmWindow
 
     curr_item = PM::PatchMaster.instance.send(@curr_item_method_sym)
     curr_index = @list.index(curr_item)
-    visible_height = @win.maxy - 2
 
     if curr_index < @offset
       @offset = curr_index

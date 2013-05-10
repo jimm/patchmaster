@@ -17,7 +17,6 @@ class PatchWindow < PmWindow
     draw_headers
     return unless @patch
 
-    visible_height = @win.maxy - 2
     @patch.connections[0, visible_height].each_with_index do |connection, i|
       @win.setpos(i+2, 1)
       draw_connection(connection)
