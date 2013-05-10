@@ -13,6 +13,8 @@ yourself with powerful tools, and look good doing it.\\
 -- markg@be.com
 #+end_quote
 
+- IRB code should =include PM=.
+
 - There's no way to cancel out of a PromptWindow (file load/save).
 
 - Trigger and filter block text isn't read properly when triggers or filters
@@ -29,6 +31,9 @@ but the most crucial features.\\
 \\
 -- Steve Jobs
 #+end_quote
+
+- IRB code should pre-define a few variables like =pm= for
+  =PM::PatchMaster.instance=.
 
 - Document song notes feature.
 
@@ -47,8 +52,6 @@ but the most crucial features.\\
 - Windows observe contents to minimize redraws. Perhaps only need to observe
   PatchMaster itself?
 
-- Scrolling in windows. See newpad.
-
 - Display instruments?
 
 - Alternate display that only shows song and patch names and little else?
@@ -58,8 +61,6 @@ but the most crucial features.\\
   take care of that?
 
 - Fix PromptWindow display cleanup.
-
-- Help screen.
 
 - Documentation for screen commands.
 

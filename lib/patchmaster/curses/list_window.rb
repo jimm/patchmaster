@@ -5,7 +5,12 @@ class ListWindow < PmWindow
 
   attr_reader :list
 
-  # +curr_item_method_sym+ is a method symbol that is sent to
+  def initialize(rows, cols, row, col, title_prefix)
+    super
+    @offset = 0
+  end
+
+ # +curr_item_method_sym+ is a method symbol that is sent to
   # PM::PatchMaster to obtain the current item so we can highlight it.
   def set_contents(title, list, curr_item_method_sym)
     @title, @list, @curr_item_method_sym = title, list, curr_item_method_sym
@@ -17,7 +22,16 @@ class ListWindow < PmWindow
     return unless @list
 
     curr_item = PM::PatchMaster.instance.send(@curr_item_method_sym)
-    @list.each_with_index do |thing, i|
+    curr_index = @list.index(curr_item)
+    visible_height = @win.maxy - 2
+
+    if curr_index < @offset
+      @offset = curr_index
+    elsif curr_index >= @offset + visible_height
+      @offset = curr_index - visible_height + 1
+    end
+
+    @list[@offset, visible_height].each_with_index do |thing, i|
       @win.setpos(i+1, 1)
       @win.attron(A_REVERSE) if thing == curr_item
       @win.addstr(make_fit(" #{thing.name} "))

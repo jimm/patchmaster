@@ -17,10 +17,10 @@ class PatchWindow < PmWindow
     draw_headers
     return unless @patch
 
-    max_len = @win.maxx - 3     # minus 2 for borders
-    @patch.connections.each_with_index do |connection, i|
+    visible_height = @win.maxy - 2
+    @patch.connections[0, visible_height].each_with_index do |connection, i|
       @win.setpos(i+2, 1)
-      draw_connection(connection, max_len)
+      draw_connection(connection)
     end
   end
 
@@ -32,7 +32,7 @@ class PatchWindow < PmWindow
     }
   end
 
-  def draw_connection(connection, max_len)
+  def draw_connection(connection)
     str =  " #{'%16s' % connection.input.name}"
     str << " #{connection.input_chan ? ('%2d' % (connection.input_chan+1)) : '  '} |"
     str << " #{'%16s' % connection.output.name}"

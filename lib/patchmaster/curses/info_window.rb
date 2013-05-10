@@ -29,7 +29,7 @@ class InfoWindow < PmWindow
     super
     i = 0
     @text.each_line do |line|
-      break if i >= @win.maxy-2
+      break if i >= @win.maxy - 2
       @win.setpos(i+1, 1)
       @win.addstr(make_fit(line.chomp))
       i += 1
