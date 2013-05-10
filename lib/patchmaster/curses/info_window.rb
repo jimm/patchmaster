@@ -1,5 +1,4 @@
 require 'curses'
-require 'delegate'
 
 module PM
 class InfoWindow < PmWindow
