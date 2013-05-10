@@ -46,5 +46,9 @@ class Geometry
   def trigger_rect
     [@top_height - @info_height, @info_width, @info_height, @info_left]
   end
+
+  def help_rect
+    [lines() - 6, cols() - 6, 3, 3]
+  end
 end
 end

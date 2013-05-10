@@ -1,7 +1,7 @@
 require 'curses'
 
 module PM
-class InfoWindow < PmWindow
+class HelpWindow < PmWindow
 
   CONTENTS = File.join(File.dirname(__FILE__), 'info_window_contents.txt')
 
@@ -11,26 +11,15 @@ class InfoWindow < PmWindow
 
   def initialize(rows, cols, row, col)
     super(rows, cols, row, col, nil)
-    @info_text = IO.read(CONTENTS)
-    text = nil
-  end
-
-  def text=(str)
-    if str
-      @text = str
-      @title = 'Song Notes'
-    else
-      @text = @info_text
-      @title = 'PatchMaster Help'
-    end
+    @text = IO.read(CONTENTS)
+    @title = 'PatchMaster Help'
   end
 
   def draw
     super
     i = 0
     @text.each_line do |line|
-      break if i >= @win.maxy-2
-      @win.setpos(i+1, 1)
+      @win.setpos(i+2, 3)
       @win.addstr(make_fit(line.chomp))
       i += 1
     end

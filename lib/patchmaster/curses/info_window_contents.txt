@@ -3,14 +3,14 @@ k, up           - prev patch
 n, right        - next song
 p, left         - prev song
 
-g   - goto song
-t   - goto song list
+g    - goto song
+t    - goto song list
 
-h   - help
-ESC - panic
+h, ? - help
+ESC  - panic
 
-l   - load
-s   - save
-e   - edit
+l    - load
+s    - save
+e    - edit
 
-q   - quit
+q    - quit

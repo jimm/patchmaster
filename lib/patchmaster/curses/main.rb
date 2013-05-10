@@ -1,7 +1,7 @@
 require 'curses'
 require 'singleton'
 require 'patchmaster/curses/geometry'
-%w(list patch info trigger prompt).each { |w| require "patchmaster/curses/#{w}_window" }
+%w(list patch info trigger prompt help).each { |w| require "patchmaster/curses/#{w}_window" }
 
 module PM
 
@@ -177,7 +177,11 @@ class Main
   end
 
   def help
-    message("Help: not yet implemented")
+    g = PM::Geometry.new
+    win = HelpWindow.new(*g.help_rect)
+    win.draw
+    win.refresh
+    ch = getch                  # eat it
   end
 
   def message(str)
