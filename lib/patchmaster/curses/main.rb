@@ -199,7 +199,8 @@ class Main
     set_window_data
     wins = [@song_lists_win, @song_list_win, @song_win, @patch_win, @info_win, @trigger_win]
     wins.map(&:draw)
-    ([stdscr] + wins).map(&:refresh)
+    ([stdscr] + wins).map(&:noutrefresh)
+    Curses.doupdate
   end
 
   def set_window_data
