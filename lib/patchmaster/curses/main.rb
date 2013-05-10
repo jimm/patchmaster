@@ -37,10 +37,10 @@ class Main
             @pm.next_patch
           when 'k', Key::UP
             @pm.prev_patch
-          when 'n', Key::LEFT
-            @pm.prev_song
-          when 'p', Key::RIGHT
+          when 'n', Key::RIGHT
             @pm.next_song
+          when 'p', Key::LEFT
+            @pm.prev_song
           when 'g'
             name = PromptWindow.new('Go To Song', 'Go to song:').gets
             @pm.goto_song(name)
@@ -51,7 +51,7 @@ class Main
             close_screen
             file = @loaded_file || PromptWindow.new('Edit', 'Edit file:').gets
             edit(file)
-          when 'h'
+          when 'h', '?'
             help
           when 27        # "\e" doesn't work here
             # Twice in a row sends individual note-off commands
@@ -73,13 +73,6 @@ class Main
               message("Saved #{file}")
             rescue => ex
               message(ex.to_s)
-            end
-          when '?'
-            if $DEBUG
-              require 'pp'
-              out = ''
-              str = pp(@pm, out)
-              message("pm = #{out}")
             end
           when 'q'
             break
