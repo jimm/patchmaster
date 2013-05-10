@@ -16,7 +16,7 @@ class Filter
   end
 
   def to_s
-    (@text || '# no block text found').gsub(/\n\s*/, "; ")
+    @text || '# no block text found'
   end
 
 end

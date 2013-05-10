@@ -38,9 +38,9 @@ class Main
           when 'k', Key::UP
             @pm.prev_patch
           when 'n', Key::LEFT
-            @pm.next_song
-          when 'p', Key::RIGHT
             @pm.prev_song
+          when 'p', Key::RIGHT
+            @pm.next_song
           when 'g'
             name = PromptWindow.new('Go To Song', 'Go to song:').gets
             @pm.goto_song(name)
@@ -132,24 +132,21 @@ class Main
     @info_win = InfoWindow.new(*g.info_rect)
 
     @message_win.scrollok(false)
-
-    # This window doesn't get redrawn by #refresh_all
-    @trigger_win.draw
   end
 
   def resize_windows
     g = PM::Geometry.new
 
-    g.move_and_resize(@song_lists_win, g.song_lists_rect)
-    g.move_and_resize(@song_list_win, g.song_list_rect)
-    g.move_and_resize(@song_win, g.song_rect)
-    g.move_and_resize(@patch_win, g.patch_rect)
-    g.move_and_resize(@message_win, g.message_rect)
-    g.move_and_resize(@trigger_win, g.trigger_rect)
-    g.move_and_resize(@info_win, g.info_rect)
+    @song_lists_win.move_and_resize(g.song_lists_rect)
+    @song_list_win.move_and_resize(g.song_list_rect)
+    @song_win.move_and_resize(g.song_rect)
+    @patch_win.move_and_resize(g.patch_rect)
+    @trigger_win.move_and_resize(g.trigger_rect)
+    @info_win.move_and_resize(g.info_rect)
 
-    # This window doesn't get redrawn by #refresh_all
-    @trigger_win.draw
+    r = g.message_rect
+    @message_win.move(r[2], r[3])
+    @message_win.resize(r[0], r[1])
   end
 
   def load(file)
@@ -203,7 +200,7 @@ class Main
 
   def refresh_all
     set_window_data
-    wins = [@song_lists_win, @song_list_win, @song_win, @patch_win, @info_win, @trigger_win, @info_win]
+    wins = [@song_lists_win, @song_list_win, @song_win, @patch_win, @info_win, @trigger_win]
     wins.map(&:draw)
     ([stdscr] + wins).map(&:refresh)
   end

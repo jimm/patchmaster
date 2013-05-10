@@ -53,8 +53,12 @@ class PatchWindow < PmWindow
            else
              "       |"
            end
-    str << " #{connection.filter}"
+    str << " #{filter_string(connection.filter)}"
     @win.addstr(make_fit(str))
+  end
+
+  def filter_string(filter)
+    filter.to_s.gsub(/\s*#.*/, '').gsub(/\n\s*/, "; ")
   end
 
 end

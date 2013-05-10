@@ -1,11 +1,10 @@
 module PM
 
+# Defines positions and sizes of windows. Rects contain [height, width, top,
+# left], which is the order used by Curses::Window.new.
 class Geometry
 
   include Curses
-  
-  attr_reader :top_height, :bot_height, :top_width, :sls_height, :sl_height,
-    :third_height, :width, :left
 
   def initialize
     @top_height = (lines() - 1) * 2 / 3
@@ -15,9 +14,9 @@ class Geometry
     @sls_height = @top_height / 3
     @sl_height = @top_height - @sls_height
 
-    @third_height = @top_height / 3
-    @width = cols() - (@top_width * 2) - 1
-    @left = @top_width * 2 + 1
+    @info_height = @top_height * 2 / 3
+    @info_width = cols() - (@top_width * 2)
+    @info_left = @top_width * 2
   end
 
   def song_lists_rect
@@ -40,18 +39,12 @@ class Geometry
     [1, cols(), lines()-1, 0]
   end
 
-  def trigger_rect
-    [@third_height, @width, @third_height * 2, @left]
-  end
-
   def info_rect
-    [@third_height * 2, @width, 0, @left]
+    [@info_height, @info_width, 0, @info_left]
   end
 
-  def move_and_resize(win, rect)
-    win.move(rect[2], rect[3])
-    win.resize(rect[0], rect[1])
+  def trigger_rect
+    [@top_height - @info_height, @info_width, @info_height, @info_left]
   end
 end
 end
-

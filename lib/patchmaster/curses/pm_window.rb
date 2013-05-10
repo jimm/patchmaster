@@ -17,9 +17,10 @@ class PmWindow < SimpleDelegator
     set_max_contents_len(cols)
   end
 
-  def resize(rows, cols)
-    @win.resize(rows, cols)
-    set_max_contents_len(cols)
+  def move_and_resize(rect)
+    @win.move(rect[2], rect[3])
+    @win.resize(rect[0], rect[1])
+    set_max_contents_len(rect[1])
   end
 
   def draw

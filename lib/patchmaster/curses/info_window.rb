@@ -11,9 +11,9 @@ class InfoWindow < PmWindow
   attr_reader :text
 
   def initialize(rows, cols, row, col)
-    super(rows, cols, row, col, 'PatchMaster')
+    super(rows, cols, row, col, nil)
     @info_text = IO.read(CONTENTS)
-    self.text=(nil)
+    text = nil
   end
 
   def text=(str)
@@ -22,7 +22,7 @@ class InfoWindow < PmWindow
       @title = 'Song Notes'
     else
       @text = @info_text
-      @title = 'Help'
+      @title = 'PatchMaster Help'
     end
   end
 
