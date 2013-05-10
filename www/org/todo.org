@@ -13,6 +13,8 @@ yourself with powerful tools, and look good doing it.\\
 -- markg@be.com
 #+end_quote
 
+- There's no way to cancel out of a PromptWindow (file load/save).
+
 - Trigger and filter block text isn't read properly when triggers or filters
   are created in a loop, the blocks are not indented properly, etc.
 
