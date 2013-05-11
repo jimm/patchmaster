@@ -38,7 +38,7 @@ but the most crucial features.\\
 - IRB code should pre-define a few variables like =pm= for
   =PM::PatchMaster.instance=.
 
-- Document song notes feature.
+- Document song notes and reload features.
 
 - Finish the "Creating Triggers" and "Song List" sections of
   file:tutorial.org.
