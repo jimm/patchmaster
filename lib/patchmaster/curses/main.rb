@@ -49,8 +49,10 @@ class Main
             @pm.goto_song_list(name)
           when 'e'
             close_screen
-            file = @loaded_file || PromptWindow.new('Edit', 'Edit file:').gets
+            file = @pm.loaded_file || PromptWindow.new('Edit', 'Edit file:').gets
             edit(file)
+          when 'r'
+            load(@pm.loaded_file) if @pm.loaded_file
           when 'h', '?'
             help
           when 27        # "\e" doesn't work here
@@ -144,12 +146,10 @@ class Main
 
   def load(file)
     @pm.load(file)
-    @loaded_file = file
   end
 
   def save(file)
     @pm.save(file)
-    @loaded_file = file
   end
 
   # Opens the most recently loaded/saved file name in an editor. After
@@ -165,7 +165,6 @@ class Main
     @pm.debug(cmd)
     system(cmd)
     load(file)
-    @loaded_file = file
   end
 
   # Return the first legit command from $VISUAL, $EDITOR, vim, vi, and

@@ -25,6 +25,7 @@ class PatchMaster < SimpleDelegator
   attr_accessor :use_midi
   alias_method :use_midi?, :use_midi
   attr_accessor :gui
+  attr_reader :loaded_file
 
   # A Cursor to which we delegate incoming position methods (#song_list,
   # #song, #patch, #next_song, #prev_patch, etc.)
