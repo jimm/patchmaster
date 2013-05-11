@@ -47,8 +47,8 @@ class PatchWindow < PmWindow
            else
              '           |'
            end
-    str << if connection.xpose && connection.xpose > 0
-             "    #{'%2d' % connection.xpose.to_i} |"
+    str << if connection.xpose && connection.xpose != 0
+             "   #{connection.xpose < 0 ? '' : ' '}#{'%2d' % connection.xpose.to_i} |"
            else
              "       |"
            end
