@@ -18,7 +18,7 @@ class Connection
   # turned into 0-based channels for later use.
   def initialize(input, input_chan, output, output_chan, filter=nil, opts={})
     @input, @input_chan, @output, @output_chan, @filter = input, input_chan, output, output_chan, filter
-    @pc_prog, @zone, @xpose = opts[:pc_prog], opts[:zone], opts[:xpose]
+    @bank, @pc_prog, @zone, @xpose = opts[:bank], opts[:pc_prog], opts[:zone], opts[:xpose]
 
     @input_chan -= 1 if @input_chan
     @output_chan -= 1 if @output_chan
