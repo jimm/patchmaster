@@ -43,16 +43,16 @@ class Main
             @pm.prev_song
           when 'g'
             name = PromptWindow.new('Go To Song', 'Go to song:').gets
-            @pm.goto_song(name)
+            @pm.goto_song(name) if name.length > 0
           when 't'
             name = PromptWindow.new('Go To Song List', 'Go to Song List:').gets
-            @pm.goto_song_list(name)
+            @pm.goto_song_list(name) if name.length > 0
           when 'e'
             close_screen
             file = @pm.loaded_file || PromptWindow.new('Edit', 'Edit file:').gets
-            edit(file)
+            edit(file) if file.length > 0
           when 'r'
-            load(@pm.loaded_file) if @pm.loaded_file
+            load(@pm.loaded_file) if @pm.loaded_file && @pm.loaded_file.length > 0
           when 'h', '?'
             help
           when 27        # "\e" doesn't work here
@@ -62,19 +62,23 @@ class Main
             message('Panic sent')
           when 'l'
             file = PromptWindow.new('Load', 'Load file:').gets
-            begin
-              load(file)
-              message("Loaded #{file}")
-            rescue => ex
-              message(ex.to_s)
+            if file.length > 0
+              begin
+                load(file)
+                message("Loaded #{file}")
+              rescue => ex
+                message(ex.to_s)
+              end
             end
           when 's'
             file = PromptWindow.new('Save', 'Save into file:').gets
-            begin
-              save(file)
-              message("Saved #{file}")
-            rescue => ex
-              message(ex.to_s)
+            if file.length > 0
+              begin
+                save(file)
+                message("Saved #{file}")
+              rescue => ex
+                message(ex.to_s)
+              end
             end
           when 'q'
             break
