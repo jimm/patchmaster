@@ -109,7 +109,7 @@ class MockInputPort
   def gets
     [{:data => [], :timestamp => 0}]
   end
-    
+
   def poll
     yield gets
   end
@@ -118,7 +118,7 @@ class MockInputPort
   end
 
   # add this class to the Listener class' known input types
-  MIDIEye::Listener.input_types << self 
+  MIDIEye::Listener.input_types << self
 
 end
 
