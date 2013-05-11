@@ -63,7 +63,7 @@ but the most crucial features.\\
 - Do I need to handle running bytes in Connection#midi_in, or does UniMIDI
   take care of that?
 
-- Fix PromptWindow display cleanup.
+- In PromptWindow, remember history and support up/down arrows, ^n, ^p.
 
 - Documentation for screen commands.
 
