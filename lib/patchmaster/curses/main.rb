@@ -121,7 +121,7 @@ class Main
 
   def create_windows
     g = PM::Geometry.new
-    
+
     @song_lists_win = ListWindow.new(*g.song_lists_rect, nil)
     @song_list_win = ListWindow.new(*g.song_list_rect, 'Song List')
     @song_win = ListWindow.new(*g.song_rect, 'Song')
