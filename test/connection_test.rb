@@ -85,7 +85,7 @@ class ConnectionTest < Test::Unit::TestCase
   def test_bank_sent
     @conn.bank = 2
     @conn.start
-    assert_equal [PM::CC_BANK_SELECT + @conn.output_chan, 2,
+    assert_equal [PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT + 32, 2,
                   PM::PROGRAM_CHANGE + @conn.output_chan, 3],
       @out_instrument.port.buffer
   end
