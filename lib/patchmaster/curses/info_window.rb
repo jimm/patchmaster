@@ -27,11 +27,11 @@ class InfoWindow < PmWindow
 
   def draw
     super
-    i = 0
+    i = 1
     @text.each_line do |line|
       break if i >= @win.maxy - 2
       @win.setpos(i+1, 1)
-      @win.addstr(make_fit(line.chomp))
+      @win.addstr(make_fit(" #{line.chomp}"))
       i += 1
     end
   end
