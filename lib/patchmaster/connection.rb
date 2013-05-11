@@ -27,7 +27,8 @@ class Connection
   def start(start_bytes=nil)
     bytes = []
     bytes += start_bytes if start_bytes
-    bytes += [CC_BANK_SELECT + @output_chan, @bank] if @bank
+    # Bank select uses MSB if we're only sending one byte
+    bytes += [CONTROLLER + @output_chan, CC_BANK_SELECT+32, @bank] if @bank
     bytes += [PROGRAM_CHANGE + @output_chan, @pc_prog] if @pc_prog
     midi_out(bytes) unless bytes.empty?
     @input.add_connection(self)

@@ -106,7 +106,7 @@ EOS
   CC_GEN_PURPOSE_3 = 18
   CC_GEN_PURPOSE_4 = 19
 
-  # [32 - 63] are LSB for [0 - 31]
+  # [32 - 63] are MSB for [0 - 31]
   CC_DATA_ENTRY_LSB = 38
 
   #--
