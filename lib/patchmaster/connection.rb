@@ -53,6 +53,7 @@ class Connection
 
   def midi_in(bytes)
     return unless accept_from_input?(bytes)
+    bytes = bytes.dup
 
     # TODO handle running bytes if needed
     high_nibble = bytes.high_nibble
