@@ -88,8 +88,8 @@ EOS
   SYSTEM_RESET = 0xFF
 
   # Controller numbers
-  # = 0 - 31 = continuous, LSB
-  # = 32 - 63 = continuous, MSB
+  # = 0 - 31 = continuous, MSB
+  # = 32 - 63 = continuous, LSB
   # = 64 - 97 = switches
   CC_BANK_SELECT = 0
   CC_MOD_WHEEL = 1
@@ -106,7 +106,7 @@ EOS
   CC_GEN_PURPOSE_3 = 18
   CC_GEN_PURPOSE_4 = 19
 
-  # [32 - 63] are MSB for [0 - 31]
+  # [32 - 63] are LSB for [0 - 31]
   CC_DATA_ENTRY_LSB = 38
 
   #--
