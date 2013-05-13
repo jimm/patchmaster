@@ -146,7 +146,6 @@ class Cursor
 
     str = str.downcase
     distances = list.collect { |item| dameraulevenshtein(str, item.name.downcase) }
-    min_distance = distances.min
     list[distances.index(distances.min)]
   end
 
