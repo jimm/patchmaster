@@ -37,6 +37,8 @@ but the most crucial features.\\
 -- Steve Jobs
 #+end_quote
 
+- Display bank number in patch window.
+
 - IRB code should pre-define a few variables like =pm= for
   =PM::PatchMaster.instance=.
 
