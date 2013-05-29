@@ -51,22 +51,50 @@ class Connection
     @zone == nil || @zone.include?(note)
   end
 
+  # The workhorse. Ignore bytes that aren't from our input, or are outside
+  # the zone. Change to output channel. Filter.
+  #
+  # Note that running bytes are not handled, but unimidi doesn't seem to use
+  # them anyway.
+  #
+  # Finally, we go through gyrations to avoid duping bytes unless they are
+  # actually modified in some way.
   def midi_in(bytes)
     return unless accept_from_input?(bytes)
-    bytes = bytes.dup
 
-    # TODO handle running bytes if needed
+    bytes_duped = false
+
     high_nibble = bytes.high_nibble
     case high_nibble
     when NOTE_ON, NOTE_OFF, POLY_PRESSURE
       return unless inside_zone?(bytes[1])
+
+      if bytes[0] != high_nibble + @output_chan || (@xpose && @xpose != 0)
+        bytes = bytes.dup
+        bytes_duped = true
+      end
+
       bytes[0] = high_nibble + @output_chan
       bytes[1] = ((bytes[1] + @xpose) & 0xff) if @xpose
     when CONTROLLER, PROGRAM_CHANGE, CHANNEL_PRESSURE, PITCH_BEND
-      bytes[0] = high_nibble + @output_chan
+      if bytes[0] != high_nibble + @output_chan
+        bytes = bytes.dup
+        bytes_duped = true
+        bytes[0] = high_nibble + @output_chan
+      end
     end
 
-    bytes = @filter.call(self, bytes) if @filter
+    # We can't tell if a filter will modify the bytes, so we have to assume
+    # they will be. If we didn't, we'd have to rely on the filter duping the
+    # bytes and returning the dupe.
+    if @filter
+      if !bytes_duped
+        bytes = bytes.dup
+        bytes_duped = true
+      end
+      bytes = @filter.call(self, bytes)
+    end
+
     if bytes && bytes.size > 0
       midi_out(bytes)
     end
