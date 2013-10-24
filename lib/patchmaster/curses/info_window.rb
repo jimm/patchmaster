@@ -12,7 +12,7 @@ class InfoWindow < PmWindow
   def initialize(rows, cols, row, col)
     super(rows, cols, row, col, nil)
     @info_text = IO.read(CONTENTS)
-    text = nil
+    @text = nil
   end
 
   def text=(str)

@@ -184,7 +184,7 @@ class Main
     win = HelpWindow.new(*g.help_rect)
     win.draw
     win.refresh
-    ch = getch                  # eat it
+    getch                       # wait for key and eat it
   end
 
   def message(str)

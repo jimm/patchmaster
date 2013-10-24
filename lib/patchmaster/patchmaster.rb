@@ -32,6 +32,7 @@ class PatchMaster < SimpleDelegator
   attr_reader :cursor
 
   def initialize
+    @running = false
     @cursor = Cursor.new(self)
     super(@cursor)
     @use_midi = true

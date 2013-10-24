@@ -10,6 +10,10 @@ In programming, do, or undo. There is always try.\\
 -- Yoda (via Ron Jeffries)
 #+end_quote
 
+* 1.1.1
+
+- Heeded a few runtime warnings.
+
 * 0.0.7
 
 - Added -p PORT option to bin/patchmaster.
