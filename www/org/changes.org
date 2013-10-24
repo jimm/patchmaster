@@ -14,6 +14,14 @@ In programming, do, or undo. There is always try.\\
 
 - Heeded a few runtime warnings.
 
+* 1.1.0
+
+- Removed =-t= command line switch from bin/patchmaster.
+
+* 1.0.0
+
+- Start of IRB interface.
+
 * 0.0.7
 
 - Added -p PORT option to bin/patchmaster.
