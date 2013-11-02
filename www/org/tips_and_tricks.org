@@ -120,7 +120,7 @@ that is modulating amplitude.
       connection :my_in, :my_out do
         filter do |c, b|
           # Add more bytes to outgoing b array (and return b)
-          # Here, + 1 means we're making this go to MIDI channel 2
+          # Here, + 1 means we're sending this to MIDI channel 2
           b + [CONTROLLER + 1, CC_VOLUME, time_based_volume]
         end
       end
