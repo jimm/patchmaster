@@ -117,12 +117,12 @@ that is modulating amplitude.
   
   song "s1" do
     patch "p1" do
-      fiter do |c, b|
-        # Add more bytes to outgoing b array
-        b << CONTROLLER + @output_chan
-        b << CC_VOLUME
-        b << time_based_volume
-        b
+      connection :my_in, :my_out do
+        filter do |c, b|
+          # Add more bytes to outgoing b array (and return b)
+          # Here, + 1 means we're making this go to MIDI channel 2
+          b + [CONTROLLER + 1, CC_VOLUME, time_based_volume]
+        end
       end
     end
   end
