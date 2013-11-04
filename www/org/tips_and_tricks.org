@@ -106,18 +106,13 @@ that is modulating amplitude.
     t = Time.now.to_f             # to_f gives sub-second accuracy
     unit_offset = Math.sin(t)     # -1 .. 1
     volume = (unit_offset * 64) + 64
-    if volume < 0
-      0
-    elsif volume > 127
-      127
-    else
-      volume
-    end
+    volume = 127 if volume == 128
+    volume
   end
   
   song "s1" do
     patch "p1" do
-      connection :my_in, :my_out do
+      connection :my_in, :my_out, 2 do
         filter do |c, b|
           # Add more bytes to outgoing b array (and return b)
           # Here, + 1 means we're sending this to MIDI channel 2

@@ -122,13 +122,8 @@ that changes over time. Let's put this method definition before our song.
     t = Time.now.to_f             # to_f gives sub-second accuracy
     unit_offset = Math.sin(t)     # -1 .. 1
     val = (unit_offset * 64) + 64
-    if val < 0
-      0
-    elsif val > 127
-      127
-    else
-      val
-    end
+    val = 127 if volume == 128
+    val
   end
 
   song "My First Song" do
