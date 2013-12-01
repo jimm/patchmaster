@@ -13,6 +13,8 @@ yourself with powerful tools, and look good doing it.\\
 -- markg@be.com
 #+end_quote
 
+- Triggers cause GUI refresh for curses, but not for Sinatra app.
+
 - Transpose values >= 100 or <= 100 throw off formatting in patch window.
 
 - When iTerm is full-screen (command-return) and then becomes not full

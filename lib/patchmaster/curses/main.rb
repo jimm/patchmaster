@@ -198,6 +198,11 @@ class Main
     @pm.debug "#{Time.now} #{str}"
   end
 
+  # Public method callable by triggers
+  def refresh
+    refresh_all
+  end
+
   def refresh_all
     set_window_data
     wins = [@song_lists_win, @song_list_win, @song_win, @patch_win, @info_win, @trigger_win]

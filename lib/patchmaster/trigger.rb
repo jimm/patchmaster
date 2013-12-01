@@ -21,7 +21,9 @@ class Trigger
   # If +bytes+ matches our +@bytes+ array then run +@block+.
   def signal(bytes)
     if bytes == @bytes
-      block.call
+      pm = PM::PatchMaster.instance
+      pm.instance_eval &@block
+      pm.gui.refresh if pm.gui
     end
   end
 

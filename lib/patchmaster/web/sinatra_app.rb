@@ -124,5 +124,10 @@ class SinatraApp
     @pm.stop
     @pm.close_debug_file
   end
+
+  # Public method callable by triggers
+  def refresh
+    # FIXME
+  end
 end
 end

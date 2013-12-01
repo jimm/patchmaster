@@ -8,6 +8,9 @@ output 2, :app, 'IAC-out'       # The second port you added
 
 FULL_VOLUME = [CONTROLLER, CC_VOLUME, 127]
 
+trigger :app, [NOTE_ON, 60, 127] { next_patch }
+trigger :app, [NOTE_ON, 61, 127] { prev_patch }
+
 song "First Song" do
   patch "Sax" do
     start_bytes FULL_VOLUME
@@ -27,6 +30,17 @@ song "First Song" do
       transpose -12
     end
   end
+  patch "Can't Miss This Note" do
+    start_bytes FULL_VOLUME
+    connection :app, :app, 1 do
+      filter do |conn, bytes|
+        if bytes.note_on?
+          bytes[1] = 64         # all notes become note 64
+        end
+        bytes
+      end
+    end
+  end
 end
 
 def time_based_volume
@@ -42,9 +56,9 @@ song "LFO Volume" do
     connection :app, :app, 1 do
       prog_chg 2
       transpose 0
-      filter do |c, b|
+      filter do |conn, bytes|
         # Add more bytes to outgoing b array (MIDI channel 1)
-        b + [CONTROLLER + 0, CC_VOLUME, time_based_volume]
+        bytes + [CONTROLLER + 0, CC_VOLUME, time_based_volume]
       end
     end
     stop_bytes FULL_VOLUME

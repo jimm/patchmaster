@@ -10,6 +10,13 @@ In programming, do, or undo. There is always try.\\
 -- Yoda (via Ron Jeffries)
 #+end_quote
 
+* 1.1.2
+
+- Fixed triggers.
+
+- When a trigger runs, the curses GUI is updated. Unfortunately, the web app
+  still isn't updated. See the To Do list.
+
 * 1.1.1
 
 - Heeded a few runtime warnings.
