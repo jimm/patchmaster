@@ -29,6 +29,7 @@ connection_row = (conn) ->
 connection_rows = (connections) ->
   rows = (connection_row(conn) for conn in connections)
   $('#patch').html(CONN_HEADERS + "\n" + rows.join("\n"))
+  set_colors()
 
 maybe_name = (data, key) -> if data[key] then data[key]['name'] else ''
 
@@ -48,21 +49,23 @@ kp = (action) ->
     message(data['message']) if data['message']?
   )
 
-cycle_colors = () ->
-  base_class = COLOR_SCHEMES[color_scheme_index]
+remove_colors = () ->
   if color_scheme_index >= 0
+    base_class = COLOR_SCHEMES[color_scheme_index]
     $('body').removeClass(base_class)
     $('.selected, th, td#appname').removeClass("reverse-#{base_class}")
     $('tr, td, th').removeClass("#{base_class}-border")
 
-  color_scheme_index = (color_scheme_index + 1) % COLOR_SCHEMES.length
-
+set_colors = () ->
   base_class = COLOR_SCHEMES[color_scheme_index]
   $('body').addClass(base_class)
   $('.selected, th, td#appname').addClass("reverse-#{base_class}")
   $('tr, td, th').addClass("#{base_class}-border")
 
-  color_scheme = base_class
+cycle_colors = () ->
+  remove_colors()
+  color_scheme_index = (color_scheme_index + 1) % COLOR_SCHEMES.length
+  set_colors()
 
 bindings =
   'j': 'next_patch'
