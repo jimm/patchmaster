@@ -12,10 +12,10 @@ trigger :app, [NOTE_ON, 60, 127] { next_patch }
 trigger :app, [NOTE_ON, 61, 127] { prev_patch }
 
 song "First Song" do
-  patch "Sax" do
+  patch "Bass" do
     start_bytes FULL_VOLUME
     connection :app, :app, 1 do
-      prog_chg 64
+      prog_chg 34
     end
   end
   patch "Piano" do
@@ -52,6 +52,16 @@ def time_based_volume
 end
 
 song "LFO Volume" do
+  notes <<EOS
+The time_based_volume function
+outputs a value that changes
+over time.
+
+The filter injects volume
+commands after every MIDI
+message and calls
+time_based_volume.
+EOS
   patch "Up 'n Down" do
     connection :app, :app, 1 do
       prog_chg 2
