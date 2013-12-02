@@ -1,8 +1,7 @@
 module PM
 
-# A Trigger performs an action when it sees a particular array of bytes.
-# Instruments have zero or more triggers. The action is a symbol that gets
-# sent to PM::PatchMaster.
+# A Trigger executes code when it sees a particular array of bytes.
+# Instruments have zero or more triggers.
 #
 # Since we want to save them to files, we store the text representation as
 # well.
