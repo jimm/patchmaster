@@ -3,41 +3,48 @@
 # First, you must open the Audo MIDI Setup application, enable IAC, and add
 # two more ports.
 
-input  1, :app, 'IAC-in'        # The first port you added
-output 2, :app, 'IAC-out'       # The second port you added
+input  1, :app_in, 'IAC-in'     # The first port you added
+output 2, :app_out, 'IAC-out'   # The second port you added
 
 FULL_VOLUME = [CONTROLLER, CC_VOLUME, 127]
 
-trigger :app, [NOTE_ON, 60, 127] { next_patch }
-trigger :app, [NOTE_ON, 61, 127] { prev_patch }
+trigger :app_in, [NOTE_ON, 0, 127] { next_patch }
+trigger :app_in, [NOTE_ON, 1, 127] { prev_patch }
 
 song "First Song" do
   patch "Bass" do
     start_bytes FULL_VOLUME
-    connection :app, :app, 1 do
+    connection :app_in, :app_out, 1 do
       prog_chg 34
     end
   end
   patch "Piano" do
     start_bytes FULL_VOLUME
-    connection :app, :app, 1 do
+    connection :app_in, :app_out, 1 do
       prog_chg 2
     end
   end
-  patch "Octave Down" do
+  patch "Chords & Bass Layers" do
     start_bytes FULL_VOLUME
-    connection :app, :app, 1 do
-      transpose -12
-    end
-  end
-  patch "Can't Miss This Note" do
-    start_bytes FULL_VOLUME
-    connection :app, :app, 1 do
+    # Chords
+    connection :app_in, :app_out, 1 do
+      prog_chg 95
       filter do |conn, bytes|
         if bytes.note_on?
-          bytes[1] = 64         # all notes become note 64
+          bytes[2] = 64 unless bytes[2] == 0
+          bytes += [bytes[0], bytes[1] + 5, bytes[2]]
+          bytes += [bytes[0], bytes[1] - 5, bytes[2]]
         end
-        bytes
+      end
+    end
+    # Bass
+    connection :app_in, :app_out, 2 do
+      prog_chg 38
+      filter do |conn, bytes|
+        if bytes.note_on?
+          bytes[1] -= 12
+          bytes += [bytes[0], bytes[1] - 12, bytes[2]]
+        end
       end
     end
   end
@@ -63,7 +70,7 @@ message and calls
 time_based_volume.
 EOS
   patch "Up 'n Down" do
-    connection :app, :app, 1 do
+    connection :app_in, :app_out, 1 do
       prog_chg 2
       transpose 0
       filter do |conn, bytes|
