@@ -6,28 +6,30 @@
 input  1, :app_in, 'IAC-in'     # The first port you added
 output 2, :app_out, 'IAC-out'   # The second port you added
 
-FULL_VOLUME = [CONTROLLER, CC_VOLUME, 127]
+def full_volume
+  start_bytes [CONTROLLER, CC_VOLUME, 127]
+end
 
-trigger :app_in, [NOTE_ON, 0, 127] { next_patch }
-trigger :app_in, [NOTE_ON, 1, 127] { prev_patch }
+trigger :app_in, [NOTE_ON+2, 0, 127] { next_patch }
+trigger :app_in, [NOTE_ON+2, 1, 127] { prev_patch }
 
 song "First Song" do
   patch "Bass" do
-    start_bytes FULL_VOLUME
-    connection :app_in, :app_out, 1 do
+    full_volume
+    connection :app_in, 1, :app_out, 1 do
       prog_chg 34
     end
   end
   patch "Piano" do
-    start_bytes FULL_VOLUME
-    connection :app_in, :app_out, 1 do
+    full_volume
+    connection :app_in, 1, :app_out, 1 do
       prog_chg 2
     end
   end
   patch "Chords & Bass Layers" do
-    start_bytes FULL_VOLUME
+    full_volume
     # Chords
-    connection :app_in, :app_out, 1 do
+    connection :app_in, 1, :app_out, 1 do
       prog_chg 95
       filter do |conn, bytes|
         if bytes.note_on?
@@ -38,7 +40,7 @@ song "First Song" do
       end
     end
     # Bass
-    connection :app_in, :app_out, 2 do
+    connection :app_in, 1, :app_out, 2 do
       prog_chg 38
       filter do |conn, bytes|
         if bytes.note_on?
@@ -70,7 +72,7 @@ message and calls
 time_based_volume.
 EOS
   patch "Up 'n Down" do
-    connection :app_in, :app_out, 1 do
+    connection :app_in, 1, :app_out, 1 do
       prog_chg 2
       transpose 0
       filter do |conn, bytes|
@@ -78,6 +80,6 @@ EOS
         bytes + [CONTROLLER + 0, CC_VOLUME, time_based_volume]
       end
     end
-    stop_bytes FULL_VOLUME
+    stop_bytes [CONTROLLER, CC_VOLUME, 127]
   end
 end
