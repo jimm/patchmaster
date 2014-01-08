@@ -72,7 +72,7 @@ Let's add a patch that connects the input from =:keys= to the output
 #+begin_src ruby
   song "My First Song" do
     patch "First Patch" do
-      connection :keys, nil :another, 1
+      connection :keys, nil, :another, 1
     end
   end
 #+end_src
@@ -87,7 +87,7 @@ modify the MIDI a bit as it goes through.
 #+begin_src ruby
   song "My First Song" do
     patch "First Patch" do
-      connection :keys, nil :another, 1
+      connection :keys, nil, :another, 1
       connection :keys, nil, :another, 2 do
         prog_chg 42
         transpose 12
@@ -141,8 +141,9 @@ to replace the volume of any note message with the current LFO value.
   
   song "My First Song" do
     patch "First Patch" do
-      # ... first two connections skipped, see above
-      connection :keys, nil :third, 1 do
+      # ... First two connections skipped here, see above.
+      # As a shortcut, you don't have to specify "nil" for input.
+      connection :keys, :third, 1 do
         filter do |connection, bytes|
           if bytes.note? && bytes[2] != 0 # not a note off
             bytes[2] = lfo()              # LFO determines volume
@@ -230,13 +231,13 @@ The whole file should look something like this. Blank lines don't matter.
 
   song "My First Song" do
     patch "First Patch" do
-      connection :keys, nil :another, 1
+      connection :keys, nil, :another, 1
       connection :keys, nil, :another, 2 do
         prog_chg 42
         transpose 12
         zone C4, B6
       end
-      connection :keys, nil :third, 1 do
+      connection :keys, :third, 1 do
         filter do |connection, bytes|
           if bytes.note? && bytes[2] != 0 # not a note off
             bytes[2] = lfo()              # LFO determines volume

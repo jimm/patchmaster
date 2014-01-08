@@ -83,36 +83,6 @@ then sends individual note-off messages for all notes on all channels.
 
 Store your setup (input, output, alias_output, etc.) in ~/.patchmasterrc.
 
-** Common Configurations
-
-Have a few favorite connection configurations? Shove them into a file,
-either one configuration in each file or all in one file in different
-methods. For example, say you've created the file "myfile.rb" that contains
-the following:
-
-#+begin_src ruby
-  input 0, :kbd, 'Cool Controller'
-  input 1, :kbd2, 'Kool Kontroller'
-  output 0, :module1, 'Moddy the Module'
-  output 1, :module2, 'YAMM'
-
-  def vanilla
-    clear
-    connection :kbd, :module1, 1
-    connection :kbd, :module2, 2
-  end
-
-  def chocolate
-    clear
-    connection :kbd,  :module1, 1
-    connection :kbd2, :module1, 3
-  end
-#+end_src
-
-Then you can @<code>require "myfile"@</code> (or @<code>require
-"/path/to/myfile"@</code> if it's not in your load path) and simply type
-"vanilla" or "chocolate" to switch between the setups.
-
 ** Loading Files
 
 To load a file from within IRB:
@@ -159,3 +129,33 @@ using the =-I= command line argument:
   PatchMaster:001:0> $LOAD_PATH << "path/to/dir-containing-myfile"
   PatchMaster:002:0> require "myfile"
 #+end_src
+
+** Common Configurations
+
+Have a few favorite connection configurations? Shove them into a file,
+either one configuration in each file or all in one file in different
+methods. For example, say you've created the file "myfile.rb" that contains
+the following:
+
+#+begin_src ruby
+  input 0, :kbd, 'Cool Controller'
+  input 1, :kbd2, 'Kool Kontroller'
+  output 0, :module1, 'Moddy the Module'
+  output 1, :module2, 'YAMM'
+
+  def vanilla
+    clear
+    connection :kbd, :module1, 1
+    connection :kbd, :module2, 2
+  end
+
+  def chocolate
+    clear
+    connection :kbd,  :module1, 1
+    connection :kbd2, :module1, 3
+  end
+#+end_src
+
+Then you can @<code>require "myfile"@</code> (or @<code>require
+"/path/to/myfile"@</code> if it's not in your load path) and simply type
+"vanilla" or "chocolate" to switch between the setups.

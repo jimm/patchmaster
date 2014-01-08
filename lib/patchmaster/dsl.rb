@@ -50,6 +50,7 @@ class DSL
     raise "output: error creating output instrument \"#{name || sym}\" on output port #{port_num}: #{ex}"
   end
   alias_method :out, :output
+  alias_method :outp, :output
 
   def message(name, bytes)
     @pm.messages[name.downcase] = bytes

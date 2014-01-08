@@ -435,12 +435,12 @@ Example:
 
 Many of the keywords in PatchMaster files have short versions.
 
-| Full Name  | Aliases  | Notes                           |
-|------------+----------+---------------------------------|
-| input      | inp      | "in" is a reserved word in Ruby |
-| output     | out      |                                 |
-| connection | conn, c  |                                 |
-| prog_chg   | pc       |                                 |
-| zone       | z        |                                 |
-| transpose  | xpose, x |                                 |
-| filter     | f        |                                 |
+| Full Name  | Aliases   | Notes                           |
+|------------+-----------+---------------------------------|
+| input      | inp       | "in" is a reserved word in Ruby |
+| output     | outp, out |                                 |
+| connection | conn, c   |                                 |
+| prog_chg   | pc        |                                 |
+| zone       | z         |                                 |
+| transpose  | xpose, x  |                                 |
+| filter     | f         |                                 |

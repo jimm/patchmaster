@@ -42,7 +42,7 @@ ports themselves, not the instruments plugged in to them (for example,
 
 Let's say you have a keyboard controller that doesn't generate any sound on
 port 0 of your MIDI interface, a typical keyboard synth (both controller and
-sound generator) on purt 1, and a rack-mount sound generator on port 2.
+sound generator) on port 1, and a rack-mount sound generator on port 2.
 Here's what that might look like in your PatchMaster file:
 
 #+begin_src ruby

@@ -6,7 +6,7 @@ require 'rubygems/package_task'
 
 HERE = File.dirname(__FILE__)
 PROJECT_NAME = 'patchmaster'
-GEM_VERSION = '1.1.2'
+GEM_VERSION = '1.1.3'
 GEM_DATE = Time.now.strftime('%Y-%m-%d')
 WEB_SERVER = 'jimmenard.com'
 WEB_DIR = "webapps/#{PROJECT_NAME}"

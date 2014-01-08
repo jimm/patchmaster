@@ -110,6 +110,6 @@ must have as its last line an array of bytes or =nil=. For example,
     if bytes.note_off?
       bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
     end
-    bytes
+    bytes         # don't forget this --- must return array of bytes
   }
 #+end_src
