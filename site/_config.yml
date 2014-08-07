@@ -1,0 +1,12 @@
+# Site settings
+title: PatchMaster
+email: jim@jimmenard.com
+description: "PatchMaster is a MIDI processing and patching system that allows a musician to reconfigure a MIDI setup instantaneously and modify the MIDI data in real time."
+baseurl: ""
+url: "http://patchmaster.org"
+twitter_username: jmenard42
+github_username:  jimm
+
+# Build settings
+markdown: kramdown
+permalink: pretty

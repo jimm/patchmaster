@@ -1,0 +1,91 @@
+---
+layout: page
+title: To Do
+permalink: /todo/
+---
+
+# Bugs
+
+> The Be staff...went to see the movie "Men in Black." ...The movie makes
+> a point that is somehow appropriate -- It is impossible to completely rid
+> the universe of bugs, but at least you can drive something fast, arm
+> yourself with powerful tools, and look good doing it.\\
+> \\
+> -- markg@be.com
+
+- Triggers cause GUI refresh for curses, but not for Sinatra app.
+
+- Transpose values >= 100 or <= 100 throw off formatting in patch window.
+
+- When iTerm is full-screen (command-return) and then becomes not full
+  screen (command-return), the curses windows don't get redrawn properly. As
+  a workaround you can manually resize the iTerm window, which will fix the
+  curses windows.
+
+- There's no way to cancel out of a PromptWindow (file load/save).
+
+- Trigger and filter block text isn't read properly when triggers or filters
+  are created in a loop, the blocks are not indented properly, etc.
+
+- Need better CSS for Web site so left margin of content moves when site
+  made bigger and LHS grows into it.
+
+# New Features
+
+> Innovation is not about saying yes to everything. It's about saying NO to all
+> but the most crucial features.\\
+> \\
+> -- Steve Jobs
+
+- Display bank number in patch window.
+
+- IRB code should pre-define a few variables like `pm` for
+  `PM::PatchMaster.instance`.
+
+- Document song notes and reload features.
+
+- Finish the "Creating Triggers" and "Song List" sections of
+  file:tutorial.org.
+
+- Working on Web interface using Sinatra and Swing interface for JRuby. I'll
+  probably concentrate on the Web interface.
+
+- Need a logo.
+
+- Add convenience methods to PM::PatchMaster (so they are available to
+  trigger locks) for things like clamping byte values to (0..127) and
+  limiting min/max values.
+
+- Windows observe contents to minimize redraws. Perhaps only need to observe
+  PatchMaster itself?
+
+- Display instruments?
+
+- Alternate display that only shows song and patch names and little else?
+  This might be useful during performance. Already have IRB mode.
+
+- Do I need to handle running bytes in Connection#midi_in, or does UniMIDI
+  take care of that?
+
+- In PromptWindow, remember history and support up/down arrows, ^n, ^p.
+
+- Documentation for screen commands.
+
+- Trap signals like ^C. Don't do work, just set flag to be handled next time
+  through loop.
+
+- Remember playing notes. When move from patch to patch, make sure to send
+  corresponding note-off messages to the original outputs on the original
+  channels. Add 2-dimensional arrays to output instrument: channel and note
+  number. If entry is non-nil then note is playing.
+
+- "Are you sure?" on quit? --- but I hate that.
+
+- Programmable MIDI messages: predefined keys that send blocks of MIDI data
+
+- See list of features at http://jimmenard.com/projects/keymaster/, but note
+  that many of those can be implemented via triggers and filters
+
+- Fill-in-the-blank messages, useful for things like sysex for displaying
+  song and patch name. This could get sent out whenever patch changes, and
+  could be used to display song/patch in a synth's display, for example.
