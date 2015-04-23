@@ -22,8 +22,9 @@ class ListWindow < PmWindow
     return unless @list
 
     curr_item = PM::PatchMaster.instance.send(@curr_item_method_sym)
-    curr_index = @list.index(curr_item)
+    return unless curr_item
 
+    curr_index = @list.index(curr_item)
     if curr_index < @offset
       @offset = curr_index
     elsif curr_index >= @offset + visible_height
