@@ -4,17 +4,28 @@ require 'tempfile'
 
 $dsl = nil
 
-# For bin/patchmaster. Does nothing.
-def run
+module PM
+  class IRB
+
+    include Singleton
+
+    attr_reader :dsl
+
+    def initialize
+      @dsl = PM::DSL.new
+      @dsl.song("IRB Song")
+      @dsl.patch("IRB Patch")
+    end
+
+    # For bin/patchmaster.
+    def run
+      IRB.start
+    end
+  end
 end
 
 def dsl
-  unless $dsl
-    $dsl = PM::DSL.new
-    $dsl.song("IRB Song")
-    $dsl.patch("IRB Patch")
-  end
-  $dsl
+  PM::IRB.instance.dsl
 end
 
 # Return the current (only) patch.
@@ -49,13 +60,10 @@ def method_missing(sym, *args)
     end
     patch.start
   elsif pm.respond_to?(sym)
+    $stderr.puts "pm responds to sym = #{sym}" # DEBUG
     pm.send(sym, *args)
   else
+    $stderr.puts "sending sym = #{sym} to super" # DEBUG
     super
   end
-end
-
-def start_patchmaster_irb(init_file=nil)
-  ENV['IRBRC'] = init_file if init_file
-  IRB.start
 end

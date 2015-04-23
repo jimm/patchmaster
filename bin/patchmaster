@@ -47,7 +47,12 @@ end.parse!(ARGV)
 
 # Must require patchmaster here, after handling options, because Singleton
 # initialize code checks $DEBUG.
-require 'patchmaster'
+begin
+  require 'patchmaster'
+rescue LoadError
+  LOAD_PATH << File.join(__dir__, '../lib')
+  retry
+end
 
 pm = PM::PatchMaster.instance
 pm.use_midi = use_midi
@@ -56,14 +61,13 @@ case gui
 when :curses
   require 'patchmaster/curses/main'
   pm.gui = PM::Main.instance
-  pm.run
 when :irb
   require 'patchmaster/irb/irb'
-  start_patchmaster_irb(File.join(File.dirname(__FILE__), 'irb_init.rb'))
+  pm.gui = PM::IRB.instance
 when :web
   require 'patchmaster/web/sinatra_app'
   app = PM::SinatraApp.instance
   app.port = port if port
   pm.gui = app
-  pm.run
 end
+pm.run
