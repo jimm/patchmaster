@@ -3,8 +3,12 @@ GEM
   specs:
     alsa-rawmidi (0.2.14)
       ffi (>= 1.0)
-    backports (2.6.1)
-    eventmachine (0.12.10)
+    backports (3.6.4)
+    byebug (4.0.5)
+      columnize (= 0.9.0)
+    columnize (0.9.0)
+    curses (1.0.1)
+    eventmachine (1.0.7)
     ffi (1.0.11)
     ffi-coremidi (0.1.7)
       ffi (>= 1.0)
@@ -21,13 +25,13 @@ GEM
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
-    rack-test (0.6.1)
+    rack-test (0.6.3)
       rack (>= 1.0)
     sinatra (1.3.2)
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
-    sinatra-contrib (1.3.1)
+    sinatra-contrib (1.3.2)
       backports (>= 2.0)
       eventmachine
       rack-protection
@@ -43,6 +47,8 @@ PLATFORMS
 
 DEPENDENCIES
   alsa-rawmidi
+  byebug
+  curses
   midi-eye
   midi-jruby
   midi-winmm
