@@ -19,7 +19,7 @@ module PM
 
     # For bin/patchmaster.
     def run
-      IRB.start
+      ::IRB.start
     end
   end
 end
@@ -44,8 +44,8 @@ def pm_help
   puts IO.read(File.join(File.dirname(__FILE__), 'irb_help.txt'))
 end
 
-# The "panic" command is handled by $dsl. This version tells panic to send
-# all all-notes-off messages.
+# The "panic" command is handled by the PM::DSL instance. This version
+# (+panic!+) tells that +panic+ to send all all-notes-off messages.
 def panic!
   PM::PatchMaster.instance.panic(true)
 end
@@ -60,10 +60,8 @@ def method_missing(sym, *args)
     end
     patch.start
   elsif pm.respond_to?(sym)
-    $stderr.puts "pm responds to sym = #{sym}" # DEBUG
     pm.send(sym, *args)
   else
-    $stderr.puts "sending sym = #{sym} to super" # DEBUG
     super
   end
 end
