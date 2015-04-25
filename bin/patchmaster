@@ -50,7 +50,7 @@ end.parse!(ARGV)
 begin
   require 'patchmaster'
 rescue LoadError
-  LOAD_PATH << File.join(__dir__, '../lib')
+  $LOAD_PATH << File.join(__dir__, '../lib')
   retry
 end
 
