@@ -12,8 +12,6 @@ title: To Do
 > \\
 > -- markg@be.com
 
-- Implement `PM::DSL.save_messages` and `PM::DSL.save_message_keys`.
-
 - Triggers cause GUI refresh for curses, but not for Sinatra app.
 
 - Transpose values >= 100 or <= 100 throw off formatting in patch window.
