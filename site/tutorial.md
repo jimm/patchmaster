@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Tutorial
-permalink: /tutorial/
 ---
 
 This tutorial walks you through creating a PatchMaster file from scratch. It
@@ -109,7 +108,7 @@ through a connection. Let's use a filter to modify the volume of all notes
 in real time using a software LFO (Low Frequency Oscillator).
 
 *NOTE* This LFO only sets the velocity of each note. It doesn't change the
-overall volume over time (/e.g./, tremolo). To do that you'd need to create
+overall volume over time (_e.g._, tremolo). To do that you'd need to create
 a method that gets called regularly, probably in a separate thread, and that
 sends volume control change messages.
 

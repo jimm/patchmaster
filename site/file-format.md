@@ -1,12 +1,9 @@
 ---
 layout: page
-title: PatchMaster Files
-permalink: /file-format/
+title: File Format
 ---
 
-# PatchMaster Files
-
-> Source code in files. How quaint.\\
+> Source code in files. How quaint.
 > 
 > -- Attributed to Kent Beck
 
@@ -23,8 +20,8 @@ For a sample PatchMaster file, see
 [examples/example.rb](https://github.com/jimm/patchmaster/blob/master/examples/example.rb).
 
 For a more detailed discussion of the things that can be in a PatchMaster
-file (how they work and what they're for), see [Components](/components) and
-[Running Patches](/patches).
+file (how they work and what they're for), see
+[Components](/components.html) and [Running Patches](/patches.html).
 
 # Loading and Saving PatchMaster Files
 
@@ -155,7 +152,7 @@ message "Tune Request", [TUNE_REQUEST]
 
 The `TUNE_REQUEST` constant is defined in `patchmaster/consts.rb`.
 
-See also [Named Messages in Filters](*Named%20Messages%20in%20Filters) below.
+See also [Named Messages in Filters](#named-messages-in-filters) below.
 
 ## Message Keys
 

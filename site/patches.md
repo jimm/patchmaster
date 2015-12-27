@@ -1,19 +1,16 @@
 ---
 layout: page
-title: Running Patches
-permalink: /patches/
+title: Patches
 ---
-
-# Running Patches
 
 > A wandering minstrel I -\\
 > A thing of threads and patches,\\
 > Of ballads, songs and snatches,\\
 > And dreamy lullaby!\\
 > \\
-> -- Sir William Gilbert, /The Mikado/
+> -- Sir William Gilbert, _The Mikado_
 
-When a patch is started it becomes the /current patch/. Each connection is
+When a patch is started it becomes the _current patch_. Each connection is
 started (see below) and passed the patch's start bytes to send to its output
 instrument. When a patch is stopped, each connection is stopped and passed
 the stop bytes to send to its output.
@@ -27,7 +24,7 @@ instrument and channel, and the following optional values:
 - Program change number
 - Keyboard zone (low/high keys stored as a Ruby Range object)
 - Transpose
-- Filter (see [Connection Filters](*Connection%20Filters) below)
+- Filter (see [Connection Filters](#connection-filters) below)
 
 If the input instrument's channel is not specified then all input from that
 instrument is run through the connection. If the channel is specified then

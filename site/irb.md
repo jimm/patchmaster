@@ -1,10 +1,7 @@
 ---
 layout: page
-title: IRB Mode
-permalink: /irb/
+title: IRB
 ---
-
-# IRB Mode
 
 *Warning*: this feature of PatchMaster is brand new. The commands or their
 syntax may change as I play with IRB mode. So, please give me your
@@ -25,7 +22,7 @@ Use the `-i` flag to start PatchMaster within an IRB console.
 
 On startup IRB mode looks for the file .patchmasterrc in the current
 directory and loads that file. If it does not exist, IRB mode looks for the
-file $HOME/.patchmasterrc.
+file `$HOME/.patchmasterrc`.
 
 # Commands
 
@@ -83,7 +80,7 @@ then sends individual note-off messages for all notes on all channels.
 
 ## Initial Setup
 
-Store your setup (input, output, alias_output, etc.) in ~/.patchmasterrc.
+Store your setup (input, output, alias_output, etc.) in `~/.patchmasterrc`.
 
 ## Loading Files
 

@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Components
-permalink: /components/
 ---
 
 > "The time has come," the Walrus said,\\
@@ -11,12 +10,12 @@ permalink: /components/
 > And why the sea is boiling hot -\\
 > And whether pigs have wings."\\
 > \\
-> -- Lewis Carroll, /Through the Looking-Glass/
+> -- Lewis Carroll, _Through the Looking-Glass_
 
 This section describes the things that make up a PatchMaster document:
 instruments, songs, patches, connections, triggers, messages, and filters.
-The [file format](/file-format) page tells you how to put them all together into a
-PatchMaster file.
+The [file format](/file-format.html) page tells you how to put them all
+together into a PatchMaster file.
 
 # Instruments
 
@@ -54,7 +53,8 @@ output 2, :rack                 # Will use UNIMidi name
 
 A song is a named list of patches that allow you to control your MIDI setup.
 A song can have any number of patches. You can step forward and backward
-through the patches in a song using the GUI movement keys or [triggers](*Triggers).
+through the patches in a song using the GUI movement keys or
+[triggers](/triggers.html).
 
 When a song becomes the current song, its first patch is made the current
 patch.
@@ -67,7 +67,7 @@ on a single channel.
 
 ## Start and Stop Bytes
 
-A patch also has optional /start bytes/ and /stop bytes/. These are arrays
+A patch also has optional _start bytes_ and _stop bytes_. These are arrays
 of MIDI bytes that can contain any MIDI data such as patch changes, volume
 controller settings, note on or off messages (for those looong drones), and
 System Exclusive messages.
@@ -144,8 +144,8 @@ talking about here.
 
 You can assign named messages to keys when using the PatchMaster GUI.
 Whenever the assigned key is pressed, the corresponding message is sent. See
-[PatchMaster Files](/file-format) for how to assign a named message to a
-key.
+the [file format](/file-format.html) page for how to assign a named message
+to a key.
 
 # Triggers
 

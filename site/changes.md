@@ -1,12 +1,18 @@
 ---
 layout: page
 title: Changes
-permalink: /changes/
 ---
 
-> In programming, do, or undo. There is always try.\\
-> \\
+> In programming, do, or undo. There is always try.
+>
 > -- Yoda (via Ron Jeffries)
+
+# 1.2.0
+
+- New `code_key` command.
+
+- `message_key` argument orders have been reversed, to match `code_key`. The
+  old order will be accepted for a while.
 
 # 1.1.2
 

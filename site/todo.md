@@ -1,7 +1,6 @@
 ---
 layout: page
 title: To Do
-permalink: /todo/
 ---
 
 # Bugs
@@ -78,8 +77,6 @@ permalink: /todo/
   corresponding note-off messages to the original outputs on the original
   channels. Add 2-dimensional arrays to output instrument: channel and note
   number. If entry is non-nil then note is playing.
-
-- "Are you sure?" on quit? --- but I hate that.
 
 - Programmable MIDI messages: predefined keys that send blocks of MIDI data
 

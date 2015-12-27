@@ -1,13 +1,10 @@
 ---
 layout: page
 title: Tips and Tricks
-permalink: /tips-and-tricks/
 ---
 
-# Tips and Tricks
-
-> An invasion of armies can be resisted, but not an idea whose time has come.\\
-> \\
+> An invasion of armies can be resisted, but not an idea whose time has come.
+>
 > -- Victor Hugo
 
 This section contains some ideas that will hopefully spur you to even more
@@ -65,7 +62,7 @@ corresponding note-off messages.
 
 You don't have to enter message byte arrays manually. You can build up the
 message using Ruby code, storing it in a variable, and then hand that
-variable to the `message` method. See examples/example.rb.
+variable to the `message` method. See `examples/example.rb`.
 
 Messages can be sent not only from the keyboard but also from a trigger or a
 filter by calling

@@ -1,12 +1,8 @@
 ---
 layout: page
-title: PatchMaster
-permalink: /
 ---
 
-# PatchMaster
-
-> Welcome. Welcome. Welcome.\\
+> Welcome. Welcome. Welcome.
 > 
 > -- The entire Ig Nobel awards ceremony welcoming speech
 
@@ -20,20 +16,20 @@ messages, limit controller and velocity values, and much more. At the stomp
 of a foot switch (or any other MIDI event), an entire MIDI system can be
 totally reconfigured.
 
-PatchMaster lets you describe /songs/, which are lists of /patches/ that
-connect /instruments/. Those /connections/ can send program changes, set
+PatchMaster lets you describe _songs_, which are lists of _patches_ that
+connect _instruments_. Those _connections_ can send program changes, set
 keyboard splits, transpose, send volume or other controller changes, and let
 you apply any Ruby code you want to the MIDI stream in real time.
 
-/Song lists/ let you organize songs into set lists for live performance or
+_Song lists_ let you organize songs into set lists for live performance or
 in the studio.
 
-Any incoming MIDI message can /trigger/ an action such as moving to the next
+Any incoming MIDI message can _trigger_ an action such as moving to the next
 or previous patch or song. For example, you can tell PatchMaster to move
 forward or backward based on controller values coming from foot switches or
 an instrument's buttons.
 
-Any array of MIDI bytes can be stored as a named /message/ which can be sent
+Any array of MIDI bytes can be stored as a named _message_ which can be sent
 via a trigger, a key press, or from any filter.
 
 A software panic button turns off any stuck notes.
@@ -82,23 +78,23 @@ ignored, and no MIDI data is sent/received. That is useful if you want to
 run PatchMaster without actually talking to any MIDI instruments.
 
 To run PatchMaster from within an IRB session use `-i`. Reads
-./.patchmasterrc if it exists, $HOME/.patchmasterrc if not. See the
+`./.patchmasterrc` if it exists, `$HOME/.patchmasterrc` if not. See the
 documentation for details on the commands that are available.
 
 To run PatchMaster using a Web browser GUI use `-w` and point your browser at
-<http://localhost:4567>. To change the port, use `-p`.
+http://localhost:4567. To change the port, use `-p`.
 
 The `-d` flag turns on debug mode. The app becomes slightly more verbose and
 logs everything to /tmp/pm_debug.txt.
 
 # More Information
 
-- Descriptions of all the [components](/components): songs, patches, connections, filters,
-  and more
-- All about [patches and connections](/patches) --- what happens when they run
-- The [PatchMaster file format](/file-format)
-- [IRB mode](/irb)
-- [Tips and tricks](/tips-and-tricks)
-- [Screen Shots](/screenshots)
-- [Changes](/changes) between PatchMaster versions
-- [To Do](/todo) list, including bugs and new features
+- Descriptions of all the [components](/components.html): songs, patches,
+  connections, filters, and more
+- All about [patches and connections](/patches.html) --- what happens when they run
+- The [PatchMaster file format](/file-format.html)
+- [IRB mode](/irb.html)
+- [Tips and tricks](/tips-and-tricks.html)
+- [Screen Shots](/screenshots.html)
+- [Changes](/changes.html) between PatchMaster versions
+- [To Do](/todo.html) list, including bugs and new features
