@@ -9,8 +9,14 @@ message "Tune Request", [TUNE_REQUEST]
 full_volumes = (0...MIDI_CHANNELS).collect { |chan| [CONTROLLER + chan, CC_VOLUME, 127]}.flatten
 message "Full Volume", full_volumes
 
-message_key "Tune Request", :f1
-message_key "Full Volume", :f2
+message_key :f1, "Tune Request"
+message_key :f2, "Full Volume"
+
+$global_code_key_value = nil
+
+code_key :f3 do
+  $global_code_key_value = 42
+end
 
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }

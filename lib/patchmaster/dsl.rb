@@ -56,10 +56,28 @@ class DSL
     @pm.messages[name.downcase] = bytes
   end
 
-  def message_key(name, key_or_sym)
-    if @pm.gui
-      @pm.gui.bind_message(name, key_or_sym)
+  def message_key(key_or_sym, name)
+    if name.is_a?(Symbol)
+        name, key_or_sym = key_or_sym, name
+        $stderr.puts "WARNING: the arguments to message_key are now key first, then name."
+        $stderr.puts "I will use #{name} as the name and #{key_or_sym} as the key for now."
+        $stderr.puts "Please swap them for future compatability."
     end
+    if key_or_sym.is_a?(String) && name.is_a?(String)
+      if name.length == 1 && key_or_sym.length > 1
+        name, key_or_sym = key_or_sym, name
+        $stderr.puts "WARNING: the arguments to message_key are now key first, then name."
+        $stderr.puts "I will use #{name} as the name and #{key_or_sym} as the key for now."
+        $stderr.puts "Please swap them for future compatability."
+      elsif name.length == 1 && key_or_sym.length == 1
+        raise "message_key: since both name and key are one-character strings, I can't tell which is which. Please make the name longer."
+      end
+    end
+    @pm.bind_message(name, to_binding_key(key_or_sym))
+  end
+
+  def code_key(key_or_sym, &block)
+    @pm.bind_code(to_binding_key(key_or_sym), block)
   end
 
   def trigger(instrument_sym, bytes, &block)
@@ -245,6 +263,12 @@ class DSL
   # ****************************************************************
 
   private
+
+  def to_binding_key(key_or_sym)
+    if key_or_sym.is_a?(Symbol) && PM::Main::FUNCTION_KEY_SYMBOLS[key_or_sym]
+      key_or_sym = PM::Main::FUNCTION_KEY_SYMBOLS[key_or_sym]
+    end
+  end
 
   def read_triggers(contents)
     read_block_text('trigger', @triggers, contents)

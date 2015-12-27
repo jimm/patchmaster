@@ -37,6 +37,8 @@ class PatchMaster < SimpleDelegator
     super(@cursor)
     @use_midi = true
     @gui = nil
+    @message_bindings = {}
+    @code_bindings = {}
 
     if $DEBUG
       @debug_file = File.open(DEBUG_FILE, 'a')
@@ -75,6 +77,14 @@ class PatchMaster < SimpleDelegator
     @loaded_file = file
   rescue => ex
     raise("error saving #{file}: #{ex}" + caller.join("\n"))
+  end
+
+  def bind_message(name, key)
+    @message_bindings[key] = name
+  end
+
+  def bind_code(key, block)
+    @code_bindings[key] = block
   end
 
   # Initializes the cursor and all data.

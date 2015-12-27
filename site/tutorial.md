@@ -176,8 +176,8 @@ message to F1 and the full volume message to F2. The names here must match
 the names you gave the messages above.
 
 {% highlight ruby %}
-message_key "Tune Request", :f1
-message_key "Full Volume", :f2
+message_key :f1, "Tune Request"
+message_key :f2, "Full Volume"
 {% endhighlight %}
 
 # Creating Triggers
@@ -212,8 +212,8 @@ full_volumes = (0...MIDI_CHANNELS).collect do |chan|
 end.flatten
 message "Full Volume", full_volumes
 
-message_key "Tune Request", :f1
-message_key "Full Volume", :f2
+message_key :f1, "Tune Request"
+message_key :f2, "Full Volume"
 
 # Outputs a value from 0 to 127 based on the time.
 def lfo

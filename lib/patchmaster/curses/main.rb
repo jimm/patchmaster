@@ -18,7 +18,6 @@ class Main
 
   def initialize
     @pm = PatchMaster.instance
-    @message_bindings = {}
   end
 
   def run
@@ -93,6 +92,8 @@ class Main
 
         msg_name = @message_bindings[ch]
         @pm.send_message(msg_name) if msg_name
+        code_block = @code_bindings[ch]
+        code_block.call if code_block
       end
     ensure
       clear
@@ -100,14 +101,6 @@ class Main
       close_screen
       @pm.stop
       @pm.close_debug_file
-    end
-  end
-
-  def bind_message(name, key_or_sym)
-    if FUNCTION_KEY_SYMBOLS.keys.include?(key_or_sym)
-      @message_bindings[FUNCTION_KEY_SYMBOLS[key_or_sym]] = name
-    else
-      @message_bindings[key_or_sym] = name
     end
   end
 

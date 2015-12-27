@@ -15,8 +15,8 @@ message "Tune Request", [TUNE_REQUEST]
 full_volumes = (0...MIDI_CHANNELS).collect { |chan| [CONTROLLER + chan, CC_VOLUME, 127]}.flatten
 message "Full Volume", full_volumes
 
-message_key "Tune Request", :f1
-message_key "Full Volume", :f2
+message_key :f1, "Tune Request"
+message_key :f2, "Full Volume"
 
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 127] { next_patch }
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 127] { prev_patch }

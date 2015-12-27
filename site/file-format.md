@@ -160,14 +160,20 @@ See also [Named Messages in Filters](*Named%20Messages%20in%20Filters) below.
 ## Message Keys
 
 {% highlight ruby %}
-  message_key name, key
+  message_key key, name
 {% endhighlight %}
 
 Maps the named message to a key. Message keys are ignored if PatchMaster was
 started without the curses GUI.
 
-`key` may be any one-character string (for example '8' or 'p') or a function
+`key` may be any one-character string (for example '8' or "p") or a function
 key symbol of the form `:f1`, `:f2`, etc.
+
+### Note
+
+Older versions of PatchMaster (before 1.2.0) reversed the order of the two
+arguments to `message_key`. The reversed order is still accepted but a
+deprecation warning is output.
 
 ## Triggers
 
