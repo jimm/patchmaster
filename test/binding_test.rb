@@ -20,8 +20,8 @@ class BindingTest < Test::Unit::TestCase
 
   def test_code_binding
     code_bindings = @pm.instance_variable_get("@code_bindings".to_sym)
-    block = code_bindings[Curses::Key::F3]
-    block.call
+    code_key = code_bindings[Curses::Key::F3]
+    code_key.run
     assert $global_code_key_value == 42
   end
 

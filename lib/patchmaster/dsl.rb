@@ -1,4 +1,5 @@
 require 'unimidi'
+require_relative './code_chunk'
 
 module PM
 
@@ -18,6 +19,7 @@ class DSL
     @outputs = {}
     @triggers = []
     @filters = []
+    @code_keys = []
     @songs = {}                 # key = name, value = song
   end
 
@@ -25,6 +27,7 @@ class DSL
     contents = IO.read(file)
     init
     instance_eval(contents)
+    read_code_keys(contents)
     read_triggers(contents)
     read_filters(contents)
   end
@@ -77,13 +80,15 @@ class DSL
   end
 
   def code_key(key_or_sym, &block)
-    @pm.bind_code(to_binding_key(key_or_sym), block)
+    ck = CodeKey.new(to_binding_key(key_or_sym), CodeChunk.new(block))
+    @pm.bind_code(ck)
+    @code_keys << ck
   end
 
   def trigger(instrument_sym, bytes, &block)
     instrument = @inputs[instrument_sym]
     raise "trigger: error finding instrument #{instrument_sym}" unless instrument
-    t = Trigger.new(bytes, block)
+    t = Trigger.new(bytes, CodeChunk.new(block))
     instrument.triggers << t
     @triggers << t
   end
@@ -164,7 +169,7 @@ class DSL
   alias_method :x, :transpose
 
   def filter(&block)
-    @conn.filter = Filter.new(block)
+    @conn.filter = Filter.new(CodeChunk.new(block))
     @filters << @conn.filter
   end
   alias_method :f, :filter
@@ -192,6 +197,9 @@ class DSL
   def save(file)
     File.open(file, 'w') { |f|
       save_instruments(f)
+      save_messages(f)
+      save_message_keys(f)
+      save_code_keys(f)
       save_triggers(f)
       save_songs(f)
       save_song_lists(f)
@@ -208,10 +216,29 @@ class DSL
     f.puts
   end
 
+  def save_messages(f)
+    # FIXME: implement
+  end
+
+  def save_message_keys(f)
+    # FIXME: implement
+  end
+
+  def save_code_keys(f)
+    @pm.code_bindings.values.each do |code_key|
+      str = if code_key.code_chunk.text[0] == '{'
+              "code_key(#{to_save_key(code_key.key)}) #{code_key.code_chunk.text}"
+            else
+              "code_key #{to_save_key(code_key.key)} #{code_key.code_chunk.text}"
+            end
+      f.puts str
+    end
+  end
+
   def save_triggers(f)
     @pm.inputs.each do |instrument|
       instrument.triggers.each do |trigger|
-        str = "trigger :#{instrument.sym}, #{trigger.bytes.inspect} #{trigger.text}"
+        str = "trigger :#{instrument.sym}, #{trigger.bytes.inspect} #{trigger.code_chunk.text}"
         f.puts str
       end
     end
@@ -241,7 +268,7 @@ class DSL
     f.puts "      prog_chg #{conn.pc_prog}" if conn.pc?
     f.puts "      zone #{conn.note_num_to_name(conn.zone.begin)}, #{conn.note_num_to_name(conn.zone.end)}" if conn.zone
     f.puts "      xpose #{conn.xpose}" if conn.xpose
-    f.puts "      filter #{conn.filter.text}" if conn.filter
+    f.puts "      filter #{conn.filter.code_chunk.text}" if conn.filter
     f.puts "    end"
   end
 
@@ -264,9 +291,20 @@ class DSL
 
   private
 
+  # Translate symbol like :f1 to the proper function key value.
   def to_binding_key(key_or_sym)
     if key_or_sym.is_a?(Symbol) && PM::Main::FUNCTION_KEY_SYMBOLS[key_or_sym]
       key_or_sym = PM::Main::FUNCTION_KEY_SYMBOLS[key_or_sym]
+    end
+  end
+
+  # Translate function key values into symbol strings and other keys into
+  # double-quoted strings.
+  def to_save_key(key)
+    if PM::Main::FUNCTION_KEY_SYMBOLS.value?(key)
+      ":#{PM::Main::FUNCTION_KEY_SYMBOLS.key(key)}"
+    else
+      %Q("#{key}")
     end
   end
 
@@ -278,6 +316,10 @@ class DSL
     read_block_text('filter', @filters, contents)
   end
 
+  def read_code_keys(contents)
+    read_block_text('code_key', @code_keys, contents)
+  end
+
   # Extremely simple block text reader. Relies on indentation to detect end
   # of code block.
   def read_block_text(name, containers, contents)
@@ -285,11 +327,13 @@ class DSL
     in_block = false
     block_indentation = nil
     block_end_token = nil
+    chunk = nil
     contents.each_line do |line|
       if line =~ /^(\s*)#{name}\s*.*?(({|do|->\s*{|lambda\s*{)(.*))/
         block_indentation, text = $1, $2
         i += 1
-        containers[i].text = text + "\n"
+        chunk = containers[i].code_chunk
+        chunk.text = text + "\n"
         in_block = true
         block_end_token = case text
                              when /^{/
@@ -306,15 +350,18 @@ class DSL
         indentation, text = $1, $2
         if indentation.length <= block_indentation.length
           if text =~ /^#{block_end_token}/
-            containers[i].text << line
+            chunk.text << line
           end
           in_block = false
         else
-          containers[i].text << line
+          chunk.text << line
         end
       end
     end
-    containers.each { |thing| thing.text.strip! if thing.text }
+    containers.each do |thing|
+      text = thing.code_chunk.text
+      text.strip! if text
+    end
   end
 
 end

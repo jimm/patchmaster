@@ -17,6 +17,7 @@ $global_code_key_value = nil
 code_key :f3 do
   $global_code_key_value = 42
 end
+code_key(:f4) { $global_code_key_value = 99 }
 
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
 trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }

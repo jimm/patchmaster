@@ -92,8 +92,8 @@ class Main
 
         msg_name = @message_bindings[ch]
         @pm.send_message(msg_name) if msg_name
-        code_block = @code_bindings[ch]
-        code_block.call if code_block
+        code_key = @code_bindings[ch]
+        code_key.run if code_block
       end
     ensure
       clear

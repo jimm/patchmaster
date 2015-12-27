@@ -5,18 +5,18 @@ module PM
 # representation as well.
 class Filter
 
-  attr_accessor :block, :text
+  attr_accessor :code_chunk
 
-  def initialize(block, text=nil)
-    @block, @text = block, text
+  def initialize(code_chunk)
+    @code_chunk = code_chunk
   end
 
   def call(conn, bytes)
-    @block.call(conn, bytes)
+    @code_chunk.run(conn, bytes)
   end
 
   def to_s
-    @text || '# no block text found'
+    @code_chunk.text || '# no block text found'
   end
 
 end

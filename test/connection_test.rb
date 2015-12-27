@@ -92,7 +92,7 @@ class ConnectionTest < Test::Unit::TestCase
 
   def test_filter
     filter_block = lambda { |conn, bytes| bytes.map(&:succ) }
-    filter = PM::Filter.new(filter_block, nil)
+    filter = PM::Filter.new(PM::CodeChunk.new(filter_block))
     conn = PM::Connection.new(@in_instrument, nil, @out_instrument, 2, filter, @options)
     conn.midi_in([1, 2, 3])
     assert_equal [2, 3, 4], @out_instrument.port.buffer

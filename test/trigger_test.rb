@@ -19,7 +19,7 @@ class TriggerTest < Test::Unit::TestCase
     second_patch = song.patches[1]
 
     x = 0
-    trigger = PM::Trigger.new([1, 2, 3], Proc.new { x += 1 })
+    trigger = PM::Trigger.new([1, 2, 3], PM::CodeChunk.new(Proc.new { x += 1 }))
 
     trigger.signal([4, 5, 6])
     assert_equal 0, x

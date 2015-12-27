@@ -33,13 +33,21 @@ class DSLTest < Test::Unit::TestCase
     assert_equal 'MockOutputPort 4', sj.name
   end
 
+  def test_load_code_keys
+    assert_equal 2, @pm.code_bindings.length
+    assert_equal "do\n  $global_code_key_value = 42\nend",
+                 @pm.code_bindings.values[0].code_chunk.text
+    assert_equal "{ $global_code_key_value = 99 }",
+                 @pm.code_bindings.values[1].code_chunk.text
+  end
+
   def test_load_triggers
     mb = @pm.inputs.detect { |instr| instr.sym == :mb }
     triggers = mb.triggers
     assert_equal 5, triggers.length
     trigger = triggers[0]
     assert_equal [PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0], trigger.bytes
-    assert_equal "{ prev_song }", mb.triggers[3].text
+    assert_equal "{ prev_song }", mb.triggers[3].code_chunk.text
   end
 
   def test_load_songs
@@ -183,10 +191,22 @@ class DSLTest < Test::Unit::TestCase
 EOS
     str.strip!
     assert_equal str,
-      @pm.all_songs.find('First Song').patches[0].connections[1].filter.text
+                 @pm.all_songs
+                   .find('First Song')
+                   .patches[0]
+                   .connections[1]
+                   .filter
+                   .code_chunk
+                   .text
 
     assert_equal "{ |c, b| b }       # no-op",
-      @pm.all_songs.find('Second Song').patches[0].connections[1].filter.text
+                 @pm.all_songs
+                   .find('Second Song')
+                   .patches[0]
+                   .connections[1]
+                   .filter
+                   .code_chunk
+                   .text
   end
 
   def test_messages

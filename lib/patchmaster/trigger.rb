@@ -7,27 +7,27 @@ module PM
 # well.
 class Trigger
 
-  attr_accessor :bytes, :block, :text
+  attr_accessor :bytes, :code_chunk
 
-  def initialize(bytes, block)
-    @bytes, @block = bytes, block
+  def initialize(bytes, code_chunk)
+    @bytes, @code_chunk = bytes, code_chunk
   end
 
   def method_missing(sym, *args)
     PM::PatchMaster.instance.send(sym, *args)
   end
 
-  # If +bytes+ matches our +@bytes+ array then run +@block+.
+  # If +bytes+ matches our +@bytes+ array then run +@code_chunk+.
   def signal(bytes)
     if bytes == @bytes
       pm = PM::PatchMaster.instance
-      pm.instance_eval &@block
+      @code_chunk.run(pm)
       pm.gui.refresh if pm.gui
     end
   end
 
   def to_s
-    "#{@bytes.inspect} => #{(@text || '# no block text found').gsub(/\n\s*/, '; ')}"
+    "#{@bytes.inspect} => #{(@code_chunk.text || '# no block text found').gsub(/\n\s*/, '; ')}"
   end
 end
 end

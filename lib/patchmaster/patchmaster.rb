@@ -21,7 +21,7 @@ class PatchMaster < SimpleDelegator
   include Singleton
 
   attr_reader :inputs, :outputs, :all_songs, :song_lists
-  attr_reader :messages
+  attr_reader :messages, :message_bindings, :code_bindings
   attr_accessor :use_midi
   alias_method :use_midi?, :use_midi
   attr_accessor :gui
@@ -83,8 +83,8 @@ class PatchMaster < SimpleDelegator
     @message_bindings[key] = name
   end
 
-  def bind_code(key, block)
-    @code_bindings[key] = block
+  def bind_code(code_key)
+    @code_bindings[code_key.key] = code_key
   end
 
   # Initializes the cursor and all data.

@@ -175,7 +175,7 @@ deprecation warning is output.
 ## Code Keys
 
 {% highlight ruby %}
-  code_key key { block of code }
+  code_key(key) { block of code }
   # or, the same thing
   code_key key do
     block of code
@@ -183,10 +183,14 @@ deprecation warning is output.
 {% endhighlight %}
 
 Maps the block of code to a key. Code keys are ignored if PatchMaster was
-started without the curses GUI.
+started without the curses GUI. When the key is pressed, the block of code
+is executed.
 
 `key` may be any one-character string (for example '8' or "p") or a function
 key symbol of the form `:f1`, `:f2`, etc.
+
+Note that if you use the `{ ... }` syntax for the block, then `key` must be
+surrounded by parentheses.
 
 ## Triggers
 
