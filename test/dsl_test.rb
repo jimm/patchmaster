@@ -137,6 +137,8 @@ class DSLTest < Test::Unit::TestCase
     @dsl.save('/tmp/dsl_test_save_file_contents.rb')
     str = IO.read(f)
     assert_match 'output 1, :ws_out, "WaveStation"', str
+    assert_match "message \"Tune Request\", [#{PM::TUNE_REQUEST}]", str
+    assert_match 'message_key :f1, "Tune Request"', str
     assert_match "trigger :mb, [176, 50, 0] { next_patch }", str
     assert_match "trigger :mb, [176, 52, 0] { next_song }", str
     assert_match 'filter { |c, b| b }       # no-op', str
@@ -210,6 +212,7 @@ EOS
   end
 
   def test_messages
-    assert_equal [PM::TUNE_REQUEST], @pm.messages["Tune Request".downcase]
+    assert_equal ["Tune Request", [PM::TUNE_REQUEST]],
+                 @pm.messages["Tune Request".downcase]
   end
 end

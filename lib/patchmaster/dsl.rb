@@ -56,7 +56,7 @@ class DSL
   alias_method :outp, :output
 
   def message(name, bytes)
-    @pm.messages[name.downcase] = bytes
+    @pm.messages[name.downcase] = [name, bytes]
   end
 
   def message_key(key_or_sym, name)
@@ -208,28 +208,32 @@ class DSL
 
   def save_instruments(f)
     @pm.inputs.each do |instr|
-      f.puts "input #{instr.port_num}, :#{instr.sym}, #{quoted(instr.name)}"
+      f.puts "input #{instr.port_num}, :#{instr.sym}, #{instr.name.inspect}"
     end
     @pm.outputs.each do |instr|
-      f.puts "output #{instr.port_num}, :#{instr.sym}, #{quoted(instr.name)}"
+      f.puts "output #{instr.port_num}, :#{instr.sym}, #{instr.name.inspect}"
     end
     f.puts
   end
 
   def save_messages(f)
-    # FIXME: implement
+    @pm.messages.each do |_, (correct_case_name, msg)|
+      f.puts "message #{correct_case_name.inspect}, #{msg.inspect}"
+    end
   end
 
   def save_message_keys(f)
-    # FIXME: implement
+    @pm.message_bindings.each do |key, message_name|
+      f.puts "message_key #{to_save_key(key).inspect}, #{message_name.inspect}"
+    end
   end
 
   def save_code_keys(f)
     @pm.code_bindings.values.each do |code_key|
       str = if code_key.code_chunk.text[0] == '{'
-              "code_key(#{to_save_key(code_key.key)}) #{code_key.code_chunk.text}"
+              "code_key(#{to_save_key(code_key.key).inspect}) #{code_key.code_chunk.text}"
             else
-              "code_key #{to_save_key(code_key.key)} #{code_key.code_chunk.text}"
+              "code_key #{to_save_key(code_key.key).inspect} #{code_key.code_chunk.text}"
             end
       f.puts str
     end
@@ -247,7 +251,7 @@ class DSL
 
   def save_songs(f)
     @pm.all_songs.songs.each do |song|
-      f.puts "song #{quoted(song.name)} do"
+      f.puts "song #{song.name.inspect} do"
       song.patches.each { |patch| save_patch(f, patch) }
       f.puts "end"
       f.puts
@@ -255,7 +259,7 @@ class DSL
   end
 
   def save_patch(f, patch)
-    f.puts "  patch #{quoted(patch.name)} do"
+    f.puts "  patch #{patch.name.inspect} do"
     f.puts "    start_bytes #{patch.start_bytes.inspect}" if patch.start_bytes
     patch.connections.each { |conn| save_connection(f, conn) }
     f.puts "  end"
@@ -275,16 +279,12 @@ class DSL
   def save_song_lists(f)
     @pm.song_lists.each do |sl|
       next if sl == @pm.all_songs
-      f.puts "song_list #{quoted(sl.name)}, ["
+      f.puts "song_list #{sl.name.inspect}, ["
       @pm.all_songs.songs.each do |song|
-        f.puts "  #{quoted(song.name)},"
+        f.puts "  #{song.name.inspect},"
       end
       f.puts "]"
     end
-  end
-
-  def quoted(str)
-    "\"#{str.gsub('"', "\\\"")}\"" # ' <= un-confuse Emacs font-lock
   end
 
   # ****************************************************************
@@ -302,9 +302,9 @@ class DSL
   # double-quoted strings.
   def to_save_key(key)
     if PM::Main::FUNCTION_KEY_SYMBOLS.value?(key)
-      ":#{PM::Main::FUNCTION_KEY_SYMBOLS.key(key)}"
+      PM::Main::FUNCTION_KEY_SYMBOLS.key(key)
     else
-      %Q("#{key}")
+      key
     end
   end
 
