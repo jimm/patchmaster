@@ -147,6 +147,13 @@ Whenever the assigned key is pressed, the corresponding message is sent. See
 the [file format](/file-format.html) page for how to assign a named message
 to a key.
 
+# Code Keys
+
+You can assign a blocks of code to be executed when keys are pressed when
+using the PatchMaster GUI. Whenver the assigned key is pressed, the
+corresponding block of code is run. See the [file format](/file-format.html)
+page for how to assign a code block to a key.
+
 # Triggers
 
 A trigger looks for a particular incoming MIDI message from a paticular

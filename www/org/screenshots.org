@@ -1,8 +1,0 @@
-#+title Screen Shots
-#+html: <!--#include virtual="header.html"-->
-#+options: num:nil
-
-* Main Screen
-
-#+attr_html: alt="PatchMaster screen shot" width="600"
-[[file:images/pm_screen_shot.png]]

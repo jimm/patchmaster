@@ -75,34 +75,19 @@ gem_ns = namespace :gem do
 end
 
 namespace :web do
-  desc "Export Org-mode files to HTML"
+  desc "Build the site files"
   task :build do
-    system("/Applications/Emacs.app/Contents/MacOS/Emacs --batch --load ~/.emacs --find-file www/org/file_format.org --eval '(org-publish (assoc \"#{PROJECT_NAME}\" org-publish-project-alist) t)'") if web_build_needed?
+    system("cd site && jekyll build")
   end
 
   desc "Publish the Web site"
   task :publish => :build do
-    system "rsync -qrlpt --filter='exclude .DS_Store' --del www/public_html/ #{WEB_SERVER}:#{WEB_DIR}"
+    system("rsync -qrlpt --filter='exclude .DS_Store' --del site/_site/ #{WEB_SERVER}:#{WEB_DIR}")
   end
 
-  desc "Copy everything to local static site in /tmp/#{PROJECT_NAME}"
-  task :local => :build do
-    require 'fileutils'
-    FileUtils.rm_rf LOCAL_HTML_TARGET
-    FileUtils.mkdir_p LOCAL_HTML_TARGET
-    FileUtils.cp "www/public_html/style.css", LOCAL_HTML_TARGET
-    FileUtils.cp_r "www/public_html/images", LOCAL_HTML_TARGET
-
-    header = IO.read('www/public_html/header.html')
-    Dir['www/public_html/*.html'].each do |path|
-      base = File.basename(path)
-      next if base == 'header.html'
-
-      contents = IO.read(path)
-      contents.sub!('<!--#include virtual="header.html"-->', header)
-      contents.sub!(/(loc = window\.location\.pathname;)/, '\1 if (loc.indexOf("/tmp/#{PROEJCT_NAME}") == 0) { loc = loc.substring(16); console.log(loc); }')
-      IO.write(File.join(LOCAL_HTML_TARGET, File.basename(path)), contents)
-    end
+  desc "Serve the site locally"
+  task :server do
+    system("jekyll server")
   end
 end
 

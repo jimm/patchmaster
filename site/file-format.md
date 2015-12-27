@@ -176,6 +176,10 @@ deprecation warning is output.
 
 {% highlight ruby %}
   code_key key { block of code }
+  # or, the same thing
+  code_key key do
+    block of code
+  end
 {% endhighlight %}
 
 Maps the block of code to a key. Code keys are ignored if PatchMaster was
