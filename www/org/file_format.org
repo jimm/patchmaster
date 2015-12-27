@@ -177,6 +177,18 @@ Older versions of PatchMaster (before 1.2.0) reversed the order of the two
 arguments to =message_key=. The reversed order is still accepted but a
 deprecation warning is output.
 
+** Code Keys
+
+#+begin_src ruby
+  code_key key { block of code }
+#+end_src
+
+Maps the block of code to a key. Code keys are ignored if PatchMaster was
+started without the curses GUI.
+
+=key= may be any one-character string (for example '8' or 'p') or a function
+key symbol of the form =:f1=, =:f2=, etc.
+
 ** Triggers
 
 #+begin_src ruby
