@@ -14,6 +14,8 @@ title: Changes
 - `message_key` argument orders have been reversed, to match `code_key`. The
   old order will be accepted for a while.
 
+- Switch to [Jekyll](http://jekyllrb.com/) version of the site.
+
 # 1.1.2
 
 - Fixed triggers.
