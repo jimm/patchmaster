@@ -87,30 +87,47 @@ EOS
   # System reset
   SYSTEM_RESET = 0xFF
 
+  #--
   # Controller numbers
   # = 0 - 31 = continuous, MSB
   # = 32 - 63 = continuous, LSB
-  # = 64 - 97 = switches
-  CC_BANK_SELECT = 0
-  CC_MOD_WHEEL = 1
-  CC_BREATH_CONTROLLER = 2
-  CC_FOOT_CONTROLLER = 4
-  CC_PORTAMENTO_TIME = 5
-  CC_DATA_ENTRY_MSB = 6
-  CC_VOLUME = 7
-  CC_BALANCE = 8
-  CC_PAN = 10
-  CC_EXPRESSION_CONTROLLER = 11
-  CC_GEN_PURPOSE_1 = 16
-  CC_GEN_PURPOSE_2 = 17
-  CC_GEN_PURPOSE_3 = 18
-  CC_GEN_PURPOSE_4 = 19
-
-  # [32 - 63] are LSB for [0 - 31]
-  CC_DATA_ENTRY_LSB = 38
+  # = 64 - 97 = momentary switches
+  #++
+  CC_BANK_SELECT           = CC_BANK_SELECT_MSB           = 0
+  CC_MOD_WHEEL             = CC_MOD_WHEEL_MSB             = 1
+  CC_BREATH_CONTROLLER     = CC_BREATH_CONTROLLER_MSB     = 2
+  CC_FOOT_CONTROLLER       = CC_FOOT_CONTROLLER_MSB       = 4
+  CC_PORTAMENTO_TIME       = CC_PORTAMENTO_TIME_MSB       = 5
+  CC_DATA_ENTRY            = CC_DATA_ENTRY_MSB            = 6
+  CC_VOLUME                = CC_VOLUME_MSB                = 7
+  CC_BALANCE               = CC_BALANCE_MSB               = 8
+  CC_PAN                   = CC_PAN_MSB                   = 10
+  CC_EXPRESSION_CONTROLLER = CC_EXPRESSION_CONTROLLER_MSB = 11
+  CC_GEN_PURPOSE_1         = CC_GEN_PURPOSE_1_MSB         = 16
+  CC_GEN_PURPOSE_2         = CC_GEN_PURPOSE_2_MSB         = 17
+  CC_GEN_PURPOSE_3         = CC_GEN_PURPOSE_3_MSB         = 18
+  CC_GEN_PURPOSE_4         = CC_GEN_PURPOSE_4_MSB         = 19
 
   #--
-  # Momentaries:
+  # [32 - 63] are LSB for [0 - 31]
+  #++
+  CC_BANK_SELECT_LSB           = CC_BANK_SELECT_MSB           + 32
+  CC_MOD_WHEEL_LSB             = CC_MOD_WHEEL_MSB             + 32
+  CC_BREATH_CONTROLLER_LSB     = CC_BREATH_CONTROLLER_MSB     + 32
+  CC_FOOT_CONTROLLER_LSB       = CC_FOOT_CONTROLLER_MSB       + 32
+  CC_PORTAMENTO_TIME_LSB       = CC_PORTAMENTO_TIME_MSB       + 32
+  CC_DATA_ENTRY_LSB            = CC_DATA_ENTRY_MSB            + 32
+  CC_VOLUME_LSB                = CC_VOLUME_MSB                + 32
+  CC_BALANCE_LSB               = CC_BALANCE_MSB               + 32
+  CC_PAN_LSB                   = CC_PAN_MSB                   + 32
+  CC_EXPRESSION_CONTROLLER_LSB = CC_EXPRESSION_CONTROLLER_MSB + 32
+  CC_GEN_PURPOSE_1_LSB         = CC_GEN_PURPOSE_1_MSB         + 32
+  CC_GEN_PURPOSE_2_LSB         = CC_GEN_PURPOSE_2_MSB         + 32
+  CC_GEN_PURPOSE_3_LSB         = CC_GEN_PURPOSE_3_MSB         + 32
+  CC_GEN_PURPOSE_4_LSB         = CC_GEN_PURPOSE_4_MSB         + 32
+
+  #--
+  # Momentary switches:
   #++
   CC_SUSTAIN = 64
   CC_PORTAMENTO = 65
@@ -145,31 +162,47 @@ EOS
   CM_MONO_MODE_ON = 0x7E        # Val = # chans
   CM_POLY_MODE_ON = 0x7F        # Val must be 0
 
-  # Controller names
   CONTROLLER_NAMES = [
-    "0",
-    "Modulation",
-    "Breath Control",
-    "3",
-    "Foot Controller",
-    "Portamento Time",
-    "Data Entry",
-    "Volume",
-    "Balance",
-    "9",
-    "Pan",
-    "Expression Control",
-    "12", "13", "14", "15",
-    "General Controller 1",
-    "General Controller 2",
-    "General Controller 3",
-    "General Controller 4",
-    "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
-    "30", "31",
-    "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-    "42", "43", "44", "45", "46", "47", "48", "49", "50", "51",
-    "52", "53", "54", "55", "56", "57", "58", "59", "60", "61",
-    "62", "63",
+    "Bank Select (MSB)",
+    "Modulation (MSB)",
+    "Breath Control (MSB)",
+    "3 (MSB)",
+    "Foot Controller (MSB)",
+    "Portamento Time (MSB)",
+    "Data Entry (MSB)",
+    "Volume (MSB)",
+    "Balance (MSB)",
+    "9 (MSB)",
+    "Pan (MSB)",
+    "Expression Control (MSB)",
+    "12 (MSB)", "13 (MSB)", "14 (MSB)", "15 (MSB)",
+    "General Controller 1 (MSB)",
+    "General Controller 2 (MSB)",
+    "General Controller 3 (MSB)",
+    "General Controller 4 (MSB)",
+    "20 (MSB)", "21 (MSB)", "22 (MSB)", "23 (MSB)", "24 (MSB)", "25 (MSB)",
+    "26 (MSB)", "27 (MSB)", "28 (MSB)", "29 (MSB)", "30 (MSB)", "31 (MSB)",
+
+    "Bank Select (LSB)",
+    "Modulation (LSB)",
+    "Breath Control (LSB)",
+    "35 (LSB)",
+    "Foot Controller (LSB)",
+    "Portamento Time (LSB)",
+    "Data Entry (LSB)",
+    "Volume (LSB)",
+    "Balance (LSB)",
+    "41 (LSB)",
+    "Pan (LSB)",
+    "Expression Control (LSB)",
+    "44 (LSB)", "45 (LSB)", "46 (LSB)", "47 (LSB)",
+    "General Controller 1 (LSB)",
+    "General Controller 2 (LSB)",
+    "General Controller 3 (LSB)",
+    "General Controller 4 (LSB)",
+    "52 (LSB)", "53 (LSB)", "54 (LSB)", "55 (LSB)", "56 (LSB)", "57 (LSB)",
+    "58 (LSB)", "59 (LSB)", "60 (LSB)", "61 (LSB)", "62 (LSB)", "63 (LSB)",
+
     "Sustain Pedal",
     "Portamento",
     "Sostenuto",

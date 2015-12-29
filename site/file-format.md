@@ -157,7 +157,7 @@ See also [Named Messages in Filters](#named-messages-in-filters) below.
 ## Message Keys
 
 {% highlight ruby %}
-  message_key key, name
+message_key key, name
 {% endhighlight %}
 
 Maps the named message to a key. Message keys are ignored if PatchMaster was
@@ -175,11 +175,11 @@ deprecation warning is output.
 ## Code Keys
 
 {% highlight ruby %}
-  code_key(key) { block of code }
-  # or, the same thing
-  code_key key do
-    block of code
-  end
+code_key(key) { block of code }
+# or, the same thing
+code_key key do
+  block of code
+end
 {% endhighlight %}
 
 Maps the block of code to a key. Code keys are ignored if PatchMaster was
