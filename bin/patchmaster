@@ -1,8 +1,11 @@
 #!/usr/bin/env ruby
 #
-# usage: patchmaster [-v] [-n] [-i] [-w] [-p port] [-d] [pm_file]
+# usage: patchmaster [-l] [-v] [-n] [-i] [-w] [-p port] [-d] [pm_file]
 #
 # Starts PatchMaster and optionally loads pm_file.
+#
+# -l lists all available MIDI inputs and outputs and exits. This is exactply
+# -the same as running the `unimidi list` command from your shell.
 #
 # -v outputs the version number and exits.
 #
@@ -29,6 +32,10 @@ port = nil
 OptionParser.new do |opts|
   opts.banner = "usage: patchmaster [options] [pm_file]"
   opts.on("-d", "--debug", "Turn on debug mode") { $DEBUG = true }
+  opts.on("-l", "--list", "List MIDI inputs and outputs and exit") do
+    system("unimidi list")
+    exit 0
+  end
   opts.on("-n", "--no-midi", "Turn off MIDI processing") { use_midi = false }
   opts.on("-i", "--irb", "Use an IRB console") { gui = :irb }
   opts.on("-w", "--web", "Use a Web browser GUI") { gui = :web }

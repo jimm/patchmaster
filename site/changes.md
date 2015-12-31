@@ -16,6 +16,9 @@ title: Changes
 
 - Switch to [Jekyll](http://jekyllrb.com/) version of the site.
 
+- New `-l` (`--list`) argument to `bin/patchmaster` lists all MIDI inputs
+  and outputs. This is the same as running `unimidi list` in your shell.
+
 # 1.1.2
 
 - Fixed triggers.
