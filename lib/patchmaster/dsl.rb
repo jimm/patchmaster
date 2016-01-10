@@ -137,14 +137,19 @@ class DSL
   alias_method :conn, :connection
   alias_method :c, :connection
 
-  # If only +bank_or_prog+ is specified, then it's a program change. If
-  # both, then it's bank number.
-  def prog_chg(bank_or_prog, prog=nil)
+  # One byte: program change
+  # Two bytes: bank lsb, program change
+  # Three bytes: bank msb, bank lsb, program change
+  def prog_chg(bank_msb, bank_lsb=nil, prog=nil)
     if prog
-      @conn.bank = bank_or_prog
+      @conn.bank_msb = bank_msb
+      @conn.bank_lsb = bank_lsb
       @conn.pc_prog = prog
+    elsif bank_lsb
+      @conn.bank_lsb = bank_msb
+      @conn.pc_prog = bank_lsb
     else
-      @conn.pc_prog = bank_or_prog
+      @conn.pc_prog = bank_msb
     end
   end
   alias_method :pc, :prog_chg

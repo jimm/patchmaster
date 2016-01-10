@@ -9,7 +9,7 @@ module PM
 class Connection
 
   attr_accessor :input, :input_chan, :output, :output_chan,
-    :bank, :pc_prog, :zone, :xpose, :filter
+    :bank_msb, :bank_lsb, :pc_prog, :zone, :xpose, :filter
 
   # If input_chan is nil than all messages from input will be sent to
   # output.
@@ -18,7 +18,7 @@ class Connection
   # turned into 0-based channels for later use.
   def initialize(input, input_chan, output, output_chan, filter=nil, opts={})
     @input, @input_chan, @output, @output_chan, @filter = input, input_chan, output, output_chan, filter
-    @bank, @pc_prog, @zone, @xpose = opts[:bank], opts[:pc_prog], opts[:zone], opts[:xpose]
+    @bank_msb, @bank_lsb, @pc_prog, @zone, @xpose = opts[:bank_msb], opts[:bank_lsb], opts[:pc_prog], opts[:zone], opts[:xpose]
 
     @input_chan -= 1 if @input_chan
     @output_chan -= 1 if @output_chan
@@ -28,7 +28,8 @@ class Connection
     bytes = []
     bytes += start_bytes if start_bytes
     # Bank select uses MSB if we're only sending one byte
-    bytes += [CONTROLLER + @output_chan, CC_BANK_SELECT+32, @bank] if @bank
+    bytes += [CONTROLLER + @output_chan, CC_BANK_SELECT,    @bank_msb] if @bank_msb
+    bytes += [CONTROLLER + @output_chan, CC_BANK_SELECT+32, @bank_lsb] if @bank_lsb
     bytes += [PROGRAM_CHANGE + @output_chan, @pc_prog] if @pc_prog
     midi_out(bytes) unless bytes.empty?
     @input.add_connection(self)

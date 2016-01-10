@@ -12,6 +12,8 @@ title: To Do
 > \\
 > -- markg@be.com
 
+- Display both bank MSB and LSB in patch window alongside PC.
+
 - Triggers cause GUI refresh for curses, but not for Sinatra app.
 
 - Transpose values >= 100 or <= 100 throw off formatting in patch window.
@@ -35,8 +37,6 @@ title: To Do
 > but the most crucial features.\\
 > \\
 > -- Steve Jobs
-
-- Display bank number in patch window.
 
 - IRB code should pre-define a few variables like `pm` for
   `PM::PatchMaster.instance`.

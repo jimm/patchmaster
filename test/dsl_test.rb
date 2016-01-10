@@ -90,7 +90,8 @@ class DSLTest < Test::Unit::TestCase
     patch = song.patches[0]
     conn = patch.connections[1]
 
-    assert_equal 2, conn.bank
+    assert_nil conn.bank_msb
+    assert_equal 2, conn.bank_lsb
     assert_equal 100, conn.pc_prog
   end
 

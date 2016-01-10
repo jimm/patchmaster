@@ -7,6 +7,13 @@ title: Changes
 >
 > -- Yoda (via Ron Jeffries)
 
+# 1.2.1
+
+- Program change command can now take
+  - Program change
+  - Bank LSB, program change
+  - Bank MSB, bank LSB, program change
+
 # 1.2.0
 
 - New `code_key` command.

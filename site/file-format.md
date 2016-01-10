@@ -271,8 +271,8 @@ processed, else only messages coming from the specified channel will be
 processed.
 
 A connection can optionally take a block that specifies a program change or
-bank plus program change (sent to the output instrument on `out_chan`), a
-zone, a transposition, and a filter (see below).
+bank MSB/LSB plus program change (sent to the output instrument on
+`out_chan`), a zone, a transposition, and a filter (see below).
 
 - prog_chg
 - zone
@@ -302,11 +302,13 @@ end
 
 {% highlight ruby %}
 prog_chg prog_number
-prog_chg bank_number, prog_number
+prog_chg bank_lsb, prog_number
+prog_chg bank_msb, bank_lsb, prog_number
 {% endhighlight %}
 
-Sends `prog_number` to the output instrument's channel. If `bank_number` is
-specified, sends bank change then program change.
+Sends `prog_number` to the output instrument's channel. If `bank_lsb` or
+`bank_msb, bank_lsb` are specified, sends bank change commands first, then
+the program change.
 
 Only one program change per connection is allowed. If there is more than one
 in a connection the last one is used.
@@ -314,8 +316,9 @@ in a connection the last one is used.
 Examples:
 
 {% highlight ruby %}
-prog_chg 42        # program change only
-prog_chg 2, 100    # bank change th
+prog_chg 42         # program change only
+prog_chg 2, 100     # bank LSB change then program change
+prog_chg 1, 2, 100  # bank LSB change then program change
 {% endhighlight %}
 
 ##### Zones

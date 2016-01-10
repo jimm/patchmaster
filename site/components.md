@@ -85,9 +85,9 @@ pressure.
 
 ## Program Changes
 
-A connection can optionally send a bank number and program change to its
-output instrument's channel. If a bank number is specified, first the bank
-change is sent then the program change.
+A connection can optionally send bank chang MSB/LSB and program change to
+its output instrument's channel. If bank MSB/LSB values are specified, first
+they are sent then the program change.
 
 ## Zones
 
