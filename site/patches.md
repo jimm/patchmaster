@@ -35,7 +35,7 @@ any incoming MIDI bytes on other channels are ignored.
 When a connection is started:
 
 - The start bytes from the patch, if any, are sent to the output instrument
-  as-is (in particular, status bytes' channels are not changed)l
+  as-is (in particular, status bytes' channels are not changed).
 
 - The program change is sent to the output instrument (on the channel
   defined for the output instrument, of course).
@@ -96,8 +96,8 @@ zone, or even change the connection's filter itself, allowing for "hot
 swapping" of filter code.
 
   Note that if a filter does "hot swap" itself for another filter, that
-  other filter will not be saved properly when everything gets saved to a
-  file.
+  other filter will not be saved as the patch's filter by the "save"
+  command.
 
 The filter's block must evaluate to the bytes you want sent. That is, it
 must have as its last line an array of bytes or `nil`. For example,
