@@ -1,6 +1,6 @@
 module PM
 
-# A SongList is a list of Songs with a cursor.
+# A SongList is a list of Songs.
 class SongList
 
   attr_accessor :name, :songs
@@ -15,8 +15,7 @@ class SongList
   end
 
   # Returns the first Song that matches +name+. +name+ may be either a
-  # Regexp or a String. The match will be made case-insensitive. Does not
-  # move or set the cursor.
+  # Regexp or a String. The match will be made case-insensitive.
   def find(name_regex)
     name_regex = Regexp.new(name_regex.to_s, true) # make case-insensitive
     @songs.detect { |s| s.name =~ name_regex }

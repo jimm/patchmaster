@@ -1,6 +1,6 @@
 module PM
 
-# A Song is a named list of Patches with a cursor.
+# A Song is a named list of Patches.
 class Song
 
   attr_accessor :name, :patches, :notes
