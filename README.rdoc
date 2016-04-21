@@ -12,4 +12,4 @@ totally reconfigured.
 
 For more information please see the {PatchMaster Web
 site}[http://www.patchmaster.org/] or, if you're offline, the {site source
-files}[site/index.md].
+files}[file:site/index.md].
