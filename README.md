@@ -1,4 +1,4 @@
-= PatchMaster
+# PatchMaster
 
 PatchMaster is a MIDI processing and patching system. It allows a musician
 to reconfigure a MIDI setup instantaneously and modify the MIDI data in real
@@ -10,6 +10,6 @@ messages, limit controller and velocity values, and much more. At the stomp
 of a foot switch (or any other MIDI event), an entire MIDI system can be
 totally reconfigured.
 
-For more information please see the {PatchMaster Web
-site}[http://www.patchmaster.org/] or, if you're offline, the {site source
-files}[file:site/index.md].
+For more information please see the
+[PatchMaster Web site](http://www.patchmaster.org/) or, if you're offline,
+the [site source files](site/index.md).
