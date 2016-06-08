@@ -90,10 +90,10 @@ class Main
           @pm.debug caller.join("\n")
         end
 
-        msg_name = @message_bindings[ch]
+        msg_name = @pm.message_bindings[ch]
         @pm.send_message(msg_name) if msg_name
-        code_key = @code_bindings[ch]
-        code_key.run if code_block
+        code_key = @pm.code_bindings[ch]
+        code_key.run if code_key
       end
     ensure
       clear
