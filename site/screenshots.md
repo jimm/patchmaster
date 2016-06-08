@@ -3,7 +3,7 @@ layout: page
 title: Screen Shots
 ---
 
-> Un bon croquis vaut mieux qu'un long discours.
+> Un bon croquis vaut mieux qu'un long discours.\\
 > _A good sketch is better than a long speech._
 >
 > -- Napoléon Bonaparte
