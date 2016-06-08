@@ -3,6 +3,11 @@ layout: page
 title: Tutorial
 ---
 
+> Build a man a fire, and he'll be warm for a day.
+> Set a man on fire, and he'll be warm for the rest of his life.
+>
+> -- Terry Pratchett
+
 This tutorial walks you through creating a PatchMaster file from scratch. It
 assumes you've installed PatchMater as a gem, which will also install
 related utilities such as `unimidi`.

@@ -3,6 +3,8 @@ layout: page
 title: IRB
 ---
 
+> She sells sea shells by the sea shore.
+
 *Warning*: this feature of PatchMaster is brand new. The commands or their
 syntax may change as I play with IRB mode. So, please give me your
 [feedback](mailto:jim@jimmenard.com).
