@@ -2,7 +2,7 @@ module PM
 
 # A PM::Cursor knows the current PM::SongList, PM::Song, and PM::Patch, how
 # to move between songs and patches, and how to find them given name
-# regexes. A Cursor does not start/stop patches or manage connections.
+# regexes.
 class Cursor
 
   attr_reader :song_list, :song, :patch
