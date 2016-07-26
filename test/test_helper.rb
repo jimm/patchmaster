@@ -16,6 +16,7 @@ class MockInputPort
   def initialize(arg)
     @name = "MockInputPort #{arg}"
     @t0 = (Time.now.to_f * 1000).to_i
+    @data_to_send = nil
   end
 
   def gets

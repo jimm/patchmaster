@@ -26,6 +26,7 @@ class InputInstrument < Instrument
     super(sym, name, port_num, input_port(port_num, use_midi))
     @connections = []
     @triggers = []
+    @listener = nil
   end
 
   def add_connection(conn)

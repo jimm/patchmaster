@@ -42,7 +42,7 @@ class Connection
   def accept_from_input?(bytes)
     return true if @input_chan == nil
     return true unless bytes.channel?
-    bytes.note? && bytes.channel == @input_chan
+    bytes.channel == @input_chan
   end
 
   # Returns true if the +@zone+ is nil (allowing all notes throught) or if

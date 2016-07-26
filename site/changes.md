@@ -7,6 +7,12 @@ title: Changes
 >
 > -- Yoda (via Ron Jeffries)
 
+# 1.2.1
+
+- Fixed `channel?` predicate method.
+
+- Fixed `Connection.accept_from_input?`.
+
 # 1.2.0
 
 - New `code_key` command.

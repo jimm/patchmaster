@@ -50,6 +50,23 @@ class ConnectionTest < Test::Unit::TestCase
     assert @conn.inside_zone?(127)
   end
 
+  def test_accept_from_input_filters_input_chan
+    @conn.input_chan = 3
+    @conn.zone = nil
+    (0x80..0xff).each do |status|
+      expected = status >= 0xf0 || (status & 0x0f) == 3
+      assert_equal expected, @conn.accept_from_input?([status, 0, 0])
+    end
+    assert @conn.accept_from_input?([0x93, 0, 0])
+    assert @conn
+  end
+
+  def test_accept_from_input_takes_anything_if_nil_in_chan
+    (0x80..0xff).each do |status|
+      assert @conn.accept_from_input?([status, 0, 0])
+    end
+  end
+
   def test_out_of_zone_no_bytes_sent
     @conn.midi_in([PM::NOTE_ON, 3, 127])
     assert @out_instrument.port.buffer.empty?,
@@ -105,5 +122,4 @@ class ConnectionTest < Test::Unit::TestCase
   def test_to_s
     assert_equal "test_in ch all -> test_out ch 2; pc 3; xpose 12; zone #{@conn.note_num_to_name(40)}..#{@conn.note_num_to_name(60)}", @conn.to_s
   end
-
 end

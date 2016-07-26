@@ -11,7 +11,7 @@ class Integer
   end
 
   def channel?
-    self >= PM::NOTE_ON && self < PM::SYSEX 
+    self >= PM::NOTE_OFF && self < PM::SYSEX
   end
   alias_method :chan?, :channel?
 
