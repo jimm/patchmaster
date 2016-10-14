@@ -117,10 +117,6 @@ class MockInputPort
 
   def clear_buffer
   end
-
-  # add this class to the Listener class' known input types
-  MIDIEye::Listener.input_types << self
-
 end
 
 class MockOutputPort

@@ -176,7 +176,7 @@ class DSLTest < Test::Unit::TestCase
       @dsl.load(file)
       fail "expected unique symbol error to be raised"
     rescue => ex
-      assert_match /can not have the same symbol \(:ws_out\)/, ex.to_s
+      assert_match(/can not have the same symbol \(:ws_out\)/, ex.to_s)
     ensure
       File.delete(file)
     end

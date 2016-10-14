@@ -49,7 +49,7 @@ class BindingTest < Test::Unit::TestCase
     dsl = PM::DSL.new
     dsl.message_key("a", "b")
     fail "expected error to be raised"
-  rescue => ex
+  rescue
     assert true == true
   end
 end

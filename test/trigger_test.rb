@@ -14,10 +14,6 @@ class TriggerTest < Test::Unit::TestCase
   end
 
   def test_trigger_sends_when_bytes_match
-    song = @pm.all_songs.songs.first
-    first_patch = song.patches.first
-    second_patch = song.patches[1]
-
     x = 0
     trigger = PM::Trigger.new([1, 2, 3], PM::CodeChunk.new(Proc.new { x += 1 }))
 

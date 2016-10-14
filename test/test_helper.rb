@@ -13,12 +13,14 @@ class MockInputPort
 
   attr_accessor :data_to_send
 
+  alias_method :old_initialize, :initialize # avoid "method redefined" warning
   def initialize(arg)
     @name = "MockInputPort #{arg}"
     @t0 = (Time.now.to_f * 1000).to_i
     @data_to_send = nil
   end
 
+  alias_method :old_gets, :gets
   def gets
     retval = @data_to_send || []
     @data_to_send = []
@@ -30,11 +32,13 @@ class MockOutputPort
 
   attr_accessor :buffer
 
+  alias_method :old_initialize, :initialize
   def initialize(port_num)
     @name = "MockOutputPort #{port_num}"
     @buffer = []
   end
 
+  alias_method :old_puts, :puts
   def puts(bytes)
     @buffer += bytes
   end
