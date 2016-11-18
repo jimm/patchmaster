@@ -30,8 +30,7 @@ class InputInstrument < Instrument
 
   # If +port+ is nil (the normal case), creates either a real or a mock port
   def initialize(sym, name, port_num, use_midi=true)
-    super(sym, name, port_num, # open_port(Portmidi::Input, port_num, use_midi))
-          Portmidi::Input.new(port_num.to_i)) # DEBUG
+    super(sym, name, port_num, open_port(Portmidi::Input, port_num, use_midi))
     @connections = []
     @triggers = []
     @listener = nil

@@ -60,7 +60,7 @@ class Connection
   # actually modified in some way.
   def midi_in(messages)
     messages
-      .map { |event| event[:message] }
+      .map { |event| event[:message][0,3] }
       .select { |msg| accept_from_input?(msg) }
       .each { |msg| do_midi_in(msg) }
   end
@@ -100,7 +100,7 @@ class Connection
     end
 
     if message && message.size > 0
-      midi_out(message)
+      midi_out([message])
     end
   end
 
