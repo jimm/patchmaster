@@ -6,7 +6,7 @@ output 4, :sj
 
 message "Tune Request", [TUNE_REQUEST]
 
-full_volumes = (0...MIDI_CHANNELS).collect { |chan| [CONTROLLER + chan, CC_VOLUME, 127]}.flatten
+full_volumes = (0...MIDI_CHANNELS).map { |chan| [CONTROLLER + chan, CC_VOLUME, 127]}
 message "Full Volume", full_volumes
 
 message_key :f1, "Tune Request"
@@ -35,7 +35,8 @@ song "First Song" do
       transpose 12
     end
     connection :ws_in, 6, :sj, 4 do  # only chan 6 from :ws_in, out to chan 4 on :sj
-      prog_chg 2, 100                # bank 2, prog 100
+      bank 2
+      prog_chg 100
       zone C4, B5
       filter { |connection, bytes|
         if bytes.note_off?

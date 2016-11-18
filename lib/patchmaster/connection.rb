@@ -9,7 +9,7 @@ module PM
 class Connection
 
   attr_accessor :input, :input_chan, :output, :output_chan,
-    :bank, :pc_prog, :zone, :xpose, :filter
+    :bank_msb, :bank_lsb, :pc_prog, :zone, :xpose, :filter
 
   # If input_chan is nil than all messages from input will be sent to
   # output.
@@ -18,31 +18,31 @@ class Connection
   # turned into 0-based channels for later use.
   def initialize(input, input_chan, output, output_chan, filter=nil, opts={})
     @input, @input_chan, @output, @output_chan, @filter = input, input_chan, output, output_chan, filter
-    @bank, @pc_prog, @zone, @xpose = opts[:bank], opts[:pc_prog], opts[:zone], opts[:xpose]
+    @bank_msg, @bank_lsb, @pc_prog, @zone, @xpose = opts[:bank_msb], opts[:bank_lsb], opts[:pc_prog], opts[:zone], opts[:xpose]
 
     @input_chan -= 1 if @input_chan
     @output_chan -= 1 if @output_chan
   end
 
-  def start(start_bytes=nil)
-    bytes = []
-    bytes += start_bytes if start_bytes
-    # Bank select uses MSB if we're only sending one byte
-    bytes += [CONTROLLER + @output_chan, CC_BANK_SELECT+32, @bank] if @bank
-    bytes += [PROGRAM_CHANGE + @output_chan, @pc_prog] if @pc_prog
-    midi_out(bytes) unless bytes.empty?
+  def start(start_messages=nil)
+    messages = []
+    messages += start_messages if start_messages
+    messages += [CONTROLLER + @output_chan, CC_BANK_SELECT_MSB, @bank_msb] if @bank_msb
+    messages += [CONTROLLER + @output_chan, CC_BANK_SELECT_LSB, @bank_lsb] if @bank_lsb
+    messages += [PROGRAM_CHANGE + @output_chan, @pc_prog, 0] if @pc_prog
+    midi_out(messages) unless messages.empty?
     @input.add_connection(self)
   end
 
-  def stop(stop_bytes=nil)
-    midi_out(stop_bytes) if stop_bytes
+  def stop(stop_messages=nil)
+    midi_out(stop_messages) if stop_messages
     @input.remove_connection(self)
   end
 
-  def accept_from_input?(bytes)
+  def accept_from_input?(messages)
     return true if @input_chan == nil
-    return true unless bytes.channel?
-    bytes.channel == @input_chan
+    return true unless messages.channel?
+    messages.channel == @input_chan
   end
 
   # Returns true if the +@zone+ is nil (allowing all notes throught) or if
@@ -51,57 +51,61 @@ class Connection
     @zone == nil || @zone.include?(note)
   end
 
-  # The workhorse. Ignore bytes that aren't from our input, or are outside
-  # the zone. Change to output channel. Filter.
+  # The workhorse. Ignore messages that aren't from our input, or are
+  # outside the zone. Change to output channel. Filter.
   #
-  # Note that running bytes are not handled, but unimidi doesn't seem to use
-  # them anyway.
+  # Note that running bytes are not handled.
   #
   # Finally, we go through gyrations to avoid duping bytes unless they are
   # actually modified in some way.
-  def midi_in(bytes)
-    return unless accept_from_input?(bytes)
+  def midi_in(messages)
+    messages
+      .map { |event| event[:message] }
+      .select { |msg| accept_from_input?(msg) }
+      .each { |msg| do_midi_in(msg) }
+  end
 
-    bytes_duped = false
+  def do_midi_in(message)
+    message_duped = false
 
-    high_nibble = bytes.high_nibble
+    high_nibble = message.high_nibble
     case high_nibble
     when NOTE_ON, NOTE_OFF, POLY_PRESSURE
-      return unless inside_zone?(bytes[1])
+      return unless inside_zone?(message[1])
 
-      if bytes[0] != high_nibble + @output_chan || (@xpose && @xpose != 0)
-        bytes = bytes.dup
-        bytes_duped = true
+      if message[0] != high_nibble + @output_chan || (@xpose && @xpose != 0)
+        message = message.dup
+        message_duped = true
       end
 
-      bytes[0] = high_nibble + @output_chan
-      bytes[1] = ((bytes[1] + @xpose) & 0xff) if @xpose
+      message[0] = high_nibble + @output_chan
+      message[1] = ((message[1] + @xpose) & 0xff) if @xpose
     when CONTROLLER, PROGRAM_CHANGE, CHANNEL_PRESSURE, PITCH_BEND
-      if bytes[0] != high_nibble + @output_chan
-        bytes = bytes.dup
-        bytes_duped = true
-        bytes[0] = high_nibble + @output_chan
+      if message[0] != high_nibble + @output_chan
+        message = message.dup
+        message_duped = true
+        message[0] = high_nibble + @output_chan
       end
     end
 
-    # We can't tell if a filter will modify the bytes, so we have to assume
+    # We can't tell if a filter will modify the message, so we have to assume
     # they will be. If we didn't, we'd have to rely on the filter duping the
-    # bytes and returning the dupe.
+    # message and returning the dupe.
     if @filter
-      if !bytes_duped
-        bytes = bytes.dup
-        bytes_duped = true
+      if !message_duped
+        message = message.dup
+        message_duped = true
       end
-      bytes = @filter.call(self, bytes)
+      message = @filter.call(self, message)
     end
 
-    if bytes && bytes.size > 0
-      midi_out(bytes)
+    if message && message.size > 0
+      midi_out(message)
     end
   end
 
-  def midi_out(bytes)
-    @output.midi_out(bytes)
+  def midi_out(messages)
+    @output.midi_out(messages)
   end
 
   def pc?

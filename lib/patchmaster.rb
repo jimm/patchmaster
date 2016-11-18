@@ -1,3 +1,4 @@
+require 'portmidi'
 require 'patchmaster/consts'
 require 'patchmaster/predicates'
 require 'patchmaster/song_list'

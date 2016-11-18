@@ -1,6 +1,7 @@
 input  num, :sym[, name]                  define an input instrument
 output num, :sym[, name]                  define an output instrument
-prog_chg [bank, ] prog                    send a program change
+prog_chg prog                             send a program change
+bank msb[, lsb]                           send a bank change
 conn :in_sym, [chan|nil], :out_sym, chan  create a connection
 xpose num                                 set transpose for connection
 zone zone_def                             set zone for connection

@@ -22,7 +22,7 @@ class PatchMaster < SimpleDelegator
 
   attr_reader :inputs, :outputs, :all_songs, :song_lists
   attr_reader :messages, :message_bindings, :code_bindings
-  attr_accessor :use_midi
+  attr_reader :use_midi
   alias_method :use_midi?, :use_midi
   attr_accessor :gui
   attr_reader :loaded_file
@@ -45,6 +45,13 @@ class PatchMaster < SimpleDelegator
     end
 
     init_data
+  end
+
+  def use_midi=(val)
+    use_midi = val
+    if use_midi
+      Portmidi.start
+    end
   end
 
   def no_gui!

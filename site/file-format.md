@@ -116,7 +116,7 @@ input  0, :mb, 'midiboard'
 input  1, :ws, 'WaveStation'
 output 1, :ws, 'WaveStation'
 output 2, :kz, 'K2000R'
-output 4, :sj                   # Name will come from UNIMidi
+output 4, :sj                   # Name will be "sj"
 {% endhighlight %}
 
 ### Aliases
@@ -270,10 +270,11 @@ or is skipped then any message coming from that instrument will be
 processed, else only messages coming from the specified channel will be
 processed.
 
-A connection can optionally take a block that specifies a program change or
-bank plus program change (sent to the output instrument on `out_chan`), a
-zone, a transposition, and a filter (see below).
+A connection can optionally take a block that specifies a program change
+(sent to the output instrument on `out_chan`), bank change (ditto), a zone,
+a transposition, and a filter (see below).
 
+- bank
 - prog_chg
 - zone
 - transpose
@@ -287,7 +288,7 @@ Example:
 song "My First Song" do
   patch "First Song, First Patch" do
     connection :ws, 6, :sj, 4 do  # only chan 6 from :ws, out to ch 4 on :sj
-      prog_chg 100    # no bank, prog chg 100
+      prog_chg 100
       zone C4, B5
       transpose -12
       filter { |connection, bytes|
@@ -302,11 +303,9 @@ end
 
 {% highlight ruby %}
 prog_chg prog_number
-prog_chg bank_number, prog_number
 {% endhighlight %}
 
-Sends `prog_number` to the output instrument's channel. If `bank_number` is
-specified, sends bank change then program change.
+Sends `prog_number` to the output instrument's channel.
 
 Only one program change per connection is allowed. If there is more than one
 in a connection the last one is used.
@@ -314,8 +313,24 @@ in a connection the last one is used.
 Examples:
 
 {% highlight ruby %}
-prog_chg 42        # program change only
-prog_chg 2, 100    # bank change th
+prog_chg 42
+{% endhighlight %}
+
+##### Bank Changes
+
+{% highlight ruby %}
+bank msb[, lsb]
+{% endhighlight %}
+
+Sends one or two bank change commands to the output instrument's channel.
+"MSB" stands for "most significant bypte" and "LSB" stands for "least
+significant byte". Your synth's manual will tell you which ones to use.
+
+Examples:
+
+{% highlight ruby %}
+bank 1
+bank 1, 12
 {% endhighlight %}
 
 ##### Zones

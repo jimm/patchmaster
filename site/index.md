@@ -45,15 +45,8 @@ PatchMaster is by [Jim Menard](mailto:jim@jimmenard.com). It is a rewrite of
 
 # Requirements
 
-- The [midi-eye](https://github.com/arirusso/midi-eye) gem, which will be
-  installed automatically if you install PatchMaster as a gem. midi-eye in
-  turn requires (and will install automatically):
-  - [midi-message](https://github.com/arirusso/midi-message)
-  - [nibbler](https://github.com/arirusso/nibbler)
-  - [unimidi](https://github.com/arirusso/unimidi)
-- The [sinatra](http://www.sinatrarb.com/) gem, if you want to use
-  PatchMaster's browser GUI
-- Ruby 1.9 (because UniMIDI requires it) or higher (including Ruby 2.0)
+- The [portmidi](http://portmedia.sourceforge.net/portmidi/) library
+- Ruby 1.9 or higher (including Ruby 2.0)
 - Curses (comes with Ruby, but I'm not sure about JRuby)
 
 # Installation
@@ -63,6 +56,8 @@ To install as a gem, type
 {% highlight bash %}
 gem install patchmaster
 {% endhighlight %}
+
+To install manually, download the code and run `bundle install`.
 
 # Running PatchMaster
 

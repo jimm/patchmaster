@@ -7,6 +7,12 @@ title: Changes
 >
 > -- Yoda (via Ron Jeffries)
 
+# 2.0.0
+
+- New `bank` command. `prog_chg` now only takes one value.
+
+- Switched to [PortMidi](http://portmedia.sourceforge.net/portmidi/).
+
 # 1.2.1
 
 - Fixed `channel?` predicate method.

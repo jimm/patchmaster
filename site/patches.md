@@ -20,7 +20,7 @@ the stop bytes to send to its output.
 Connections have an input instrument and (optional) input channel, output
 instrument and channel, and the following optional values:
 
-- Program bank number
+- Program bank numbers
 - Program change number
 - Keyboard zone (low/high keys stored as a Ruby Range object)
 - Transpose

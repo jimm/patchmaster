@@ -10,7 +10,7 @@ title: Tutorial
 
 This tutorial walks you through creating a PatchMaster file from scratch. It
 assumes you've installed PatchMater as a gem, which will also install
-related utilities such as `unimidi`.
+related utilities such as the `portmidi` gem.
 
 PatchMaster files are Ruby files. Since Ruby files typically use the
 extension ".rb", go ahead and create a new file in your favorite editor
@@ -27,12 +27,12 @@ are optional.
 In a terminal window, type
 
 {% highlight bash %}
-unimidi list
+patchmaster --list
 {% endhighlight %}
 
 This command lists all the input and output instruments that are attached to
 your Mac, whether physical or virtual. You'll need to remember the input and
-output instrument numbers listed by `unimidi`.
+output instrument numbers.
 
 ## Add them to your PatchMaster file
 
@@ -43,9 +43,10 @@ add a line like this:
 input 0, :keys, 'Long Name'
 {% endhighlight %}
 
-The number is the number you got from the `unimidi list` command. ":keys" is
-any short name; it's what you will use to refer to that MIDI input. The name
-must begin with the ":" character and can not contain any spaces.
+The number is the number you got from the `patchmaster --list` command.
+":keys" is any short name; it's what you will use to refer to that MIDI
+input. The name must begin with the ":" character and can not contain any
+spaces.
 
 The name for each instrument must be different.
 

@@ -21,7 +21,7 @@ together into a PatchMaster file.
 
 An intstrument represents either a MIDI input to a synth, drum machine, or
 other device or a MIDI output from a controller. Each instrument needs a
-symbol (a usually short name starting with ":"), specifies which UNIMidi
+symbol (a usually short name starting with ":"), specifies which Portmidi
 port number it uses, and has a name.
 
 Input instrument symbols must be unique, as must output instruments. The
@@ -29,11 +29,7 @@ same symbol can be used for an input and an output, however. You'd usually
 do that if you have an instrument such as a keyboard that can act as both a
 controller (an output instrument) and a sound module (an input instrument).
 
-If you don't give an instrument a name, PatchMaster will display the name
-that UNIMidi uses. This isn't always what you want, because if you're using
-a MIDI interface such as the Unitor amt8, UNIMidi will use the names of the
-ports themselves, not the instruments plugged in to them (for example,
-"Unitor Port 0", "Unitor Port 1", ...).
+If you don't give an instrument a name, PatchMaster will display the symbol.
 
 ## Example
 
@@ -46,7 +42,7 @@ Here's what that might look like in your PatchMaster file:
 input  0, :con, 'My Controller'
 input  1, :kbd, 'The Keyboard'
 output 1, :kbd, 'The Keyboard'
-output 2, :rack                 # Will use UNIMidi name
+output 2, :rack                 # Will use "rack"
 {% endhighlight %}
 
 # Songs
@@ -85,9 +81,9 @@ pressure.
 
 ## Program Changes
 
-A connection can optionally send a bank number and program change to its
-output instrument's channel. If a bank number is specified, first the bank
-change is sent then the program change.
+A connection can optionally send bank numbers and a program change to its
+output instrument's channel. If a bank is specified, first the bank change
+is sent then the program change.
 
 ## Zones
 

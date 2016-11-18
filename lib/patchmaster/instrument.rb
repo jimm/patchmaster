@@ -1,6 +1,4 @@
-require 'midi-eye'
-
-# Ports are UniMIDI inputs or outputs.
+# Ports are Portmidi inputs or outputs.
 module PM
 
 class Instrument
@@ -9,9 +7,18 @@ class Instrument
 
   def initialize(sym, name, port_num, port)
     @sym, @name, @port_num, @port = sym, name, port_num, port
-    @name ||= @port.name if @port
+    @name ||= sym.to_s
   end
 
+  private
+
+  def open_port(klass, port_num, use_midi=true)
+    if use_midi
+      klass.new(port_num.to_i)
+    else
+      MockInputPort.new(port_num)
+    end
+  end
 end
 
 # When a connection is started, it adds itself to this InputInstrument's
@@ -19,14 +26,16 @@ end
 class InputInstrument < Instrument
 
   attr_accessor :connections, :triggers
-  attr_reader :listener
+  attr_reader :listener, :running
 
   # If +port+ is nil (the normal case), creates either a real or a mock port
   def initialize(sym, name, port_num, use_midi=true)
-    super(sym, name, port_num, input_port(port_num, use_midi))
+    super(sym, name, port_num, # open_port(Portmidi::Input, port_num, use_midi))
+          Portmidi::Input.new(port_num.to_i)) # DEBUG
     @connections = []
     @triggers = []
     @listener = nil
+    @running = false
   end
 
   def add_connection(conn)
@@ -40,55 +49,42 @@ class InputInstrument < Instrument
   # Poll for more MIDI input and process it.
   def start
     PatchMaster.instance.debug("instrument #{name} start")
-    @port.clear_buffer
-    @listener = MIDIEye::Listener.new(@port).listen_for { |event| midi_in(event[:message].to_bytes) }
-    @listener.run(:background => true)
+    if !@listener
+      @listener = Thread.new {
+        while true
+          if @port.poll
+            midi_in(@port.read)
+          end
+          sleep 0.01
+        end
+      }
+    end
   end
 
   def stop
     PatchMaster.instance.debug("instrument #{name} stop")
-    @port.clear_buffer
     if @listener
-      @listener.close
+      @listener.exit
       @listener = nil
     end
   end
 
-  # Passes MIDI bytes on to triggers and to each output connection.
-  def midi_in(bytes)
-    @triggers.each { |trigger| trigger.signal(bytes) }
-    @connections.each { |conn| conn.midi_in(bytes) }
+  # Passes MIDI messages on to triggers and to each output connection.
+  def midi_in(messages)
+    @triggers.each { |trigger| trigger.signal(messages) }
+    @connections.each { |conn| conn.midi_in(messages) }
   end
-
-  private
-
-  def input_port(port_num, use_midi=true)
-    if use_midi
-      UniMIDI::Input.all[port_num].open
-    else
-      MockInputPort.new(port_num)
-    end
-  end
-
 end
 
 class OutputInstrument < Instrument
 
   def initialize(sym, name, port_num, use_midi=true)
-    super(sym, name, port_num, output_port(port_num, use_midi))
+    super(sym, name, port_num, open_port(Portmidi::Output, port_num, use_midi))
   end
 
-  def midi_out(bytes)
-    @port.puts bytes
-  end
-
-  private
-
-  def output_port(port_num, use_midi)
-    if use_midi
-      UniMIDI::Output.all[port_num].open
-    else
-      MockOutputPort.new(port_num)
+  def midi_out(messages)
+    messages.each do |msg|
+      @port.write_short(msg[0], msg[1] || 0, msg[2] || 0)
     end
   end
 end

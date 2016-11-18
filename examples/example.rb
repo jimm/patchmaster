@@ -3,7 +3,7 @@ input  1, :ws_in, 'WaveStation'
 
 output 1, :ws_out, 'WaveStation'
 output 2, :kz, 'K2000R'
-output 4, :sj                   # Name will come from UNIMidi
+output 4, :sj                   # Name will be "sj"
 
 # In this setup, output 4 => SJ => MIDI thru => Drum machine. This lets me
 # refer to the same output as both :sj and :drums. There's an equivalent
@@ -12,7 +12,7 @@ alias_output :drums, :sj
 
 message "Tune Request", [TUNE_REQUEST]
 
-full_volumes = (0...MIDI_CHANNELS).collect { |chan| [CONTROLLER + chan, CC_VOLUME, 127]}.flatten
+full_volumes = (0...MIDI_CHANNELS).map { |chan| [CONTROLLER + chan, CC_VOLUME, 127]}
 message "Full Volume", full_volumes
 
 message_key :f1, "Tune Request"

@@ -99,10 +99,21 @@ class ConnectionTest < Test::Unit::TestCase
     assert_equal [PM::PROGRAM_CHANGE + @conn.output_chan, 3], @out_instrument.port.buffer
   end
 
-  def test_bank_sent
-    @conn.bank = 2
+  def test_bank_msb_sent
+    @conn.bank_msb = 2
     @conn.start
-    assert_equal [PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT + 32, 2,
+    assert_equal [PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT_MSB, 2,
+                  PM::PROGRAM_CHANGE + @conn.output_chan, 3],
+      @out_instrument.port.buffer
+  end
+
+  def test_bank_msb_and_lsb_sent
+    @conn.bank_msb = 2
+    @conn.bank_lsb = 12
+    @conn.start
+    assert_equal [PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT_MSB, 2,
+                  PM::PROGRAM_CHANGE + @conn.output_chan, 3,
+                  PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT_LSB, 12,
                   PM::PROGRAM_CHANGE + @conn.output_chan, 3],
       @out_instrument.port.buffer
   end
