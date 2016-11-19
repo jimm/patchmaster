@@ -15,15 +15,15 @@ class TriggerTest < Test::Unit::TestCase
 
   def test_trigger_sends_when_bytes_match
     x = 0
-    trigger = PM::Trigger.new([1, 2, 3], PM::CodeChunk.new(Proc.new { x += 1 }))
+    trigger = PM::Trigger.new([[1, 2, 3]], PM::CodeChunk.new(Proc.new { x += 1 }))
 
-    trigger.signal([4, 5, 6])
+    trigger.signal([[4, 5, 6]])
     assert_equal 0, x
 
-    trigger.signal([1, 2, 3])
+    trigger.signal([[1, 2, 3]])
     assert_equal 1, x
 
-    trigger.signal([1, 2, 3])
+    trigger.signal([[1, 2, 3]])
     assert_equal 2, x
   end
 end

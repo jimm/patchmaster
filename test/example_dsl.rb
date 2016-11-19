@@ -4,7 +4,7 @@ output 1, :ws_out, 'WaveStation'
 out    2, :kz, 'K2000R'
 output 4, :sj
 
-message "Tune Request", [TUNE_REQUEST]
+message "Tune Request", [[TUNE_REQUEST]]
 
 full_volumes = (0...MIDI_CHANNELS).map { |chan| [CONTROLLER + chan, CC_VOLUME, 127]}
 message "Full Volume", full_volumes
@@ -19,16 +19,16 @@ code_key :f3 do
 end
 code_key(:f4) { $global_code_key_value = 99 }
 
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_7, 0] { next_song }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_8, 0] { prev_song }
-trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
+trigger :mb, [[CONTROLLER, CC_GEN_PURPOSE_5, 0]] { next_patch }
+trigger :mb, [[CONTROLLER, CC_GEN_PURPOSE_6, 0]] { prev_patch }
+trigger :mb, [[CONTROLLER, CC_GEN_PURPOSE_7, 0]] { next_song }
+trigger :mb, [[CONTROLLER, CC_GEN_PURPOSE_8, 0]] { prev_song }
+trigger :mb, [[CONTROLLER, 126, 127]] { send_message "Tune Request" }
 
 song "First Song" do
   patch "First Song, First Patch" do
-    start_bytes [TUNE_REQUEST]
-    stop_bytes [STOP]
+    start_messages [[TUNE_REQUEST]]
+    stop_messages [[STOP]]
     connection :mb, nil, :kz, 2 do  # all chans from :mb, out to chan 2 on :kz
       prog_chg 64
       zone C4, B5

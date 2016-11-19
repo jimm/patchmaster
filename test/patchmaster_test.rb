@@ -153,13 +153,14 @@ class PatchMasterTest < Test::Unit::TestCase
   end
 
   def test_send_message
-    # We've started a patch that sends tune request as start_bytes
-    assert_equal [PM::TUNE_REQUEST], @pm.outputs[0].port.buffer
+    # We've started a patch that sends tune request as start message
+    treq_msgs = [[PM::TUNE_REQUEST, 0, 0]]
+    assert_equal treq_msgs, @pm.outputs[0].port.buffer
 
     @pm.send_message "Tune Request"
 
     # Make sure the message was sent
-    assert_equal [PM::TUNE_REQUEST, PM::TUNE_REQUEST], @pm.outputs[0].port.buffer
+    assert_equal treq_msgs * 2, @pm.outputs[0].port.buffer
   end
 
   def assert_only_curr_patch_running
@@ -177,10 +178,11 @@ class PatchMasterTest < Test::Unit::TestCase
   def test_panic
     @pm.panic
     @pm.outputs.each do |out|
-      expected = (0...PM::MIDI_CHANNELS).collect do |chan|
+      expected = (0...PM::MIDI_CHANNELS).map do |chan|
         [PM::CONTROLLER + chan, PM::CM_ALL_NOTES_OFF, 0]
-      end.flatten
-      assert_equal 16 * 3, expected.length
+      end
+      assert_equal 16, expected.length
+      assert_equal 16 * 3, expected.flatten.length
       # Match expected to end of buffer, since start bytes, program changes,
       # etc. might have been sent already.
       assert_equal expected, out.port.buffer[-expected.length..-1]
@@ -190,11 +192,14 @@ class PatchMasterTest < Test::Unit::TestCase
   def test_panic_all_notes
     @pm.panic(true)
     @pm.outputs.each do |out|
-      expected = (0...PM::MIDI_CHANNELS).collect do |chan|
-        [PM::CONTROLLER + chan, PM::CM_ALL_NOTES_OFF, 0] +
-          (0..127).collect { |note| [PM::NOTE_OFF + chan, note, 0] }.flatten
-      end.flatten
-      assert_equal 16 * (3 + 128*3), expected.length
+      expected = []
+      (0...PM::MIDI_CHANNELS).each do |chan|
+        expected << [PM::CONTROLLER + chan, PM::CM_ALL_NOTES_OFF, 0]
+        expected +=
+          (0..127).collect { |note| [PM::NOTE_OFF + chan, note, 0] }
+      end
+      assert_equal 16 * 129, expected.length
+      assert_equal 16 * 129 * 3, expected.flatten.length
       # Match expected to end of buffer, since start bytes, program changes,
       # etc. might have been sent already.
       assert_equal expected, out.port.buffer[-expected.length..-1]

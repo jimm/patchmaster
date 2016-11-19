@@ -138,7 +138,7 @@ alias_output :drums, :kbd
 ## Named Messages
 
 {% highlight ruby %}
-message name, bytes
+message name, [[bytes], [bytes], ...]
 {% endhighlight %}
 
 Stores a named MIDI message. These messages can be sent at any time using
@@ -236,8 +236,8 @@ patch name block
 
 A patch contains connections and optional start and stop byte arrays.
 
-- start_bytes
-- stop_bytes
+- start_messages
+- stop_messages
 - connection
 
 Example:
@@ -245,7 +245,7 @@ Example:
 {% highlight ruby %}
 song "My First Song" do
   patch "First Song, First Patch" do
-    start_bytes [TUNE_REQUEST]
+    start_messages [[TUNE_REQUEST]]
     connection :mb, :kz, 2 do  # all chans from :mb, out to ch 2 on :kz
       # ...
     end
@@ -445,8 +445,8 @@ bytes are sent, not before. Here's how:
 
 {% highlight ruby %}
 filter do |conn, bytes|
-  msg_bytes = messages["My Message Name".downcase]
-  bytes + msg_bytes             # return original bytes plus message bytes
+  msg_messages = messages["My Message Name".downcase]
+  bytes + msg_messages             # return original bytes plus message bytes
 end
 {% endhighlight %}
 

@@ -64,8 +64,8 @@ zone C4, B5
 - `song`
 - `patch`
 - `song_list`
-- `start_bytes`
-- `stop_bytes`
+- `start_messages`
+- `stop_messages`
 
 ## New Commands
 

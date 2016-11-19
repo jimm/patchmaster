@@ -18,7 +18,7 @@ class Connection
   # turned into 0-based channels for later use.
   def initialize(input, input_chan, output, output_chan, filter=nil, opts={})
     @input, @input_chan, @output, @output_chan, @filter = input, input_chan, output, output_chan, filter
-    @bank_msg, @bank_lsb, @pc_prog, @zone, @xpose = opts[:bank_msb], opts[:bank_lsb], opts[:pc_prog], opts[:zone], opts[:xpose]
+    @bank_msb, @bank_lsb, @pc_prog, @zone, @xpose = opts[:bank_msb], opts[:bank_lsb], opts[:pc_prog], opts[:zone], opts[:xpose]
 
     @input_chan -= 1 if @input_chan
     @output_chan -= 1 if @output_chan
@@ -27,9 +27,9 @@ class Connection
   def start(start_messages=nil)
     messages = []
     messages += start_messages if start_messages
-    messages += [CONTROLLER + @output_chan, CC_BANK_SELECT_MSB, @bank_msb] if @bank_msb
-    messages += [CONTROLLER + @output_chan, CC_BANK_SELECT_LSB, @bank_lsb] if @bank_lsb
-    messages += [PROGRAM_CHANGE + @output_chan, @pc_prog, 0] if @pc_prog
+    messages << [CONTROLLER + @output_chan, CC_BANK_SELECT_MSB, @bank_msb] if @bank_msb
+    messages << [CONTROLLER + @output_chan, CC_BANK_SELECT_LSB, @bank_lsb] if @bank_lsb
+    messages << [PROGRAM_CHANGE + @output_chan, @pc_prog, 0] if @pc_prog
     midi_out(messages) unless messages.empty?
     @input.add_connection(self)
   end

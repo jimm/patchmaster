@@ -3,7 +3,7 @@ require 'test_helper'
 class InstrumentTest < Test::Unit::TestCase
 
   def setup
-    @data = [1, 2, 3]
+    @data = [[1, 2, 3]]
     @in_instrument = PM::InputInstrument.new(:tin, 'test_in', 0, false)
     @in_instrument.port.data_to_send = @data
     @out_instrument = PM::OutputInstrument.new(:tout, 'test_out', 0, false)

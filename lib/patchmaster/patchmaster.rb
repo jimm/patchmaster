@@ -48,8 +48,8 @@ class PatchMaster < SimpleDelegator
   end
 
   def use_midi=(val)
-    use_midi = val
-    if use_midi
+    @use_midi = val
+    if @use_midi
       Portmidi.start
     end
   end
@@ -167,9 +167,9 @@ class PatchMaster < SimpleDelegator
     @outputs.each do |out|
       buf = []
       MIDI_CHANNELS.times do |chan|
-        buf += [CONTROLLER + chan, CM_ALL_NOTES_OFF, 0]
+        buf << [CONTROLLER + chan, CM_ALL_NOTES_OFF, 0]
         if individual_notes
-          buf += (0..127).collect { |note| [NOTE_OFF + chan, note, 0] }.flatten
+          buf += (0..127).map { |note| [NOTE_OFF + chan, note, 0] }
         end
       end
       out.midi_out(buf)

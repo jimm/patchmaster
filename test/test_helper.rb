@@ -4,6 +4,10 @@ require 'patchmaster'
 # For all tests, make sure mock I/O MIDI ports are used.
 PM::PatchMaster.instance.use_midi = false
 
+def event(*bytes)
+  {message: bytes, timestamp: 0}
+end
+
 module PM
 
 # To help with testing, we replace PM::MockInputPort#gets and

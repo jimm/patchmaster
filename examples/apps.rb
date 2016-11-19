@@ -7,7 +7,7 @@ input  1, :app_in, 'IAC-in'     # The first port you added
 output 2, :app_out, 'IAC-out'   # The second port you added
 
 def full_volume
-  start_bytes [CONTROLLER, CC_VOLUME, 127]
+  start_messages [[CONTROLLER, CC_VOLUME, 127]]
 end
 
 trigger :app_in, [NOTE_ON+2, 0, 127] { next_patch }

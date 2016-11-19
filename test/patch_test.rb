@@ -30,19 +30,19 @@ class PatchTest < Test::Unit::TestCase
     @patch.stop
   end
 
-  def test_start_sends_start_bytes
-    @patch.start_bytes = [1, 2, 3]
+  def test_start_sends_start_messages
+    @patch.start_messages = [[1, 2, 3]]
     @patch.start
     @patch.stop
-    assert_equal [1, 2, 3], @out_instrument.port.buffer[0,3]
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[0]
   end
 
-  def test_stop_sends_stop_bytes
-    @patch.start_bytes = nil
-    @patch.stop_bytes = [1, 2, 3]
+  def test_stop_sends_stop_messages
+    @patch.start_messages = nil
+    @patch.stop_messages = [[1, 2, 3]]
     @patch.start
     @patch.stop
-    assert_equal [1, 2, 3], @out_instrument.port.buffer[-3..-1]
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[-1]
   end
 
   def test_inputs
@@ -66,7 +66,8 @@ class PatchTest < Test::Unit::TestCase
     @patch << conn2
 
     @patch.start
-    assert_equal [PM::PROGRAM_CHANGE + 1, 3, PM::PROGRAM_CHANGE + 2, 42], @out_instrument.port.buffer
+    assert_equal [[PM::PROGRAM_CHANGE + 1, 3, 0], [PM::PROGRAM_CHANGE + 2, 42, 0]],
+                 @out_instrument.port.buffer
   end
 
   # Tests two connections with non-overlapping zones that go to different
@@ -85,23 +86,23 @@ class PatchTest < Test::Unit::TestCase
     @patch.start
 
     # Send note in @conn1 zone
-    @patch.connections.each { |c| c.midi_in([PM::NOTE_ON + 9, PM::C1, 127]) }
-    expected = [PM::NOTE_ON + 1, PM::C2, 127] # transposed, channel 1
+    @patch.connections.each { |c| c.midi_in([event(PM::NOTE_ON + 9, PM::C1, 127)]) }
+    expected = [[PM::NOTE_ON + 1, PM::C2, 127]] # transposed, channel 1
     assert_equal expected, @out_instrument.port.buffer
 
     # Send note in conn2 zone
-    @patch.connections.each { |c| c.midi_in([PM::NOTE_ON + 9, PM::C5, 127]) }
-    expected += [PM::NOTE_ON + 2, PM::C5, 127] # not transposed, channel 2
+    @patch.connections.each { |c| c.midi_in([event(PM::NOTE_ON + 9, PM::C5, 127)]) }
+    expected << [PM::NOTE_ON + 2, PM::C5, 127] # not transposed, channel 2
     assert_equal expected, @out_instrument.port.buffer
 
     # Note at top of @conn1 zone
-    @patch.connections.each { |c| c.midi_in([PM::NOTE_ON + 9, PM::Gs4, 127]) }
-    expected += [PM::NOTE_ON + 1, PM::Gs5, 127] # transposed, channel 1
+    @patch.connections.each { |c| c.midi_in([event(PM::NOTE_ON + 9, PM::Gs4, 127)]) }
+    expected << [PM::NOTE_ON + 1, PM::Gs5, 127] # transposed, channel 1
     assert_equal expected, @out_instrument.port.buffer
 
     # Note at bottom of conn2 zone
-    @patch.connections.each { |c| c.midi_in([PM::NOTE_ON + 9, PM::A4, 127]) }
-    expected += [PM::NOTE_ON + 2, PM::A4, 127] # not transposed, channel 2
+    @patch.connections.each { |c| c.midi_in([event(PM::NOTE_ON + 9, PM::A4, 127)]) }
+    expected << [PM::NOTE_ON + 2, PM::A4, 127] # not transposed, channel 2
     assert_equal expected, @out_instrument.port.buffer
   end
 end

@@ -50,7 +50,7 @@ Explode
 EOS
 
   patch "First Song, First Patch" do
-    start_bytes [TUNE_REQUEST]
+    start_messages [[TUNE_REQUEST]]
     connection :mb, :kz, 2 do  # all chans from :mb, out to chan 2 on :kz
       prog_chg 64
       zone C4, B5

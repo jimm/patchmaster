@@ -46,7 +46,7 @@ class DSLTest < Test::Unit::TestCase
     triggers = mb.triggers
     assert_equal 5, triggers.length
     trigger = triggers[0]
-    assert_equal [PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0], trigger.bytes
+    assert_equal [[PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0]], trigger.messages
     assert_equal "{ prev_song }", mb.triggers[3].code_chunk.text
   end
 
@@ -63,8 +63,8 @@ class DSLTest < Test::Unit::TestCase
   def test_load_patches
     song = @pm.all_songs.find('First Song')
     patch = song.patches[0]
-    assert_equal [PM::TUNE_REQUEST], patch.start_bytes
-    assert_equal [PM::STOP], patch.stop_bytes
+    assert_equal [[PM::TUNE_REQUEST]], patch.start_messages
+    assert_equal [[PM::STOP]], patch.stop_messages
     assert_equal 3, patch.connections.length
   end
 
@@ -138,10 +138,10 @@ class DSLTest < Test::Unit::TestCase
     @dsl.save('/tmp/dsl_test_save_file_contents.rb')
     str = IO.read(f)
     assert_match 'output 1, :ws_out, "WaveStation"', str
-    assert_match "message \"Tune Request\", [#{PM::TUNE_REQUEST}]", str
+    assert_match "message \"Tune Request\", [[#{PM::TUNE_REQUEST}]]", str
     assert_match 'message_key :f1, "Tune Request"', str
-    assert_match "trigger :mb, [176, 50, 0] { next_patch }", str
-    assert_match "trigger :mb, [176, 52, 0] { next_song }", str
+    assert_match "trigger :mb, [[176, 50, 0]] { next_patch }", str
+    assert_match "trigger :mb, [[176, 52, 0]] { next_song }", str
     assert_match 'filter { |c, b| b }       # no-op', str
     assert_match 'filter { |c, b| b[0] += 1; b }', str
   rescue => ex
@@ -213,7 +213,7 @@ EOS
   end
 
   def test_messages
-    assert_equal ["Tune Request", [PM::TUNE_REQUEST]],
+    assert_equal ["Tune Request", [[PM::TUNE_REQUEST]]],
                  @pm.messages["Tune Request".downcase]
   end
 end

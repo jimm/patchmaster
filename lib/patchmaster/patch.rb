@@ -2,10 +2,10 @@ module PM
 
 class Patch
 
-  attr_accessor :name, :connections, :start_bytes, :stop_bytes
+  attr_accessor :name, :connections, :start_messages, :stop_messages
 
-  def initialize(name, start_bytes=nil, stop_bytes=nil)
-    @name, @start_bytes, @stop_bytes = name, start_bytes, stop_bytes
+  def initialize(name, start_messages=nil, stop_messages=nil)
+    @name, @start_messages, @stop_messages = name, start_messages, stop_messages
     @connections = []
     @running = false
   end
@@ -18,10 +18,10 @@ class Patch
     @connections.map(&:input).uniq
   end
 
-  # Send start_bytes to each connection.
+  # Send start_messages to each connection.
   def start
     unless @running
-      @connections.each { |conn| conn.start(@start_bytes) }
+      @connections.each { |conn| conn.start(@start_messages) }
       @running = true
     end
   end
@@ -30,11 +30,11 @@ class Patch
     @running
   end
 
-  # Send stop_bytes to each connection, then call #stop on each connection.
+  # Send stop_messages to each connection, then call #stop on each connection.
   def stop
     if @running
       @running = false
-      @connections.each { |conn| conn.stop(@stop_bytes) }
+      @connections.each { |conn| conn.stop(@stop_messages) }
     end
   end
 end

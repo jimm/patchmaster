@@ -22,19 +22,19 @@ class ConnectionTest < Test::Unit::TestCase
     assert @in_instrument.connections.empty?
   end
 
-  def test_start_sends_start_bytes
+  def test_start_sends_start_messages
     assert_equal [], @out_instrument.port.buffer
-    @conn.start([1, 2, 3])
-    assert_equal [1, 2, 3], @out_instrument.port.buffer[0,3]
+    @conn.start([[1, 2, 3]])
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[0]
     @conn.stop
-    assert_equal [1, 2, 3], @out_instrument.port.buffer[0,3]
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[0]
   end
 
-  def test_stop_sends_stop_bytes
+  def test_stop_sends_stop_messages
     assert_equal [], @out_instrument.port.buffer
     @conn.start
-    @conn.stop([4, 5, 6])
-    assert_equal [4, 5, 6], @out_instrument.port.buffer[-3..-1]
+    @conn.stop([[4, 5, 6]])
+    assert_equal [4, 5, 6], @out_instrument.port.buffer[-1]
   end
 
   def test_inside_zone
@@ -67,43 +67,43 @@ class ConnectionTest < Test::Unit::TestCase
     end
   end
 
-  def test_out_of_zone_no_bytes_sent
-    @conn.midi_in([PM::NOTE_ON, 3, 127])
+  def test_out_of_zone_no_messages_sent
+    @conn.midi_in([event(PM::NOTE_ON, 3, 127)])
     assert @out_instrument.port.buffer.empty?,
       'output port should be empty because note is out of range'
   end
 
   def test_output_sent_to_output_channel
     @conn.xpose = 0
-    @conn.midi_in([PM::NOTE_ON + 1, 40, 127])
-    assert_equal [PM::NOTE_ON + 1, 40, 127], @out_instrument.port.buffer
+    @conn.midi_in([event(PM::NOTE_ON + 1, 40, 127)])
+    assert_equal [[PM::NOTE_ON + 1, 40, 127]], @out_instrument.port.buffer
 
     @out_instrument.port.buffer = []
-    @conn.midi_in([PM::NOTE_ON, 40, 127])
-    assert_equal [PM::NOTE_ON + 1, 40, 127], @out_instrument.port.buffer
+    @conn.midi_in([event(PM::NOTE_ON, 40, 127)])
+    assert_equal [[PM::NOTE_ON + 1, 40, 127]], @out_instrument.port.buffer
 
     @out_instrument.port.buffer = []
-    @conn.midi_in([PM::CONTROLLER + 15, 1, 2])
-    assert_equal [PM::CONTROLLER + 1, 1, 2], @out_instrument.port.buffer
+    @conn.midi_in([event(PM::CONTROLLER + 15, 1, 2)])
+    assert_equal [[PM::CONTROLLER + 1, 1, 2]], @out_instrument.port.buffer
   end
 
   def test_transpose
     assert_equal 12, @conn.xpose
-    @conn.midi_in([PM::NOTE_ON + 1, 40, 127])
-    assert_equal [PM::NOTE_ON + 1, 52, 127], @out_instrument.port.buffer
+    @conn.midi_in([event(PM::NOTE_ON + 1, 40, 127)])
+    assert_equal [[PM::NOTE_ON + 1, 52, 127]], @out_instrument.port.buffer
   end
 
   def test_prog_sent
     assert_equal 3, @conn.pc_prog
     @conn.start
-    assert_equal [PM::PROGRAM_CHANGE + @conn.output_chan, 3], @out_instrument.port.buffer
+    assert_equal [[PM::PROGRAM_CHANGE + @conn.output_chan, 3, 0]], @out_instrument.port.buffer
   end
 
   def test_bank_msb_sent
     @conn.bank_msb = 2
     @conn.start
-    assert_equal [PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT_MSB, 2,
-                  PM::PROGRAM_CHANGE + @conn.output_chan, 3],
+    assert_equal [[PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT_MSB, 2],
+                  [PM::PROGRAM_CHANGE + @conn.output_chan, 3, 0]],
       @out_instrument.port.buffer
   end
 
@@ -111,19 +111,18 @@ class ConnectionTest < Test::Unit::TestCase
     @conn.bank_msb = 2
     @conn.bank_lsb = 12
     @conn.start
-    assert_equal [PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT_MSB, 2,
-                  PM::PROGRAM_CHANGE + @conn.output_chan, 3,
-                  PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT_LSB, 12,
-                  PM::PROGRAM_CHANGE + @conn.output_chan, 3],
+    assert_equal [[PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT_MSB, 2],
+                  [PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT_LSB, 12],
+                  [PM::PROGRAM_CHANGE + @conn.output_chan, 3, 0]],
       @out_instrument.port.buffer
   end
 
   def test_filter
-    filter_block = lambda { |conn, bytes| bytes.map(&:succ) }
+    filter_block = lambda { |_conn, message| message.map(&:succ) }
     filter = PM::Filter.new(PM::CodeChunk.new(filter_block))
     conn = PM::Connection.new(@in_instrument, nil, @out_instrument, 2, filter, @options)
-    conn.midi_in([1, 2, 3])
-    assert_equal [2, 3, 4], @out_instrument.port.buffer
+    conn.midi_in([event(1, 2, 3)])
+    assert_equal [[2, 3, 4]], @out_instrument.port.buffer
   end
 
   def test_note_num_to_name

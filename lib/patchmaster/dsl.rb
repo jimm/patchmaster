@@ -54,8 +54,8 @@ class DSL
   alias_method :out, :output
   alias_method :outp, :output
 
-  def message(name, bytes)
-    @pm.messages[name.downcase] = [name, bytes]
+  def message(name, messages)
+    @pm.messages[name.downcase] = [name, messages]
   end
 
   def message_key(key_or_sym, name)
@@ -84,10 +84,10 @@ class DSL
     @code_keys << ck
   end
 
-  def trigger(instrument_sym, bytes, &block)
+  def trigger(instrument_sym, messages, &block)
     instrument = @inputs[instrument_sym]
     raise "trigger: error finding instrument #{instrument_sym}" unless instrument
-    t = Trigger.new(bytes, CodeChunk.new(block))
+    t = Trigger.new(messages, CodeChunk.new(block))
     instrument.triggers << t
     @triggers << t
   end
@@ -108,12 +108,12 @@ class DSL
     yield @patch if block_given?
   end
 
-  def start_bytes(bytes)
-    @patch.start_bytes = bytes
+  def start_messages(messages)
+    @patch.start_messages = messages
   end
 
-  def stop_bytes(bytes)
-    @patch.stop_bytes = bytes
+  def stop_messages(messages)
+    @patch.stop_messages = messages
   end
 
   # in_chan can be skipped, so "connection :foo, :bar, 1" is the same as
@@ -138,7 +138,7 @@ class DSL
 
   def bank(msb, lsb=nil)
     @conn.bank_msb = msb
-    @conn.bak_lsb = lsb
+    @conn.bank_lsb = lsb
   end
 
   def prog_chg(prog)
@@ -239,7 +239,7 @@ class DSL
   def save_triggers(f)
     @pm.inputs.each do |instrument|
       instrument.triggers.each do |trigger|
-        str = "trigger :#{instrument.sym}, #{trigger.bytes.inspect} #{trigger.code_chunk.text}"
+        str = "trigger :#{instrument.sym}, #{trigger.messages.inspect} #{trigger.code_chunk.text}"
         f.puts str
       end
     end
@@ -257,7 +257,8 @@ class DSL
 
   def save_patch(f, patch)
     f.puts "  patch #{patch.name.inspect} do"
-    f.puts "    start_bytes #{patch.start_bytes.inspect}" if patch.start_bytes
+    f.puts "    start_messages #{patch.start_messages.inspect}" if patch.start_messages
+    f.puts "    stop_messages #{patch.stop_messages.inspect}" if patch.stop_messages
     patch.connections.each { |conn| save_connection(f, conn) }
     f.puts "  end"
   end
