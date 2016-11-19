@@ -5,7 +5,7 @@ module PM
 
     def initialize(sym, name, port_num, port)
       @sym, @name, @port_num, @port = sym, name, port_num, port
-      @name ||= @port&.name || sym.to_s
+      @name ||= sym.to_s
     end
   end
 
@@ -82,11 +82,6 @@ module PM
     attr_reader :name
 
     def initialize(port_num)
-      @name = "MockInputPort #{port_num}"
-    end
-
-    def gets
-      [{:data => [], :timestamp => 0}]
     end
   end
 
@@ -94,7 +89,6 @@ module PM
     attr_reader :name
 
     def initialize(port_num)
-      @name = "MockOutputPort #{port_num}"
       @buffer = []
     end
 

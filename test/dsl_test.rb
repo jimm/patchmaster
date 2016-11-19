@@ -28,9 +28,15 @@ class DSLTest < Test::Unit::TestCase
   end
 
   def test_output_name
+    ws = @pm.outputs.detect { |instr| instr.sym == :ws_out }
+    assert_kind_of PM::OutputInstrument, ws
+    assert_equal "WaveStation", ws.name
+  end
+
+  def test_output_name_none_specified
     sj = @pm.outputs.detect { |instr| instr.sym == :sj }
     assert_kind_of PM::OutputInstrument, sj
-    assert_equal 'MockOutputPort 4', sj.name
+    assert_equal "sj", sj.name
   end
 
   def test_load_code_keys
