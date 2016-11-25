@@ -1,6 +1,3 @@
-RewriteEngine On
-RewriteCond %{HTTP:X-Forwarded-SSL} !on
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 <IfModule headers_module>
 header set X-Clacks-Overhead "GNU Terry Pratchett"
 </IfModule>
