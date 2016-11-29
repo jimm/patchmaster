@@ -64,7 +64,12 @@ class Main
               end
             end
           when 'r'
-            load(@pm.loaded_file) if @pm.loaded_file && @pm.loaded_file.length > 0
+            if @pm.loaded_file && @pm.loaded_file.length > 0
+              load(@pm.loaded_file)
+              message("Reloaded #{@pm.loaded_file}")
+            else
+              message('No file loaded')
+            end
           when 'q'
             break
           when Key::RESIZE
