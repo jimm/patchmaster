@@ -51,6 +51,7 @@ song "First Song" do
 end
 
 song "Second Song" do
+  no_op_filter = ->(c, b) { b }
   patch "Second Song, First Patch" do
     c :mb, :sj, 4 do
       pc 22
@@ -58,7 +59,7 @@ song "Second Song" do
     end
     c :ws_in, :ws_out, 6 do
       zone C4..B5
-      filter { |c, b| b }       # no-op
+      filter no_op_filter       # lambda example
     end
     c :ws_in, :kz, 3 do
       filter { |c, b| b[0] += 1; b }

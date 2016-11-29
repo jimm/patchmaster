@@ -23,78 +23,10 @@ For a more detailed discussion of the things that can be in a PatchMaster
 file (how they work and what they're for), see
 [Components](/components.html) and [Running Patches](/patches.html).
 
-# Loading and Saving PatchMaster Files
+# Loading PatchMaster Files
 
 When you start PatchMaster you can specify a file to load on the command
 line. While it's running, you can (re)load a file with the 'l' key.
-
-You can save what's been loaded with the 's' key. To be honest, the
-PatchMaster save feature isn't all that useful since you can't change
-anything from within PatchMaster anyway --- yet.
-
-# Editing PatchMaster Files
-
-> Most editors are failed writers - but so are most writers.\\
-> \\
-> -- T. S. Eliot
-
-You can create and edit PatchMaster files using any text editor you like.
-
-## Editing From Within Patchmaster
-
-While running PatchMaster, the 'e' key lets you edit the file you loaded or
-most recently saved. If you have not yet loaded a file or you save the file
-to a different location, PatchMaster will ask you for a file name.
-
-The edit command suspends PatchMaster and starts the editor defined by the
-environment variables `VISUAL` or `EDITOR`. If neither of those are defined
-it tries 'vim', 'vi', and finally 'notepad.exe'.
-
-After editing a file, PatchMaster attempts to reload that file and continue
-with the same song list, song, and patch that was current when you edited
-the file.
-
-When you edit a file from within PatchMaster, it has no way of knowing if
-you saved that file to a different location. If you do so and want to load
-that file you'll have to use the 'l' command to do so.
-
-## Trigger and Filter Blocks
-
-Triggers and filters have blocks of code that they run. Saving them out to a
-PatchMaster file requires those blocks be saved. However, there is no
-practical way to obtain the text of a code block across all versions of Ruby
-at runtime. To get around this, when loading the file PatchMaster re-reads
-the file, looking for the trigger and filter definitions and saving their
-blocks as text. When the trigger or filter is saved, the block text that was
-read is written back out.
-
-This simplistic solution can lead to three potential problems.
-
-1. The algorithm used to find the code block text is dumb. It assumes that
-   the end of the block is indented to the same level as the begnning, and
-   that all intervening lines are indented more than the beginning and end
-   lines. (One-line blocks on the same as the `trigger` or `filter` keyword
-   are fine.)
-
-2. If your PatchMaster file creates triggers or filters in a loop (more
-   precisely, if there isn't a one-to-one in-order correspondence between
-   trigger and filter instances and their apperance in the file) then the
-   block's text can't be read properly and it won't be saved or displayed
-   properly. The trigger or filter will run just fine --- it's just that the
-   text representing the block on save will be wrong.
-
-3. If your filter or trigger does anything tricky like changing its own code
-   (replacing its block with another) there is no way that PatchMaster can
-   know the text of the new code. When the trigger or filter is saved, the
-   old block text will be written out.
-
-As a workaround, you'll have to avoid using PatchMaster's save feature. Make
-all your edits to triggers and filters from outside of PatchMaster, using
-your editor.
-
-To be honest, the PatchMaster save feature isn't all that useful since you
-can't change anything from within PatchMaster anyway --- yet. Once editing
-capabilities are added to PatchMaster this might become more bothersome.
 
 # Anatomy of a PatchMaster File
 

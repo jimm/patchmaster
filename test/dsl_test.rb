@@ -41,10 +41,10 @@ class DSLTest < Test::Unit::TestCase
 
   def test_load_code_keys
     assert_equal 2, @pm.code_bindings.length
-    assert_equal "do\n  $global_code_key_value = 42\nend",
-                 @pm.code_bindings.values[0].code_chunk.text
-    assert_equal "{ $global_code_key_value = 99 }",
-                 @pm.code_bindings.values[1].code_chunk.text
+    @pm.code_bindings.values[0].call
+    assert_equal 42, $global_code_key_value
+    @pm.code_bindings.values[1].call
+    assert_equal 99, $global_code_key_value
   end
 
   def test_load_triggers
@@ -53,7 +53,6 @@ class DSLTest < Test::Unit::TestCase
     assert_equal 5, triggers.length
     trigger = triggers[0]
     assert_equal [[PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0]], trigger.messages
-    assert_equal "{ prev_song }", mb.triggers[3].code_chunk.text
   end
 
   def test_load_songs
@@ -101,6 +100,22 @@ class DSLTest < Test::Unit::TestCase
     assert_equal 100, conn.pc_prog
   end
 
+  def test_filter_block
+    song = @pm.all_songs.find('Second Song')
+    patch = song.patches[0]
+    conn = patch.connections[2]
+    assert_not_nil conn.filter.block_or_proc
+    assert_equal [2, 2, 3], conn.filter.call(nil, [1, 2, 3])
+  end
+
+  def test_filter_proc
+    song = @pm.all_songs.find('Second Song')
+    patch = song.patches[0]
+    conn = patch.connections[1]
+    assert_not_nil conn.filter.block_or_proc
+    assert_equal [1, 2, 3], conn.filter.call(nil, [1, 2, 3])
+  end
+
   def test_skip_input_chan
     # Make sure that we can skip the second input_chan argument and things
     # are still assigned properly.
@@ -112,48 +127,6 @@ class DSLTest < Test::Unit::TestCase
     assert_nil conn.input_chan
     assert_equal sj, conn.output
     assert_equal 3, conn.output_chan
-  end
-
-  def test_save
-    f = '/tmp/dsl_test_save.rb'
-    begin
-      @dsl.save(f)
-      # TODO write more here
-    rescue => ex
-      fail ex.to_s
-    ensure
-      File.delete(f)
-    end
-  end
-
-  def test_what_saves_is_loadable
-    f = '/tmp/dsl_test_what_saves_is_loadable.rb'
-    begin
-      @dsl.save(f)
-      @pm.init_data
-      @dsl.load(f)
-    rescue => ex
-      fail ex.to_s
-    ensure
-      File.delete(f)
-    end
-  end
-
-  def test_save_file_contents
-    f = '/tmp/dsl_test_save_file_contents.rb'
-    @dsl.save('/tmp/dsl_test_save_file_contents.rb')
-    str = IO.read(f)
-    assert_match 'output 1, :ws_out, "WaveStation"', str
-    assert_match "message \"Tune Request\", [[#{PM::TUNE_REQUEST}]]", str
-    assert_match 'message_key :f1, "Tune Request"', str
-    assert_match "trigger :mb, [[176, 50, 0]] { next_patch }", str
-    assert_match "trigger :mb, [[176, 52, 0]] { next_song }", str
-    assert_match 'filter { |c, b| b }       # no-op', str
-    assert_match 'filter { |c, b| b[0] += 1; b }', str
-  rescue => ex
-    fail ex.to_s
-  ensure
-    File.delete(f)
   end
 
   def test_aliases
@@ -187,35 +160,6 @@ class DSLTest < Test::Unit::TestCase
     ensure
       File.delete(file)
     end
-  end
-
-  def test_read_filter_text
-    str = <<EOS
-{ |connection, bytes|
-        if bytes.note_off?
-          bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
-        end
-        bytes
-      }
-EOS
-    str.strip!
-    assert_equal str,
-                 @pm.all_songs
-                   .find('First Song')
-                   .patches[0]
-                   .connections[1]
-                   .filter
-                   .code_chunk
-                   .text
-
-    assert_equal "{ |c, b| b }       # no-op",
-                 @pm.all_songs
-                   .find('Second Song')
-                   .patches[0]
-                   .connections[1]
-                   .filter
-                   .code_chunk
-                   .text
   end
 
   def test_messages

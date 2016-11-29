@@ -83,6 +83,9 @@ module PM
 
     def initialize(port_num)
     end
+
+    def poll
+    end
   end
 
   class MockOutputPort

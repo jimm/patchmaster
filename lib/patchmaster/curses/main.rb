@@ -46,12 +46,6 @@ class Main
           when 't'
             name = PromptWindow.new('Go To Song List', 'Go to Song List:').gets
             @pm.goto_song_list(name) if name.length > 0
-          when 'e'
-            close_screen
-            file = @pm.loaded_file || PromptWindow.new('Edit', 'Edit file:').gets
-            edit(file) if file.length > 0
-          when 'r'
-            load(@pm.loaded_file) if @pm.loaded_file && @pm.loaded_file.length > 0
           when 'h', '?'
             help
           when 27        # "\e" doesn't work here
@@ -69,16 +63,8 @@ class Main
                 message(ex.to_s)
               end
             end
-          when 's'
-            file = PromptWindow.new('Save', 'Save into file:').gets
-            if file.length > 0
-              begin
-                save(file)
-                message("Saved #{file}")
-              rescue => ex
-                message(ex.to_s)
-              end
-            end
+          when 'r'
+            load(@pm.loaded_file) if @pm.loaded_file && @pm.loaded_file.length > 0
           when 'q'
             break
           when Key::RESIZE
@@ -93,7 +79,7 @@ class Main
         msg_name = @pm.message_bindings[ch]
         @pm.send_message(msg_name) if msg_name
         code_key = @pm.code_bindings[ch]
-        code_key.run if code_key
+        code_key.call if code_key
       end
     ensure
       clear
@@ -143,33 +129,6 @@ class Main
 
   def load(file)
     @pm.load(file)
-  end
-
-  def save(file)
-    @pm.save(file)
-  end
-
-  # Opens the most recently loaded/saved file name in an editor. After
-  # editing, the file is re-loaded.
-  def edit(file)
-    editor_command = find_editor
-    unless editor_command
-      message("Can not find $VISUAL, $EDITOR, vim, or vi on your path")
-      return
-    end
-
-    cmd = "#{editor_command} #{file}"
-    @pm.debug(cmd)
-    system(cmd)
-    load(file)
-  end
-
-  # Return the first legit command from $VISUAL, $EDITOR, vim, vi, and
-  # notepad.exe.
-  def find_editor
-    @editor ||= [ENV['VISUAL'], ENV['EDITOR'], 'vim', 'vi', 'notepad.exe'].compact.detect do |cmd|
-      system('which', cmd) || File.exist?(cmd)
-    end
   end
 
   def help

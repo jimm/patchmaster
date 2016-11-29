@@ -1,23 +1,17 @@
 module PM
 
-# Filters are blocks of code executed by a Connection to modify incoming
-# MIDI bytes. Since we want to save them to files, we store the text
-# representation as well.
+# Filters are blocks of code or procs executed by a Connection to modify
+# incoming MIDI bytes.
 class Filter
 
-  attr_accessor :code_chunk
+  attr_accessor :block_or_proc
 
-  def initialize(code_chunk)
-    @code_chunk = code_chunk
+  def initialize(proc = nil, &block)
+    @block_or_proc = proc || block
   end
 
   def call(conn, bytes)
-    @code_chunk.run(conn, bytes)
+    @block_or_proc.call(conn, bytes)
   end
-
-  def to_s
-    @code_chunk.text || '# no block text found'
-  end
-
 end
 end

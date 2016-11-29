@@ -79,13 +79,6 @@ class PatchMaster < SimpleDelegator
     raise("error loading #{file}: #{ex}\n" + caller.join("\n"))
   end
 
-  def save(file)
-    DSL.new.save(file)
-    @loaded_file = file
-  rescue => ex
-    raise("error saving #{file}: #{ex}" + caller.join("\n"))
-  end
-
   def bind_message(name, key)
     @message_bindings[key] = name
   end

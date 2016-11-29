@@ -1,5 +1,3 @@
-require_relative './code_chunk'
-
 module PM
 
 # Implements a DSL for describing a PatchMaster setup.
@@ -26,9 +24,6 @@ class DSL
     contents = IO.read(file)
     init
     instance_eval(contents)
-    read_code_keys(contents)
-    read_triggers(contents)
-    read_filters(contents)
   end
 
   def input(port_num, sym, name=nil)
@@ -78,16 +73,16 @@ class DSL
     @pm.bind_message(name, to_binding_key(key_or_sym))
   end
 
-  def code_key(key_or_sym, &block)
-    ck = CodeKey.new(to_binding_key(key_or_sym), CodeChunk.new(block))
+  def code_key(key_or_sym, proc=nil, &block)
+    ck = CodeKey.new(to_binding_key(key_or_sym), proc || block)
     @pm.bind_code(ck)
     @code_keys << ck
   end
 
-  def trigger(instrument_sym, messages, &block)
+  def trigger(instrument_sym, messages, proc = nil, &block)
     instrument = @inputs[instrument_sym]
     raise "trigger: error finding instrument #{instrument_sym}" unless instrument
-    t = Trigger.new(messages, CodeChunk.new(block))
+    t = Trigger.new(messages, proc || block)
     instrument.triggers << t
     @triggers << t
   end
@@ -141,6 +136,14 @@ class DSL
     @conn.bank_lsb = lsb
   end
 
+  def bank_msb(msb)
+    @conn.bank_msb = msb
+  end
+
+  def bank_lsb(lsb)
+    @conn.bank_lsb = lsb
+  end
+
   def prog_chg(prog)
       @conn.pc_prog = prog
   end
@@ -165,8 +168,8 @@ class DSL
   alias_method :xpose, :transpose
   alias_method :x, :transpose
 
-  def filter(&block)
-    @conn.filter = Filter.new(CodeChunk.new(block))
+  def filter(proc=nil, &block)
+    @conn.filter = Filter.new(proc || block)
     @filters << @conn.filter
   end
   alias_method :f, :filter
@@ -191,174 +194,12 @@ class DSL
 
   # ****************************************************************
 
-  def save(file)
-    File.open(file, 'w') { |f|
-      save_instruments(f)
-      save_messages(f)
-      save_message_keys(f)
-      save_code_keys(f)
-      save_triggers(f)
-      save_songs(f)
-      save_song_lists(f)
-    }
-  end
-
-  def save_instruments(f)
-    @pm.inputs.each do |instr|
-      f.puts "input #{instr.port_num}, :#{instr.sym}, #{instr.name.inspect}"
-    end
-    @pm.outputs.each do |instr|
-      f.puts "output #{instr.port_num}, :#{instr.sym}, #{instr.name.inspect}"
-    end
-    f.puts
-  end
-
-  def save_messages(f)
-    @pm.messages.each do |_, (correct_case_name, msg)|
-      f.puts "message #{correct_case_name.inspect}, #{msg.inspect}"
-    end
-  end
-
-  def save_message_keys(f)
-    @pm.message_bindings.each do |key, message_name|
-      f.puts "message_key #{to_save_key(key).inspect}, #{message_name.inspect}"
-    end
-  end
-
-  def save_code_keys(f)
-    @pm.code_bindings.values.each do |code_key|
-      str = if code_key.code_chunk.text[0] == '{'
-              "code_key(#{to_save_key(code_key.key).inspect}) #{code_key.code_chunk.text}"
-            else
-              "code_key #{to_save_key(code_key.key).inspect} #{code_key.code_chunk.text}"
-            end
-      f.puts str
-    end
-  end
-
-  def save_triggers(f)
-    @pm.inputs.each do |instrument|
-      instrument.triggers.each do |trigger|
-        str = "trigger :#{instrument.sym}, #{trigger.messages.inspect} #{trigger.code_chunk.text}"
-        f.puts str
-      end
-    end
-    f.puts
-  end
-
-  def save_songs(f)
-    @pm.all_songs.songs.each do |song|
-      f.puts "song #{song.name.inspect} do"
-      song.patches.each { |patch| save_patch(f, patch) }
-      f.puts "end"
-      f.puts
-    end
-  end
-
-  def save_patch(f, patch)
-    f.puts "  patch #{patch.name.inspect} do"
-    f.puts "    start_messages #{patch.start_messages.inspect}" if patch.start_messages
-    f.puts "    stop_messages #{patch.stop_messages.inspect}" if patch.stop_messages
-    patch.connections.each { |conn| save_connection(f, conn) }
-    f.puts "  end"
-  end
-
-  def save_connection(f, conn)
-    in_chan = conn.input_chan ? conn.input_chan + 1 : 'nil'
-    out_chan = conn.output_chan + 1
-    f.puts "    conn :#{conn.input.sym}, #{in_chan}, :#{conn.output.sym}, #{out_chan} do"
-    f.puts "      prog_chg #{conn.pc_prog}" if conn.pc?
-    f.puts "      zone #{conn.note_num_to_name(conn.zone.begin)}, #{conn.note_num_to_name(conn.zone.end)}" if conn.zone
-    f.puts "      xpose #{conn.xpose}" if conn.xpose
-    f.puts "      filter #{conn.filter.code_chunk.text}" if conn.filter
-    f.puts "    end"
-  end
-
-  def save_song_lists(f)
-    @pm.song_lists.each do |sl|
-      next if sl == @pm.all_songs
-      f.puts "song_list #{sl.name.inspect}, ["
-      @pm.all_songs.songs.each do |song|
-        f.puts "  #{song.name.inspect},"
-      end
-      f.puts "]"
-    end
-  end
-
-  # ****************************************************************
-
   private
 
   # Translate symbol like :f1 to the proper function key value.
   def to_binding_key(key_or_sym)
     if key_or_sym.is_a?(Symbol) && PM::Main::FUNCTION_KEY_SYMBOLS[key_or_sym]
       key_or_sym = PM::Main::FUNCTION_KEY_SYMBOLS[key_or_sym]
-    end
-  end
-
-  # Translate function key values into symbol strings and other keys into
-  # double-quoted strings.
-  def to_save_key(key)
-    if PM::Main::FUNCTION_KEY_SYMBOLS.value?(key)
-      PM::Main::FUNCTION_KEY_SYMBOLS.key(key)
-    else
-      key
-    end
-  end
-
-  def read_triggers(contents)
-    read_block_text('trigger', @triggers, contents)
-  end
-
-  def read_filters(contents)
-    read_block_text('filter', @filters, contents)
-  end
-
-  def read_code_keys(contents)
-    read_block_text('code_key', @code_keys, contents)
-  end
-
-  # Extremely simple block text reader. Relies on indentation to detect end
-  # of code block.
-  def read_block_text(name, containers, contents)
-    i = -1
-    in_block = false
-    block_indentation = nil
-    block_end_token = nil
-    chunk = nil
-    contents.each_line do |line|
-      if line =~ /^(\s*)#{name}\s*.*?(({|do|->\s*{|lambda\s*{)(.*))/
-        block_indentation, text = $1, $2
-        i += 1
-        chunk = containers[i].code_chunk
-        chunk.text = text + "\n"
-        in_block = true
-        block_end_token = case text
-                             when /^{/
-                               "}"
-                             when /^do\b/
-                               "end"
-                             when /^(->|lambda)\s*({|do)/
-                               $2 == "{" ? "}" : "end"
-                             else
-                               "}|end" # regex
-                             end
-      elsif in_block
-        line =~ /^(\s*)(.*)/
-        indentation, text = $1, $2
-        if indentation.length <= block_indentation.length
-          if text =~ /^#{block_end_token}/
-            chunk.text << line
-          end
-          in_block = false
-        else
-          chunk.text << line
-        end
-      end
-    end
-    containers.each do |thing|
-      text = thing.code_chunk.text
-      text.strip! if text
     end
   end
 

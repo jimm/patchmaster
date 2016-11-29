@@ -21,7 +21,7 @@ title: To Do
   a workaround you can manually resize the iTerm window, which will fix the
   curses windows.
 
-- There's no way to cancel out of a PromptWindow (file load/save).
+- There's no way to cancel out of a PromptWindow (file load).
 
 - Trigger and filter block text isn't read properly when triggers or filters
   are created in a loop, the blocks are not indented properly, etc.

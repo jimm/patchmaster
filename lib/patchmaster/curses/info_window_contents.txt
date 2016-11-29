@@ -10,8 +10,6 @@ h, ? - help
 ESC  - panic
 
 l    - load
-s    - save
 r    - reload
-e    - edit
 
 q    - quit

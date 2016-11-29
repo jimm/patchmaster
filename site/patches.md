@@ -95,10 +95,6 @@ itself. For example, a filter could change the transpose value or keyboard
 zone, or even change the connection's filter itself, allowing for "hot
 swapping" of filter code.
 
-  Note that if a filter does "hot swap" itself for another filter, that
-  other filter will not be saved as the patch's filter by the "save"
-  command.
-
 The filter's block must evaluate to the bytes you want sent. That is, it
 must have as its last line an array of bytes or `nil`. For example,
 
