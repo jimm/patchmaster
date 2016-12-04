@@ -79,10 +79,10 @@ class DSL
     @code_keys << ck
   end
 
-  def trigger(instrument_sym, messages, proc = nil, &block)
+  def trigger(instrument_sym, message, proc = nil, &block)
     instrument = @inputs[instrument_sym]
     raise "trigger: error finding instrument #{instrument_sym}" unless instrument
-    t = Trigger.new(messages, proc || block)
+    t = Trigger.new(message, proc || block)
     instrument.triggers << t
     @triggers << t
   end

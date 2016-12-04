@@ -1,4 +1,5 @@
 require 'patchmaster/consts'
+require 'patchmaster/formatter'
 
 module PM
 
@@ -112,17 +113,11 @@ class Connection
     @pc_prog != nil
   end
 
-  def note_num_to_name(n)
-    oct = (n / 12) - 1
-    note = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'][n % 12]
-    "#{note}#{oct}"
-  end
-
   def to_s
     str = "#{@input.name} ch #{@input_chan ? @input_chan+1 : 'all'} -> #{@output.name} ch #{@output_chan+1}"
     str << "; pc #@pc_prog" if pc?
     str << "; xpose #@xpose" if @xpose
-    str << "; zone #{note_num_to_name(@zone.begin)}..#{note_num_to_name(@zone.end)}" if @zone
+    str << "; zone #{Formatter.note_num_to_name(@zone.begin)}..#{Formatter.note_num_to_name(@zone.end)}" if @zone
     str
   end
 end

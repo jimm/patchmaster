@@ -20,26 +20,6 @@ EOS
   NOTES_PER_CHANNEL = 128
 
   #--
-  # Standard MIDI File meta event defs.
-  #++
-  META_EVENT = 0xff
-  META_SEQ_NUM = 0x00
-  META_TEXT = 0x01
-  META_COPYRIGHT = 0x02
-  META_SEQ_NAME = 0x03
-  META_INSTRUMENT = 0x04
-  META_LYRIC = 0x05
-  META_MARKER = 0x06
-  META_CUE = 0x07
-  META_MIDI_CHAN_PREFIX = 0x20
-  META_TRACK_END = 0x2f
-  META_SET_TEMPO = 0x51
-  META_SMPTE = 0x54
-  META_TIME_SIG = 0x58
-  META_PATCH_SIG = 0x59
-  META_SEQ_SPECIF = 0x7f
-
-  #--
   # Channel messages
   #++
   # Note, val
@@ -86,6 +66,26 @@ EOS
   ACTIVE_SENSE = 0xFE
   # System reset
   SYSTEM_RESET = 0xFF
+
+  #--
+  # Standard MIDI File meta event defs.
+  #++
+  META_EVENT = 0xff
+  META_SEQ_NUM = 0x00
+  META_TEXT = 0x01
+  META_COPYRIGHT = 0x02
+  META_SEQ_NAME = 0x03
+  META_INSTRUMENT = 0x04
+  META_LYRIC = 0x05
+  META_MARKER = 0x06
+  META_CUE = 0x07
+  META_MIDI_CHAN_PREFIX = 0x20
+  META_TRACK_END = 0x2f
+  META_SET_TEMPO = 0x51
+  META_SMPTE = 0x54
+  META_TIME_SIG = 0x58
+  META_PATCH_SIG = 0x59
+  META_SEQ_SPECIF = 0x7f
 
   #--
   # Controller numbers

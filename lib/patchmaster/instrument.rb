@@ -59,7 +59,7 @@ module PM
 
     # Passes MIDI messages on to triggers and to each output connection.
     def midi_in(messages)
-      @triggers.each { |trigger| trigger.signal(messages) }
+      @triggers.each { |trigger| messages.each {|m| trigger.signal(m)} }
       @connections.each { |conn| conn.midi_in(messages) }
     end
   end
