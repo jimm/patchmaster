@@ -9,11 +9,12 @@ title: Changes
 
 # 2.0.0
 
-- New `bank`, `bank_msb`, and `bank_lsb` commands. `prog_chg` now only takes one value.
-
 - Switched to [PortMidi](http://portmedia.sourceforge.net/portmidi/).
 
-- Removed edit and save commands
+- New `bank`, `bank_msb`, and `bank_lsb` commands. `prog_chg` now only takes
+  one value.
+
+- Removed edit and save commands.
 
 # 1.2.1
 

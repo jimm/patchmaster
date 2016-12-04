@@ -206,7 +206,7 @@ A connection can optionally take a block that specifies a program change
 (sent to the output instrument on `out_chan`), bank change (ditto), a zone,
 a transposition, and a filter (see below).
 
-- bank
+- bank, bank\_msb, bank\_lsb
 - prog_chg
 - zone
 - transpose
@@ -252,17 +252,21 @@ prog_chg 42
 
 {% highlight ruby %}
 bank msb[, lsb]
+bank_msb msb
+bank_lsb lsb
 {% endhighlight %}
 
 Sends one or two bank change commands to the output instrument's channel.
-"MSB" stands for "most significant bypte" and "LSB" stands for "least
+"MSB" stands for "most significant byte" and "LSB" stands for "least
 significant byte". Your synth's manual will tell you which ones to use.
 
 Examples:
 
 {% highlight ruby %}
-bank 1
+bank 1          # msb only
 bank 1, 12
+bank_msb 1
+bank_lsb 12
 {% endhighlight %}
 
 ##### Zones
