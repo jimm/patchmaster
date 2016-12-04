@@ -11,7 +11,7 @@ CONN_HEADERS = """
                  <th>Filter</th>
                </tr>
                """
-COLOR_SCHEMES = ['default', 'green', 'amber', 'blue'];
+COLOR_SCHEMES = ['default', 'reverse', 'green', 'amber', 'blue'];
 color_scheme_index = 0;
 
 list_item = (val, highlighted_value) ->
@@ -73,9 +73,9 @@ bindings =
   'k': 'prev_patch'
   'up': 'prev_patch'
   'n': 'next_song'
-  'left': 'next_song'
+  'right': 'next_song'
   'p': 'prev_song'
-  'right': 'prev_song'
+  'left': 'prev_song'
   'esc': 'panic'
 f = (key, val) -> $(document).bind('keydown', key, () -> kp(val))
 f(key, val) for key, val of bindings

@@ -39,6 +39,19 @@ table h1, table li, table pre {
   border: 1px solid black;
 }
 
+/* ================ reverse ================ */
+.reverse {
+  background-color: black;
+  color: white;
+}
+.reverse-reverse {
+  background-color: white;
+  color: black;
+}
+.reverse-border {
+  border: 1px solid white;
+}
+
 /* ================ green on black ================ */
 .green {
   background-color: black;
