@@ -2,8 +2,8 @@ require 'patchmaster/formatter'
 
 module PM
 
-# A Trigger executes code when it sees a particular array of messages.
-# Instruments have zero or more triggers.
+# A Trigger executes code when it sees a particular message. Instruments
+# have zero or more triggers.
 class Trigger
 
   attr_accessor :message, :block_or_proc
@@ -16,7 +16,7 @@ class Trigger
     PM::PatchMaster.instance.send(sym, *args)
   end
 
-  # If +messages+ matches our +@messages+ array then run +@block_or_proc+.
+  # If +message+ matches our +@message+ then run +@block_or_proc+.
   def signal(message)
     if message == @message
       pm = PM::PatchMaster.instance

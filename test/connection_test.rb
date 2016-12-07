@@ -125,11 +125,7 @@ class ConnectionTest < Test::Unit::TestCase
     assert_equal [[2, 3, 4]], @out_instrument.port.buffer
   end
 
-  def test_note_num_to_name
-    assert_equal "C4", @conn.note_num_to_name(PM::C4)
-  end
-
   def test_to_s
-    assert_equal "test_in ch all -> test_out ch 2; pc 3; xpose 12; zone #{@conn.note_num_to_name(40)}..#{@conn.note_num_to_name(60)}", @conn.to_s
+    assert_equal "test_in ch all -> test_out ch 2; pc 3; xpose 12; zone #{Formatter.note_num_to_name(40)}..#{Formatter.note_num_to_name(60)}", @conn.to_s
   end
 end

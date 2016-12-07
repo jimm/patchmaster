@@ -14,7 +14,7 @@ module PM
   class InputInstrument < Instrument
 
     attr_accessor :connections, :triggers
-    attr_reader :listener, :running
+    attr_reader :listener
 
     # If +port+ is nil (the normal case), creates either a real or a mock port
     def initialize(sym, name, port_num, use_midi=true)
@@ -23,7 +23,6 @@ module PM
       @connections = []
       @triggers = []
       @listener = nil
-      @running = false
     end
 
     def add_connection(conn)
@@ -36,25 +35,23 @@ module PM
 
     # Poll for more MIDI input and process it.
     def start
+      return if @listener
       PatchMaster.instance.debug("instrument #{name} start")
-      if !@listener
-        @listener = Thread.new {
-          while true
-            if @port.poll
-              midi_in(@port.read)
-            end
-            sleep 0.01
+      @listener = Thread.new {
+        while true
+          if @port.poll
+            midi_in(@port.read)
           end
-        }
-      end
+          sleep 0.01
+        end
+      }
     end
 
     def stop
+      return unless @listener
       PatchMaster.instance.debug("instrument #{name} stop")
-      if @listener
-        @listener.exit
-        @listener = nil
-      end
+      @listener.exit
+      @listener = nil
     end
 
     # Passes MIDI messages on to triggers and to each output connection.

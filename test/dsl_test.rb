@@ -52,7 +52,7 @@ class DSLTest < Test::Unit::TestCase
     triggers = mb.triggers
     assert_equal 5, triggers.length
     trigger = triggers[0]
-    assert_equal [[PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0]], trigger.messages
+    assert_equal [PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0], trigger.message
   end
 
   def test_load_songs

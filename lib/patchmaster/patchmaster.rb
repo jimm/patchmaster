@@ -107,7 +107,7 @@ class PatchMaster < SimpleDelegator
     @inputs.map(&:start)
   end
 
-  # Stop everything, including input instruments' MIDIEye listener threads.
+  # Stop everything, including input instruments' listener threads.
   def stop
     @cursor.patch.stop if @cursor.patch
     @inputs.map(&:stop)
@@ -116,16 +116,15 @@ class PatchMaster < SimpleDelegator
 
   # Run PatchMaster without the GUI. Don't use this when using PM::Main. If
   # there is a GUI then forward this request to it. Otherwise, call #start,
-  # wait for inputs' MIDIEye listener threads to finish, then call #stop.
-  # Note that normally nothing stops those threads, so this is used as a way
-  # to make sure the script doesn't quit until killed by something like
-  # SIGINT.
+  # wait for inputs' listener threads to finish, then call #stop. Note that
+  # normally nothing stops those threads, so this is used as a way to make
+  # sure the script doesn't quit until killed by something like SIGINT.
   def run
     if @gui
       @gui.run
     else
       start(true)
-      @inputs.each { |input| input.listener.join }
+      @inputs.each { |input| input.stop }
       stop
     end
   end
