@@ -1,3 +1,7 @@
+#!/usr/bin/env ruby
+#
+# This script is called from ./patchmaster. It may also be run on its own.
+
 require 'portmidi'
 
 devices = Portmidi.devices
