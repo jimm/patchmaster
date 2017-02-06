@@ -90,6 +90,7 @@ class Main
       clear
       refresh
       close_screen
+      endwin
       @pm.stop
       @pm.close_debug_file
     end
