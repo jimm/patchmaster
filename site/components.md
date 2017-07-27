@@ -19,7 +19,7 @@ together into a PatchMaster file.
 
 # Instruments
 
-An intstrument represents either a MIDI input to a synth, drum machine, or
+An instrument represents either a MIDI input to a synth, drum machine, or
 other device or a MIDI output from a controller. Each instrument needs a
 symbol (a usually short name starting with ":"), specifies which UNIMidi
 port number it uses, and has a name.
