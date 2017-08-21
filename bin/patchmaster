@@ -56,6 +56,7 @@ end.parse!(ARGV)
 # initialize code checks $DEBUG.
 begin
   require 'patchmaster'
+  require 'patchmaster/curses/main' # for function key symbols
 rescue LoadError
   $LOAD_PATH << File.join(__dir__, '../lib')
   retry
@@ -63,10 +64,8 @@ end
 
 pm = PM::PatchMaster.instance
 pm.use_midi = use_midi
-pm.load(ARGV[0]) if ARGV[0]
 case gui
 when :curses
-  require 'patchmaster/curses/main'
   pm.gui = PM::Main.instance
 when :irb
   require 'patchmaster/irb/irb'
@@ -77,4 +76,5 @@ when :web
   app.port = port if port
   pm.gui = app
 end
+pm.load(ARGV[0]) if ARGV[0]
 pm.run

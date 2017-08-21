@@ -3,13 +3,6 @@ require 'sinatra/json'
 require 'singleton'
 
 # ================================================================
-# Settings
-# ================================================================
-
-set :run, true
-set :root, File.dirname(__FILE__)
-
-# ================================================================
 # Helper methods
 # ================================================================
 
@@ -106,7 +99,10 @@ end
 
 module PM
 
-class SinatraApp
+class SinatraApp < Sinatra::Base
+
+  set :run, true
+  set :root, File.dirname(__FILE__)
 
   include Singleton
 
@@ -118,7 +114,7 @@ class SinatraApp
   end
 
   def run
-    set(:port, @port) if @port
+    self.class.set(:port, @port) if @port
     @pm.start
   ensure
     @pm.stop
