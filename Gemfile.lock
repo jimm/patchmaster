@@ -50,7 +50,7 @@ DEPENDENCIES
   alsa-rawmidi
   byebug
   curses
-  midi-eye
+  midi-eye (= 0.3.9)
   midi-jruby
   midi-winmm
   sinatra

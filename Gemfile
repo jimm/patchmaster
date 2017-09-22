@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'midi-eye'
+gem 'midi-eye', '0.3.9'
 gem 'curses'
 gem 'sinatra'
 gem 'sinatra-contrib'
