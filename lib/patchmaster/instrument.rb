@@ -96,6 +96,7 @@ end
 class MockInputPort
 
   attr_reader :name
+  attr_accessor :buffer
 
   # For MIDIEye::Listener
   def self.is_compatible?(input)
@@ -105,6 +106,7 @@ class MockInputPort
   # Constructor param is ignored; it's required by MIDIEye.
   def initialize(arg)
     @name = "MockInputPort #{arg}"
+    @buffer = []
   end
 
   def gets
@@ -120,11 +122,12 @@ class MockInputPort
 end
 
 class MockOutputPort
-
   attr_reader :name
+  attr_accessor :buffer
 
   def initialize(port_num)
     @name = "MockOutputPort #{port_num}"
+    @buffer = []
   end
 
   def puts(data)
