@@ -7,6 +7,12 @@ title: Changes
 >
 > -- Yoda (via Ron Jeffries)
 
+# 2.0.0
+
+- Supports Ruby 2.4.x and the latest versions of the MIDI libs on which it
+  depends such as [Unimidi](https://github.com/arirusso/unimidi]) and
+  [MIDIEye](https://github.com/arirusso/midi-eye) by Ari Russo.
+
 # 1.2.1
 
 - Fixed `channel?` predicate method.

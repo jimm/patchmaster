@@ -55,6 +55,7 @@ DEPENDENCIES
   midi-winmm
   sinatra
   sinatra-contrib
+  unimidi
 
 BUNDLED WITH
-   1.12.4
+   1.15.4

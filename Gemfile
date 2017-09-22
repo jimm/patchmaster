@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem 'unimidi'
 gem 'midi-eye'
 gem 'curses'
 gem 'sinatra'
