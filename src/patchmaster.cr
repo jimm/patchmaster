@@ -24,11 +24,23 @@
 # The -d flag turns on debug mode. The app becomes slightly more verbose and
 # logs everything to `/tmp/pm_debug.txt'.
 
+require "./patchmaster/consts"
+require "./patchmaster/predicates"
+require "./patchmaster/song_list"
+require "./patchmaster/song"
+require "./patchmaster/patch"
+require "./patchmaster/connection"
+require "./patchmaster/filter"
+require "./patchmaster/instrument"
+require "./patchmaster/patchmaster"
+require "./patchmaster/trigger"
+require "./patchmaster/code_key"
+require "./patchmaster/dsl"
+
 require "option_parser"
-require "../src/patchmaster"
-require "../src/patchmaster/curses/main" # for function key symbols
-require "../src/patchmaster/irb/irb"
-require "../src/patchmaster/web/sinatra_app"
+require "./patchmaster/curses/main" # for function key symbols
+require "./patchmaster/irb/irb"
+require "./patchmaster/web/sinatra_app"
 
 use_midi = true
 gui = :curses
