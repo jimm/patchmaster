@@ -207,9 +207,9 @@ block can call methods such as `#next_patch`, `#prev_song`, or
 Example:
 
 {% highlight ruby %}
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 127] { next_patch }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 127] { prev_patch }
-trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_5, 127]) { next_patch }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_6, 127]) { prev_patch }
+trigger(:mb, [CONTROLLER, 126, 127]) { send_message "Tune Request" }
 {% endhighlight %}
 
 ## Songs

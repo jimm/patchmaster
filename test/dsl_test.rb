@@ -139,8 +139,8 @@ class DSLTest < Test::Unit::TestCase
     assert_match 'output 1, :ws_out, "WaveStation"', str
     assert_match "message \"Tune Request\", [#{PM::TUNE_REQUEST}]", str
     assert_match 'message_key :f1, "Tune Request"', str
-    assert_match "trigger :mb, [176, 50, 0] { next_patch }", str
-    assert_match "trigger :mb, [176, 52, 0] { next_song }", str
+    assert_match "trigger(:mb, [176, 50, 0]) { next_patch }", str
+    assert_match "trigger(:mb, [176, 52, 0]) { next_song }", str
     assert_match 'filter { |c, b| b }       # no-op', str
     assert_match 'filter { |c, b| b[0] += 1; b }', str
   rescue => ex

@@ -18,11 +18,11 @@ message "Full Volume", full_volumes
 message_key :f1, "Tune Request"
 message_key :f2, "Full Volume"
 
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 127] { next_patch }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 127] { prev_patch }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_7, 127] { next_song }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_8, 127] { prev_song }
-trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_5, 127]) { next_patch }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_6, 127]) { prev_patch }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_7, 127]) { next_song }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_8, 127]) { prev_song }
+trigger(:mb, [CONTROLLER, 126, 127]) { send_message "Tune Request" }
 
 song "First Song" do
 

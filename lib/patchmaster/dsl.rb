@@ -242,7 +242,7 @@ class DSL
   def save_triggers(f)
     @pm.inputs.each do |instrument|
       instrument.triggers.each do |trigger|
-        str = "trigger :#{instrument.sym}, #{trigger.bytes.inspect} #{trigger.code_chunk.text}"
+        str = "trigger(:#{instrument.sym}, #{trigger.bytes.inspect}) #{trigger.code_chunk.text}"
         f.puts str
       end
     end
