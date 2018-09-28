@@ -19,11 +19,11 @@ code_key :f3 do
 end
 code_key(:f4) { $global_code_key_value = 99 }
 
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0] { next_patch }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0] { prev_patch }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_7, 0] { next_song }
-trigger :mb, [CONTROLLER, CC_GEN_PURPOSE_8, 0] { prev_song }
-trigger :mb, [CONTROLLER, 126, 127] { send_message "Tune Request" }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_5, 0]) { next_patch }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_6, 0]) { prev_patch }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_7, 0]) { next_song }
+trigger(:mb, [CONTROLLER, CC_GEN_PURPOSE_8, 0]) { prev_song }
+trigger(:mb, [CONTROLLER, 126, 127]) { send_message "Tune Request" }
 
 song "First Song" do
   patch "First Song, First Patch" do

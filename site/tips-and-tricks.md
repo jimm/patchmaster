@@ -89,7 +89,7 @@ def output_reset
   @outputs.each { |out| out.midi_out([SYSTEM_RESET]) }
 end
     
-trigger :mb, [CONTROLLER, 126, 127] { output_reset }
+trigger(:mb, [CONTROLLER, 126, 127]) { output_reset }
 {% endhighlight %}
 
 # Time Lord

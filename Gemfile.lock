@@ -1,29 +1,48 @@
+GIT
+  remote: https://github.com/halfbyte/portmidi.git
+  revision: c0826ea932ecb428ec5f44319904d9e1f49b01a5
+  specs:
+    portmidi (1.0.0.pre.beta.1)
+      ffi (~> 1.9)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    backports (3.6.8)
-    byebug (9.0.6)
-    curses (1.0.2)
-    ffi (1.9.14)
-    multi_json (1.12.1)
-    portmidi (0.0.6)
-    rack (1.6.4)
-    rack-protection (1.5.3)
+    activesupport (5.2.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    backports (3.11.4)
+    byebug (10.0.2)
+    concurrent-ruby (1.0.5)
+    curses (1.2.4)
+    ffi (1.9.25)
+    i18n (1.1.0)
+      concurrent-ruby (~> 1.0)
+    minitest (5.11.3)
+    multi_json (1.13.1)
+    mustermann (1.0.3)
+    rack (2.0.5)
+    rack-protection (2.0.4)
       rack
-    rack-test (0.6.3)
-      rack (>= 1.0)
-    sinatra (1.4.7)
-      rack (~> 1.5)
-      rack-protection (~> 1.4)
-      tilt (>= 1.3, < 3)
-    sinatra-contrib (1.4.7)
-      backports (>= 2.0)
+    sinatra (2.0.4)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.4)
+      tilt (~> 2.0)
+    sinatra-contrib (2.0.4)
+      activesupport (>= 4.0.0)
+      backports (>= 2.8.2)
       multi_json
-      rack-protection
-      rack-test
-      sinatra (~> 1.4.0)
+      mustermann (~> 1.0)
+      rack-protection (= 2.0.4)
+      sinatra (= 2.0.4)
       tilt (>= 1.3, < 3)
-    tilt (2.0.5)
+    thread_safe (0.3.6)
+    tilt (2.0.8)
+    tzinfo (1.2.5)
+      thread_safe (~> 0.1)
 
 PLATFORMS
   ruby
@@ -32,9 +51,9 @@ DEPENDENCIES
   byebug
   curses
   ffi
-  portmidi
+  portmidi!
   sinatra
   sinatra-contrib
 
 BUNDLED WITH
-   1.13.6
+   1.16.1

@@ -10,8 +10,8 @@ def full_volume
   start_messages [[CONTROLLER, CC_VOLUME, 127]]
 end
 
-trigger :app_in, [NOTE_ON+2, 0, 127] { next_patch }
-trigger :app_in, [NOTE_ON+2, 1, 127] { prev_patch }
+trigger(:app_in, [NOTE_ON+2, 0, 127]) { next_patch }
+trigger(:app_in, [NOTE_ON+2, 1, 127]) { prev_patch }
 
 song "First Song" do
   patch "Bass" do
