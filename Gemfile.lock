@@ -3,7 +3,6 @@ GEM
   specs:
     alsa-rawmidi (0.3.2)
       ffi (~> 1.0)
-    backports (3.11.1)
     byebug (10.0.0)
     curses (1.2.4)
     ffi (1.9.23)
@@ -19,23 +18,15 @@ GEM
       midi-message (~> 0.4, >= 0.4.4)
     midi-winmm (0.1.10)
       ffi (>= 1.0)
-    multi_json (1.13.1)
-    mustermann (1.0.2)
+    mustermann (1.0.3)
     rack (2.0.6)
-    rack-protection (2.0.1)
+    rack-protection (2.0.4)
       rack
-    sinatra (2.0.1)
+    sinatra (2.0.4)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.1)
+      rack-protection (= 2.0.4)
       tilt (~> 2.0)
-    sinatra-contrib (2.0.1)
-      backports (>= 2.0)
-      multi_json
-      mustermann (~> 1.0)
-      rack-protection (= 2.0.1)
-      sinatra (= 2.0.1)
-      tilt (>= 1.3, < 3)
     tilt (2.0.8)
     unimidi (0.4.8)
       alsa-rawmidi (~> 0.3, >= 0.3.1)
@@ -54,7 +45,6 @@ DEPENDENCIES
   midi-jruby
   midi-winmm
   sinatra
-  sinatra-contrib
   unimidi
 
 BUNDLED WITH
