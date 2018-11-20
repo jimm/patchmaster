@@ -3,9 +3,9 @@ GEM
   specs:
     alsa-rawmidi (0.3.2)
       ffi (~> 1.0)
-    byebug (10.0.0)
-    curses (1.2.4)
-    ffi (1.9.23)
+    byebug (10.0.2)
+    curses (1.2.5)
+    ffi (1.9.25)
     ffi-coremidi (0.4.1)
       ffi (~> 1.9, >= 1.9.6)
     midi-eye (0.3.10)
