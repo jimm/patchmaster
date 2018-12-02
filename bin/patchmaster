@@ -72,7 +72,7 @@ when :irb
   pm.gui = PM::IRB.instance
 when :web
   require 'patchmaster/web/sinatra_app'
-  app = PM::SinatraApp.instance
+  app = PM::Web.instance
   app.port = port if port
   pm.gui = app
 end

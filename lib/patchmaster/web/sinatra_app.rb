@@ -6,12 +6,8 @@ require 'singleton'
 # Helper methods
 # ================================================================
 
-def pm
-  @pm ||= PM::SinatraApp.instance.pm
-end
-
 def return_status(opts={})
-  pm = pm()
+  pm = PM::PatchMaster.instance()
   status = {
     :lists => pm.song_lists.map(&:name),
     :list => pm.song_list.name,
@@ -50,6 +46,10 @@ end
 # ================================================================
 # URL handlers
 # ================================================================
+
+class Sinatra::Base
+set :run, true
+set :root, File.dirname(__FILE__)
 
 not_found do
   path = request.env['REQUEST_PATH']
@@ -92,38 +92,31 @@ get '/panic' do
   pm.panic
   return_status
 end
+end
 
 # ================================================================
 # GUI class: run method
 # ================================================================
 
 module PM
+  class Web
+    include Singleton
 
-class SinatraApp < Sinatra::Base
+    attr_accessor :port
+    attr_reader :pm
 
-  set :run, true
-  set :root, File.dirname(__FILE__)
+    def initialize
+      @pm = PM::PatchMaster.instance
+      @started = false
+    end
 
-  include Singleton
+    def run
+      return if @started
 
-  attr_accessor :port
-  attr_reader :pm
-
-  def initialize
-    @pm = PM::PatchMaster.instance
+      @pm.start
+      @started = true
+      Sinatra::Base.set(:port, @port) if @port
+      Sinatra::Base.run!
+    end
   end
-
-  def run
-    self.class.set(:port, @port) if @port
-    @pm.start
-  ensure
-    @pm.stop
-    @pm.close_debug_file
-  end
-
-  # Public method callable by triggers
-  def refresh
-    # FIXME
-  end
-end
 end
