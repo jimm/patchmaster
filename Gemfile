@@ -4,6 +4,7 @@ gem 'unimidi'
 gem 'midi-eye'
 gem 'curses'
 gem 'sinatra'
+gem 'sinatra-contrib'
 
 group :development, :test do
   gem 'byebug'
