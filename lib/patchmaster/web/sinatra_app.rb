@@ -47,10 +47,6 @@ end
 # URL handlers
 # ================================================================
 
-class Sinatra::Base
-set :run, true
-set :root, File.dirname(__FILE__)
-
 not_found do
   path = request.env['REQUEST_PATH']
   unless path == '/favicon.ico'
@@ -68,30 +64,29 @@ get '/status' do
 end
 
 get '/next_patch' do
-  pm.next_patch
+  PM::PatchMaster.instance.next_patch
   return_status
 end
 
 get '/prev_patch' do
-  pm.prev_patch
+  PM::PatchMaster.instance.prev_patch
   return_status
 end
 
 get '/next_song' do
-  pm.next_song
+  PM::PatchMaster.instance.next_song
   return_status
 end
 
 get '/prev_song' do
-  pm.prev_song
+  PM::PatchMaster.instance.prev_song
   return_status
 end
 
 get '/panic' do
   # TODO when panic called twice in a row, call panic(true)
-  pm.panic
+  PM::PatchMaster.instance.panic
   return_status
-end
 end
 
 # ================================================================
@@ -115,6 +110,7 @@ module PM
 
       @pm.start
       @started = true
+      Sinatra::Base.set(:root, File.dirname(__FILE__))
       Sinatra::Base.set(:port, @port) if @port
       Sinatra::Base.run!
     end
