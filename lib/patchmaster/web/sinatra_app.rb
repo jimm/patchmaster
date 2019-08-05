@@ -101,15 +101,14 @@ module PM
     attr_reader :pm
 
     def initialize
-      @pm = PM::PatchMaster.instance
       @started = false
     end
 
     def run
       return if @started
 
-      @pm.start
       @started = true
+      PM::PatchMaster.instance.start
       Sinatra::Base.set(:root, File.dirname(__FILE__))
       Sinatra::Base.set(:port, @port) if @port
       Sinatra::Base.run!

@@ -17,6 +17,7 @@ GEM
       ffi (~> 1.9, >= 1.9.6)
     i18n (1.1.1)
       concurrent-ruby (~> 1.0)
+    json (2.1.0)
     midi-eye (0.3.10)
       midi-message (~> 0.4, >= 0.4.4)
       midi-nibbler (~> 0.2, >= 0.2.2)
@@ -63,6 +64,7 @@ DEPENDENCIES
   alsa-rawmidi
   byebug
   curses
+  json (= 2.1.0)
   midi-eye
   midi-jruby
   midi-winmm
