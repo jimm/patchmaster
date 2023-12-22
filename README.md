@@ -10,6 +10,7 @@ messages, limit controller and velocity values, and much more. At the stomp
 of a foot switch (or any other MIDI event), an entire MIDI system can be
 totally reconfigured.
 
-For more information please see the
-[PatchMaster Web site](http://www.patchmaster.org/) or, if you're offline,
-the [site source files](site/index.md).
+PatchMaster is totall programmable using Ruby. See the [examples](examples)
+for a few ideas.
+
+For more information please see the [documentation](site/index.md).
