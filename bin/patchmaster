@@ -29,23 +29,23 @@ use_midi = true
 gui = :curses
 port = nil
 OptionParser.new do |opts|
-  opts.banner = "usage: patchmaster [options] [pm_file]"
-  opts.on("-d", "--debug", "Turn on debug mode") { $DEBUG = true }
-  opts.on("-l", "--list", "List MIDI inputs and outputs and exit") do
+  opts.banner = 'usage: patchmaster [options] [pm_file]'
+  opts.on('-d', '--debug', 'Turn on debug mode') { $DEBUG = true }
+  opts.on('-l', '--list', 'List MIDI inputs and outputs and exit') do
     require_relative 'portmidi_list'
     exit 0
   end
-  opts.on("-n", "--no-midi", "Turn off MIDI processing") { use_midi = false }
-  opts.on("-i", "--irb", "Use an IRB console") { gui = :irb }
-  opts.on("-w", "--web", "Use a Web browser GUI") { gui = :web }
-  opts.on("-p", "--port PORT", "Web browser GUI port number") { |opt| port = opt.to_i }
-  opts.on("-v", "--version", "Show version number and exit") do
+  opts.on('-n', '--no-midi', 'Turn off MIDI processing') { use_midi = false }
+  opts.on('-i', '--irb', 'Use an IRB console') { gui = :irb }
+  opts.on('-w', '--web', 'Use a Web browser GUI') { gui = :web }
+  opts.on('-p', '--port PORT', 'Web browser GUI port number') { |opt| port = opt.to_i }
+  opts.on('-v', '--version', 'Show version number and exit') do
     version_line = IO.readlines(File.join(File.dirname(__FILE__), '../Rakefile')).grep(/GEM_VERSION\s*=/).first
     version_line =~ /(\d+\.\d+\.\d+)/
-    puts "patchmaster #{$1}"
+    puts "patchmaster #{Regexp.last_match(1)}"
     exit 0
   end
-  opts.on_tail("-h", "-?", "--help", "Show this message") do
+  opts.on_tail('-h', '-?', '--help', 'Show this message') do
     puts opts
     exit 0
   end
@@ -71,6 +71,7 @@ when :irb
   pm.gui = PM::IRB.instance
 when :web
   require 'patchmaster/web/sinatra_app'
+  warn 'calling instance' # DEBUG
   app = PM::SinatraApp.instance
   app.port = port if port
   pm.gui = app

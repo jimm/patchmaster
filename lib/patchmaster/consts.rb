@@ -1,18 +1,17 @@
 # MIDI and PatchMaster constants.
 module PM
-
   # Define MIDI note names C0 - B10
-  (0..10).each { |oct|
-    {:C => 0, :D => 2, :E => 4, :F => 5, :G => 7, :A => 9, :B => 11}.each { |note,val|
-      base = (oct+1) * 12 + val
-      eval <<EOS
-#{note}#{oct} = #{base}
-#{note}f#{oct} = #{base - 1}
-#{note}b#{oct} = #{base - 1}
-#{note}s#{oct} = #{base + 1}
-EOS
-    }
-  }
+  11.times do |oct|
+    { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }.each do |note, val|
+      base = (oct + 1) * 12 + val
+      eval <<~EOS
+        #{note}#{oct} = #{base}
+        #{note}f#{oct} = #{base - 1}
+        #{note}b#{oct} = #{base - 1}
+        #{note}s#{oct} = #{base + 1}
+      EOS
+    end
+  end
 
   # Number of MIDI channels
   MIDI_CHANNELS = 16
@@ -163,313 +162,312 @@ EOS
   CM_POLY_MODE_ON = 0x7F        # Val must be 0
 
   CONTROLLER_NAMES = [
-    "Bank Select (MSB)",
-    "Modulation (MSB)",
-    "Breath Control (MSB)",
-    "3 (MSB)",
-    "Foot Controller (MSB)",
-    "Portamento Time (MSB)",
-    "Data Entry (MSB)",
-    "Volume (MSB)",
-    "Balance (MSB)",
-    "9 (MSB)",
-    "Pan (MSB)",
-    "Expression Control (MSB)",
-    "12 (MSB)", "13 (MSB)", "14 (MSB)", "15 (MSB)",
-    "General Controller 1 (MSB)",
-    "General Controller 2 (MSB)",
-    "General Controller 3 (MSB)",
-    "General Controller 4 (MSB)",
-    "20 (MSB)", "21 (MSB)", "22 (MSB)", "23 (MSB)", "24 (MSB)", "25 (MSB)",
-    "26 (MSB)", "27 (MSB)", "28 (MSB)", "29 (MSB)", "30 (MSB)", "31 (MSB)",
+    'Bank Select (MSB)',
+    'Modulation (MSB)',
+    'Breath Control (MSB)',
+    '3 (MSB)',
+    'Foot Controller (MSB)',
+    'Portamento Time (MSB)',
+    'Data Entry (MSB)',
+    'Volume (MSB)',
+    'Balance (MSB)',
+    '9 (MSB)',
+    'Pan (MSB)',
+    'Expression Control (MSB)',
+    '12 (MSB)', '13 (MSB)', '14 (MSB)', '15 (MSB)',
+    'General Controller 1 (MSB)',
+    'General Controller 2 (MSB)',
+    'General Controller 3 (MSB)',
+    'General Controller 4 (MSB)',
+    '20 (MSB)', '21 (MSB)', '22 (MSB)', '23 (MSB)', '24 (MSB)', '25 (MSB)',
+    '26 (MSB)', '27 (MSB)', '28 (MSB)', '29 (MSB)', '30 (MSB)', '31 (MSB)',
 
-    "Bank Select (LSB)",
-    "Modulation (LSB)",
-    "Breath Control (LSB)",
-    "35 (LSB)",
-    "Foot Controller (LSB)",
-    "Portamento Time (LSB)",
-    "Data Entry (LSB)",
-    "Volume (LSB)",
-    "Balance (LSB)",
-    "41 (LSB)",
-    "Pan (LSB)",
-    "Expression Control (LSB)",
-    "44 (LSB)", "45 (LSB)", "46 (LSB)", "47 (LSB)",
-    "General Controller 1 (LSB)",
-    "General Controller 2 (LSB)",
-    "General Controller 3 (LSB)",
-    "General Controller 4 (LSB)",
-    "52 (LSB)", "53 (LSB)", "54 (LSB)", "55 (LSB)", "56 (LSB)", "57 (LSB)",
-    "58 (LSB)", "59 (LSB)", "60 (LSB)", "61 (LSB)", "62 (LSB)", "63 (LSB)",
+    'Bank Select (LSB)',
+    'Modulation (LSB)',
+    'Breath Control (LSB)',
+    '35 (LSB)',
+    'Foot Controller (LSB)',
+    'Portamento Time (LSB)',
+    'Data Entry (LSB)',
+    'Volume (LSB)',
+    'Balance (LSB)',
+    '41 (LSB)',
+    'Pan (LSB)',
+    'Expression Control (LSB)',
+    '44 (LSB)', '45 (LSB)', '46 (LSB)', '47 (LSB)',
+    'General Controller 1 (LSB)',
+    'General Controller 2 (LSB)',
+    'General Controller 3 (LSB)',
+    'General Controller 4 (LSB)',
+    '52 (LSB)', '53 (LSB)', '54 (LSB)', '55 (LSB)', '56 (LSB)', '57 (LSB)',
+    '58 (LSB)', '59 (LSB)', '60 (LSB)', '61 (LSB)', '62 (LSB)', '63 (LSB)',
 
-    "Sustain Pedal",
-    "Portamento",
-    "Sostenuto",
-    "Soft Pedal",
-    "68",
-    "Hold 2",
-    "70", "71", "72", "73", "74", "75", "76", "77", "78", "79",
-    "General Controller 5",
-    "Tempo Change",
-    "General Controller 7",
-    "General Controller 8",
-    "84", "85", "86", "87", "88", "89", "90",
-    "External Effects Depth",
-    "Tremolo Depth",
-    "Chorus Depth",
-    "Detune (Celeste) Depth",
-    "Phaser Depth",
-    "Data Increment",
-    "Data Decrement",
-    "Non-Registered Param LSB",
-    "Non-Registered Param MSB",
-    "Registered Param LSB",
-    "Registered Param MSB",
-    "102", "103", "104", "105", "106", "107", "108", "109",
-    "110", "111", "112", "113", "114", "115", "116", "117",
-    "118", "119", "120",
-    "Reset All Controllers",
-    "Local Control",
-    "All Notes Off",
-    "Omni Mode Off",
-    "Omni Mode On",
-    "Mono Mode On",
-    "Poly Mode On"
-  ]
+    'Sustain Pedal',
+    'Portamento',
+    'Sostenuto',
+    'Soft Pedal',
+    '68',
+    'Hold 2',
+    '70', '71', '72', '73', '74', '75', '76', '77', '78', '79',
+    'General Controller 5',
+    'Tempo Change',
+    'General Controller 7',
+    'General Controller 8',
+    '84', '85', '86', '87', '88', '89', '90',
+    'External Effects Depth',
+    'Tremolo Depth',
+    'Chorus Depth',
+    'Detune (Celeste) Depth',
+    'Phaser Depth',
+    'Data Increment',
+    'Data Decrement',
+    'Non-Registered Param LSB',
+    'Non-Registered Param MSB',
+    'Registered Param LSB',
+    'Registered Param MSB',
+    '102', '103', '104', '105', '106', '107', '108', '109',
+    '110', '111', '112', '113', '114', '115', '116', '117',
+    '118', '119', '120',
+    'Reset All Controllers',
+    'Local Control',
+    'All Notes Off',
+    'Omni Mode Off',
+    'Omni Mode On',
+    'Mono Mode On',
+    'Poly Mode On'
+  ].freeze
 
   # General MIDI patch names
   GM_PATCH_NAMES = [
     #--
     # Pianos
     #++
-    "Acoustic Grand Piano",
-    "Bright Acoustic Piano",
-    "Electric Grand Piano",
-    "Honky-tonk Piano",
-    "Electric Piano 1",
-    "Electric Piano 2",
-    "Harpsichord",
-    "Clavichord",
+    'Acoustic Grand Piano',
+    'Bright Acoustic Piano',
+    'Electric Grand Piano',
+    'Honky-tonk Piano',
+    'Electric Piano 1',
+    'Electric Piano 2',
+    'Harpsichord',
+    'Clavichord',
     #--
     # Tuned Idiophones
     #++
-    "Celesta",
-    "Glockenspiel",
-    "Music Box",
-    "Vibraphone",
-    "Marimba",
-    "Xylophone",
-    "Tubular Bells",
-    "Dulcimer",
+    'Celesta',
+    'Glockenspiel',
+    'Music Box',
+    'Vibraphone',
+    'Marimba',
+    'Xylophone',
+    'Tubular Bells',
+    'Dulcimer',
     #--
     # Organs
     #++
-    "Drawbar Organ",
-    "Percussive Organ",
-    "Rock Organ",
-    "Church Organ",
-    "Reed Organ",
-    "Accordion",
-    "Harmonica",
-    "Tango Accordion",
+    'Drawbar Organ',
+    'Percussive Organ',
+    'Rock Organ',
+    'Church Organ',
+    'Reed Organ',
+    'Accordion',
+    'Harmonica',
+    'Tango Accordion',
     #--
     # Guitars
     #++
-    "Acoustic Guitar (nylon)",
-    "Acoustic Guitar (steel)",
-    "Electric Guitar (jazz)",
-    "Electric Guitar (clean)",
-    "Electric Guitar (muted)",
-    "Overdriven Guitar",
-    "Distortion Guitar",
-    "Guitar harmonics",
+    'Acoustic Guitar (nylon)',
+    'Acoustic Guitar (steel)',
+    'Electric Guitar (jazz)',
+    'Electric Guitar (clean)',
+    'Electric Guitar (muted)',
+    'Overdriven Guitar',
+    'Distortion Guitar',
+    'Guitar harmonics',
     #--
     # Basses
     #++
-    "Acoustic Bass",
-    "Electric Bass (finger)",
-    "Electric Bass (pick)",
-    "Fretless Bass",
-    "Slap Bass 1",
-    "Slap Bass 2",
-    "Synth Bass 1",
-    "Synth Bass 2",
+    'Acoustic Bass',
+    'Electric Bass (finger)',
+    'Electric Bass (pick)',
+    'Fretless Bass',
+    'Slap Bass 1',
+    'Slap Bass 2',
+    'Synth Bass 1',
+    'Synth Bass 2',
     #--
     # Strings
     #++
-    "Violin",
-    "Viola",
-    "Cello",
-    "Contrabass",
-    "Tremolo Strings",
-    "Pizzicato Strings",
-    "Orchestral Harp",
-    "Timpani",
+    'Violin',
+    'Viola',
+    'Cello',
+    'Contrabass',
+    'Tremolo Strings',
+    'Pizzicato Strings',
+    'Orchestral Harp',
+    'Timpani',
     #--
     # Ensemble strings and voices
     #++
-    "String Ensemble 1",
-    "String Ensemble 2",
-    "SynthStrings 1",
-    "SynthStrings 2",
-    "Choir Aahs",
-    "Voice Oohs",
-    "Synth Voice",
-    "Orchestra Hit",
+    'String Ensemble 1',
+    'String Ensemble 2',
+    'SynthStrings 1',
+    'SynthStrings 2',
+    'Choir Aahs',
+    'Voice Oohs',
+    'Synth Voice',
+    'Orchestra Hit',
     #--
     # Brass
     #++
-    "Trumpet",
-    "Trombone",
-    "Tuba",
-    "Muted Trumpet",
-    "French Horn",
-    "Brass Section",
-    "SynthBrass 1",
-    "SynthBrass 2",
+    'Trumpet',
+    'Trombone',
+    'Tuba',
+    'Muted Trumpet',
+    'French Horn',
+    'Brass Section',
+    'SynthBrass 1',
+    'SynthBrass 2',
     #--
     # Reeds
     #++
-    "Soprano Sax",              # 64
-    "Alto Sax",
-    "Tenor Sax",
-    "Baritone Sax",
-    "Oboe",
-    "English Horn",
-    "Bassoon",
-    "Clarinet",
+    'Soprano Sax', # 64
+    'Alto Sax',
+    'Tenor Sax',
+    'Baritone Sax',
+    'Oboe',
+    'English Horn',
+    'Bassoon',
+    'Clarinet',
     #--
     # Pipes
     #++
-    "Piccolo",
-    "Flute",
-    "Recorder",
-    "Pan Flute",
-    "Blown Bottle",
-    "Shakuhachi",
-    "Whistle",
-    "Ocarina",
+    'Piccolo',
+    'Flute',
+    'Recorder',
+    'Pan Flute',
+    'Blown Bottle',
+    'Shakuhachi',
+    'Whistle',
+    'Ocarina',
     #--
     # Synth Leads
     #++
-    "Lead 1 (square)",
-    "Lead 2 (sawtooth)",
-    "Lead 3 (calliope)",
-    "Lead 4 (chiff)",
-    "Lead 5 (charang)",
-    "Lead 6 (voice)",
-    "Lead 7 (fifths)",
-    "Lead 8 (bass + lead)",
+    'Lead 1 (square)',
+    'Lead 2 (sawtooth)',
+    'Lead 3 (calliope)',
+    'Lead 4 (chiff)',
+    'Lead 5 (charang)',
+    'Lead 6 (voice)',
+    'Lead 7 (fifths)',
+    'Lead 8 (bass + lead)',
     #--
     # Synth Pads
     #++
-    "Pad 1 (new age)",
-    "Pad 2 (warm)",
-    "Pad 3 (polysynth)",
-    "Pad 4 (choir)",
-    "Pad 5 (bowed)",
-    "Pad 6 (metallic)",
-    "Pad 7 (halo)",
-    "Pad 8 (sweep)",
+    'Pad 1 (new age)',
+    'Pad 2 (warm)',
+    'Pad 3 (polysynth)',
+    'Pad 4 (choir)',
+    'Pad 5 (bowed)',
+    'Pad 6 (metallic)',
+    'Pad 7 (halo)',
+    'Pad 8 (sweep)',
     #--
     # Effects
     #++
-    "FX 1 (rain)",
-    "FX 2 (soundtrack)",
-    "FX 3 (crystal)",
-    "FX 4 (atmosphere)",
-    "FX 5 (brightness)",
-    "FX 6 (goblins)",
-    "FX 7 (echoes)",
-    "FX 8 (sci-fi)",
+    'FX 1 (rain)',
+    'FX 2 (soundtrack)',
+    'FX 3 (crystal)',
+    'FX 4 (atmosphere)',
+    'FX 5 (brightness)',
+    'FX 6 (goblins)',
+    'FX 7 (echoes)',
+    'FX 8 (sci-fi)',
     #--
     # Ethnic
     #++
-    "Sitar",
-    "Banjo",
-    "Shamisen",
-    "Koto",
-    "Kalimba",
-    "Bag pipe",
-    "Fiddle",
-    "Shanai",
+    'Sitar',
+    'Banjo',
+    'Shamisen',
+    'Koto',
+    'Kalimba',
+    'Bag pipe',
+    'Fiddle',
+    'Shanai',
     #--
     # Percussion
     #++
-    "Tinkle Bell",
-    "Agogo",
-    "Steel Drums",
-    "Woodblock",
-    "Taiko Drum",
-    "Melodic Tom",
-    "Synth Drum",
-    "Reverse Cymbal",
+    'Tinkle Bell',
+    'Agogo',
+    'Steel Drums',
+    'Woodblock',
+    'Taiko Drum',
+    'Melodic Tom',
+    'Synth Drum',
+    'Reverse Cymbal',
     #--
     # Sound Effects
     #++
-    "Guitar Fret Noise",
-    "Breath Noise",
-    "Seashore",
-    "Bird Tweet",
-    "Telephone Ring",
-    "Helicopter",
-    "Applause",
-    "Gunshot"
-  ]
+    'Guitar Fret Noise',
+    'Breath Noise',
+    'Seashore',
+    'Bird Tweet',
+    'Telephone Ring',
+    'Helicopter',
+    'Applause',
+    'Gunshot'
+  ].freeze
 
   # GM drum notes start at 35 (C), so subtrack GM_DRUM_NOTE_LOWEST from your
   # note number before using this array.
   GM_DRUM_NOTE_LOWEST = 35
   # General MIDI drum channel note names.
   GM_DRUM_NOTE_NAMES = [
-    "Acoustic Bass Drum",       # 35, C
-    "Bass Drum 1",              # 36, C#
-    "Side Stick",               # 37, D
-    "Acoustic Snare",           # 38, D#
-    "Hand Clap",                # 39, E
-    "Electric Snare",           # 40, F
-    "Low Floor Tom",            # 41, F#
-    "Closed Hi Hat",            # 42, G
-    "High Floor Tom",           # 43, G#
-    "Pedal Hi-Hat",             # 44, A
-    "Low Tom",                  # 45, A#
-    "Open Hi-Hat",              # 46, B
-    "Low-Mid Tom",              # 47, C
-    "Hi Mid Tom",               # 48, C#
-    "Crash Cymbal 1",           # 49, D
-    "High Tom",                 # 50, D#
-    "Ride Cymbal 1",            # 51, E
-    "Chinese Cymbal",           # 52, F
-    "Ride Bell",                # 53, F#
-    "Tambourine",               # 54, G
-    "Splash Cymbal",            # 55, G#
-    "Cowbell",                  # 56, A
-    "Crash Cymbal 2",           # 57, A#
-    "Vibraslap",                # 58, B
-    "Ride Cymbal 2",            # 59, C
-    "Hi Bongo",                 # 60, C#
-    "Low Bongo",                # 61, D
-    "Mute Hi Conga",            # 62, D#
-    "Open Hi Conga",            # 63, E
-    "Low Conga",                # 64, F
-    "High Timbale",             # 65, F#
-    "Low Timbale",              # 66, G
-    "High Agogo",               # 67, G#
-    "Low Agogo",                # 68, A
-    "Cabasa",                   # 69, A#
-    "Maracas",                  # 70, B
-    "Short Whistle",            # 71, C
-    "Long Whistle",             # 72, C#
-    "Short Guiro",              # 73, D
-    "Long Guiro",               # 74, D#
-    "Claves",                   # 75, E
-    "Hi Wood Block",            # 76, F
-    "Low Wood Block",           # 77, F#
-    "Mute Cuica",               # 78, G
-    "Open Cuica",               # 79, G#
-    "Mute Triangle",            # 80, A
-    "Open Triangle"             # 81, A#
-  ]
-
-end # PM
+    'Acoustic Bass Drum',       # 35, C
+    'Bass Drum 1',              # 36, C#
+    'Side Stick',               # 37, D
+    'Acoustic Snare',           # 38, D#
+    'Hand Clap',                # 39, E
+    'Electric Snare',           # 40, F
+    'Low Floor Tom',            # 41, F#
+    'Closed Hi Hat',            # 42, G
+    'High Floor Tom',           # 43, G#
+    'Pedal Hi-Hat',             # 44, A
+    'Low Tom',                  # 45, A#
+    'Open Hi-Hat',              # 46, B
+    'Low-Mid Tom',              # 47, C
+    'Hi Mid Tom',               # 48, C#
+    'Crash Cymbal 1',           # 49, D
+    'High Tom',                 # 50, D#
+    'Ride Cymbal 1',            # 51, E
+    'Chinese Cymbal',           # 52, F
+    'Ride Bell',                # 53, F#
+    'Tambourine',               # 54, G
+    'Splash Cymbal',            # 55, G#
+    'Cowbell',                  # 56, A
+    'Crash Cymbal 2',           # 57, A#
+    'Vibraslap',                # 58, B
+    'Ride Cymbal 2',            # 59, C
+    'Hi Bongo',                 # 60, C#
+    'Low Bongo',                # 61, D
+    'Mute Hi Conga',            # 62, D#
+    'Open Hi Conga',            # 63, E
+    'Low Conga',                # 64, F
+    'High Timbale',             # 65, F#
+    'Low Timbale',              # 66, G
+    'High Agogo',               # 67, G#
+    'Low Agogo',                # 68, A
+    'Cabasa',                   # 69, A#
+    'Maracas',                  # 70, B
+    'Short Whistle',            # 71, C
+    'Long Whistle',             # 72, C#
+    'Short Guiro',              # 73, D
+    'Long Guiro',               # 74, D#
+    'Claves',                   # 75, E
+    'Hi Wood Block',            # 76, F
+    'Low Wood Block',           # 77, F#
+    'Mute Cuica',               # 78, G
+    'Open Cuica',               # 79, G#
+    'Mute Triangle',            # 80, A
+    'Open Triangle'             # 81, A#
+  ].freeze
+end

@@ -6,15 +6,14 @@ $dsl = nil
 
 module PM
   class IRB
-
     include Singleton
 
     attr_reader :dsl
 
     def initialize
       @dsl = PM::DSL.new
-      @dsl.song("IRB Song")
-      @dsl.patch("IRB Patch")
+      @dsl.song('IRB Song')
+      @dsl.patch('IRB Patch')
     end
 
     # For bin/patchmaster.
@@ -55,9 +54,7 @@ def method_missing(sym, *args)
   if dsl.respond_to?(sym)
     patch.stop
     dsl.send(sym, *args)
-    if sym == :input || sym == :inp
-      pm.inputs.last.start
-    end
+    pm.inputs.last.start if %i[input inp].include?(sym)
     patch.start
   elsif pm.respond_to?(sym)
     pm.send(sym, *args)
