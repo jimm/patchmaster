@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem 'ffi'
-gem 'portmidi', git: 'https://github.com/halfbyte/portmidi.git'
+gem 'portmidi'
 gem 'curses'
 gem 'sinatra'
 gem 'sinatra-contrib'
