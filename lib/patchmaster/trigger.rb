@@ -1,33 +1,34 @@
+# frozen_string_literal: true
+
 module PM
+  # A Trigger executes code when it sees a particular array of bytes.
+  # Instruments have zero or more triggers.
+  #
+  # Since we want to save them to files, we store the text representation as
+  # well.
+  class Trigger
+    attr_accessor :bytes, :code_chunk
 
-# A Trigger executes code when it sees a particular array of bytes.
-# Instruments have zero or more triggers.
-#
-# Since we want to save them to files, we store the text representation as
-# well.
-class Trigger
+    def initialize(bytes, code_chunk)
+      @bytes = bytes
+      @code_chunk = code_chunk
+    end
 
-  attr_accessor :bytes, :code_chunk
+    def method_missing(sym, *args)
+      PM::PatchMaster.instance.send(sym, *args)
+    end
 
-  def initialize(bytes, code_chunk)
-    @bytes, @code_chunk = bytes, code_chunk
-  end
+    # If +bytes+ matches our +@bytes+ array then run +@code_chunk+.
+    def signal(bytes)
+      return unless bytes == @bytes
 
-  def method_missing(sym, *args)
-    PM::PatchMaster.instance.send(sym, *args)
-  end
-
-  # If +bytes+ matches our +@bytes+ array then run +@code_chunk+.
-  def signal(bytes)
-    if bytes == @bytes
       pm = PM::PatchMaster.instance
       @code_chunk.run(pm)
-      pm.gui.refresh if pm.gui
+      pm.gui&.refresh
+    end
+
+    def to_s
+      "#{@bytes.inspect} => #{(@code_chunk.text || '# no block text found').gsub(/\n\s*/, '; ')}"
     end
   end
-
-  def to_s
-    "#{@bytes.inspect} => #{(@code_chunk.text || '# no block text found').gsub(/\n\s*/, '; ')}"
-  end
-end
 end

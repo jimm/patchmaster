@@ -3,7 +3,7 @@ input  1, :ws_in, 'WaveStation'
 
 output 1, :ws_out, 'WaveStation'
 output 2, :kz, 'K2000R'
-output 4, :sj                   # Name will come from UNIMidi
+output 4, :sj                   # Name will come from RtMidi
 
 # In this setup, output 4 => SJ => MIDI thru => Drum machine. This lets me
 # refer to the same output as both :sj and :drums. There's an equivalent

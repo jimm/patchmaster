@@ -4,8 +4,7 @@
 #
 # Starts PatchMaster and optionally loads pm_file.
 #
-# -l lists all available MIDI inputs and outputs and exits. This is exactply
-# -the same as running the `unimidi list` command from your shell.
+# -l lists all available MIDI inputs and outputs and exits.
 #
 # -v outputs the version number and exits.
 #
@@ -33,12 +32,17 @@ OptionParser.new do |opts|
   opts.banner = 'usage: patchmaster [options] [pm_file]'
   opts.on('-d', '--debug', 'Turn on debug mode') { $DEBUG = true }
   opts.on('-l', '--list', 'List MIDI inputs and outputs and exit') do
-    require 'unimidi'
-    puts 'Inputs:'
-    UniMIDI::Input.list
+    require 'rtmidi'
+
+    midiin = RtMidi::In.new
+    puts "Available MIDI input ports"
+    midiin.port_names.each_with_index { |name, index| puts "  #{index}: #{name}" }
+
     puts
-    puts 'Outputs:'
-    UniMIDI::Output.list
+    midiout = RtMidi::Out.new
+    puts "Available MIDI output ports"
+    midiout.port_names.each_with_index { |name, index| puts "  #{index}: #{name}" }
+
     exit 0
   end
   opts.on('-n', '--no-midi', 'Turn off MIDI processing') { use_midi = false }

@@ -21,7 +21,7 @@ together into a PatchMaster file.
 
 An instrument represents either a MIDI input to a synth, drum machine, or
 other device or a MIDI output from a controller. Each instrument needs a
-symbol (a usually short name starting with ":"), specifies which UNIMidi
+symbol (a usually short name starting with ":"), specifies which RtMidi
 port number it uses, and has a name.
 
 Input instrument symbols must be unique, as must output instruments. The
@@ -30,8 +30,8 @@ do that if you have an instrument such as a keyboard that can act as both a
 controller (an output instrument) and a sound module (an input instrument).
 
 If you don't give an instrument a name, PatchMaster will display the name
-that UNIMidi uses. This isn't always what you want, because if you're using
-a MIDI interface such as the Unitor amt8, UNIMidi will use the names of the
+that RtMidi uses. This isn't always what you want, because if you're using
+a MIDI interface such as the Unitor amt8, RtMidi will use the names of the
 ports themselves, not the instruments plugged in to them (for example,
 "Unitor Port 0", "Unitor Port 1", ...).
 
@@ -46,7 +46,7 @@ Here's what that might look like in your PatchMaster file:
 input  0, :con, 'My Controller'
 input  1, :kbd, 'The Keyboard'
 output 1, :kbd, 'The Keyboard'
-output 2, :rack                 # Will use UNIMidi name
+output 2, :rack                 # Will use RtMidi name
 {% endhighlight %}
 
 # Songs

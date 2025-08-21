@@ -116,7 +116,7 @@ input  0, :mb, 'midiboard'
 input  1, :ws, 'WaveStation'
 output 1, :ws, 'WaveStation'
 output 2, :kz, 'K2000R'
-output 4, :sj                   # Name will come from UNIMidi
+output 4, :sj                   # Name will come from RtMidi
 {% endhighlight %}
 
 ### Aliases

@@ -1,136 +1,135 @@
-require 'midi-eye'
+# frozen_string_literal: true
 
-# Ports are UniMIDI inputs or outputs.
+require 'rtmidi'
+
+# Monkeypatch RtMidi::In::receive_message to ignore active sensing messages.
+module RtMidi
+  class In
+    def receive_message
+      cancel_callback
+      # Don't ignore sysex or timing (clock), but ignore active sensing message
+      Interface.midiin_ignore_types(@midiin, false, false, true)
+      Interface.midiin_set_varargs_callback(@midiin, ->(bytes, size) { yield(*bytes.read_array_of_uchar(size)) })
+      @callback_set = true
+    end
+  end
+end
+
+# Ports are RtMidi inputs or outputs.
 module PM
+  class Instrument
+    attr_reader :sym, :name, :port_num, :port
 
-class Instrument
-
-  attr_reader :sym, :name, :port_num, :port
-
-  def initialize(sym, name, port_num, port)
-    @sym, @name, @port_num, @port = sym, name, port_num, port
-    @name ||= @port.name if @port
-  end
-
-end
-
-# When a connection is started, it adds itself to this InputInstrument's
-# +@connections+. When it ends, it removes itself.
-class InputInstrument < Instrument
-
-  attr_accessor :connections, :triggers
-  attr_reader :listener
-
-  # If +port+ is nil (the normal case), creates either a real or a mock port
-  def initialize(sym, name, port_num, use_midi=true)
-    super(sym, name, port_num, input_port(port_num, use_midi))
-    @connections = []
-    @triggers = []
-    @listener = nil
-  end
-
-  def add_connection(conn)
-    @connections << conn
-  end
-
-  def remove_connection(conn)
-    @connections.delete(conn)
-  end
-
-  # Poll for more MIDI input and process it.
-  def start
-    PatchMaster.instance.debug("instrument #{name} start")
-    @port.clear_buffer
-    @listener = MIDIEye::Listener.new(@port).listen_for { |event| midi_in(event[:message].to_bytes) }
-    @listener.run(:background => true)
-  end
-
-  def stop
-    PatchMaster.instance.debug("instrument #{name} stop")
-    @port.clear_buffer
-    if @listener
-      @listener.close
-      @listener = nil
+    def initialize(sym, name, port_num, port)
+      @sym = sym
+      @name = name
+      @port_num = port_num
+      @port = port
+      @name ||= @port.name if @port
     end
   end
 
-  # Passes MIDI bytes on to triggers and to each output connection.
-  def midi_in(bytes)
-    @triggers.each { |trigger| trigger.signal(bytes) }
-    @connections.each { |conn| conn.midi_in(bytes) }
-  end
+  # When a connection is started, it adds itself to this InputInstrument's
+  # +@connections+. When it ends, it removes itself.
+  class InputInstrument < Instrument
+    attr_accessor :connections, :triggers
 
-  private
+    # If +port+ is nil (the normal case), creates either a real or a mock port
+    def initialize(sym, name, port_num, use_midi = true)
+      super(sym, name, port_num, input_port(port_num, use_midi))
+      @connections = []
+      @triggers = []
+    end
 
-  def input_port(port_num, use_midi=true)
-    if use_midi
-      UniMIDI::Input.all[port_num].open
-    else
-      MockInputPort.new(port_num)
+    def add_connection(conn)
+      @connections << conn
+    end
+
+    def remove_connection(conn)
+      @connections.delete(conn)
+    end
+
+    # Poll for more MIDI input and process it.
+    def start
+      PatchMaster.instance.debug("instrument #{name} start")
+      @port.receive_message { |*bytes| midi_in(bytes) }
+      warn 'input start returning' # DEBUG
+    end
+
+    def stop
+      PatchMaster.instance.debug("instrument #{name} stop")
+      @port.stop_receiving
+      warn 'input stop returning' # DEBUG
+    end
+
+    # Passes MIDI bytes on to triggers and to each output connection.
+    def midi_in(bytes)
+      warn "in midi_in, bytes = #{bytes}" # DEBUG
+      @triggers.each { |trigger| trigger.signal(bytes) }
+      @connections.each { |conn| conn.midi_in(bytes) }
+    end
+
+    private
+
+    def input_port(port_num, use_midi = true)
+      if use_midi
+        RtMidi::In.new.tap do |input|
+          input.open_port(port_num)
+        end
+      else
+        MockInputPort.new(port_num)
+      end
     end
   end
 
-end
+  class OutputInstrument < Instrument
+    def initialize(sym, name, port_num, use_midi = true)
+      super(sym, name, port_num, output_port(port_num, use_midi))
+    end
 
-class OutputInstrument < Instrument
+    def midi_out(bytes)
+      @port.puts bytes
+    end
 
-  def initialize(sym, name, port_num, use_midi=true)
-    super(sym, name, port_num, output_port(port_num, use_midi))
-  end
+    private
 
-  def midi_out(bytes)
-    @port.puts bytes
-  end
-
-  private
-
-  def output_port(port_num, use_midi)
-    if use_midi
-      UniMIDI::Output.all[port_num].open
-    else
-      MockOutputPort.new(port_num)
+    def output_port(port_num, use_midi)
+      if use_midi
+        RtMidi::Out.new.tap { |output| output.open_port(port_num) }
+      else
+        MockOutputPort.new(port_num)
+      end
     end
   end
-end
 
-class MockInputPort
+  class MockInputPort
+    attr_reader :name
+    attr_accessor :buffer
 
-  attr_reader :name
-  attr_accessor :buffer
+    # Constructor param is ignored; it's required by MIDIEye.
+    def initialize(arg)
+      @name = "MockInputPort #{arg}"
+      @buffer = []
+    end
 
-  # For MIDIEye::Listener
-  def self.is_compatible?(input)
-    true
+    def gets
+      [{ data: [], timestamp: 0 }]
+    end
+
+    def poll
+      yield gets
+    end
   end
 
-  # Constructor param is ignored; it's required by MIDIEye.
-  def initialize(arg)
-    @name = "MockInputPort #{arg}"
-    @buffer = []
-  end
+  class MockOutputPort
+    attr_reader :name
+    attr_accessor :buffer
 
-  def gets
-    [{:data => [], :timestamp => 0}]
-  end
+    def initialize(port_num)
+      @name = "MockOutputPort #{port_num}"
+      @buffer = []
+    end
 
-  def poll
-    yield gets
+    def puts(data); end
   end
-
-  def clear_buffer
-  end
-end
-
-class MockOutputPort
-  attr_reader :name
-  attr_accessor :buffer
-
-  def initialize(port_num)
-    @name = "MockOutputPort #{port_num}"
-    @buffer = []
-  end
-
-  def puts(data)
-  end
-end
 end

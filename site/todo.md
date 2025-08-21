@@ -63,7 +63,7 @@ title: To Do
 - Alternate display that only shows song and patch names and little else?
   This might be useful during performance. Already have IRB mode.
 
-- Do I need to handle running bytes in Connection#midi_in, or does UniMIDI
+- Do I need to handle running bytes in Connection#midi_in, or does RtMidi
   take care of that?
 
 - In PromptWindow, remember history and support up/down arrows, ^n, ^p.

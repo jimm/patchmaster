@@ -7,6 +7,11 @@ title: Changes
 >
 > -- Yoda (via Ron Jeffries)
 
+# 3.0.0
+
+- Use [RtMidi](https://www.music.mcgill.ca/~gary/rtmidi/) and the
+  [rtmidi](https://github.com/adamjmurray/ruby-rtmidi/) gem.
+
 # 2.0.0
 
 - Supports Ruby 2.4.x and the latest versions of the MIDI libs on which it

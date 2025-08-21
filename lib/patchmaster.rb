@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'patchmaster/consts'
 require 'patchmaster/predicates'
 require 'patchmaster/song_list'

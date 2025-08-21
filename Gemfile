@@ -1,17 +1,13 @@
 source "https://rubygems.org"
 
-gem 'unimidi'
-gem 'midi-eye'
+gem 'rtmidi'
 gem 'curses'
 gem 'sinatra'
 gem 'sinatra-contrib'
 
+gem 'monitor'
+gem 'bigdecimal'
+
 group :development, :test do
   gem 'byebug'
-end
-
-group :test do
-  gem 'alsa-rawmidi'
-  gem 'midi-jruby'
-  gem 'midi-winmm'
 end
