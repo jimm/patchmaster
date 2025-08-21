@@ -10,11 +10,12 @@ module PM
     include Singleton
     include Curses
 
-    FUNCTION_KEY_SYMBOLS = {}.freeze
+    FUNCTION_KEY_SYMBOLS = {}
     12.times do |i|
       FUNCTION_KEY_SYMBOLS["f#{i + 1}".to_sym] = Key::F1 + i
       FUNCTION_KEY_SYMBOLS["F#{i + 1}".to_sym] = Key::F1 + i
     end
+    FUNCTION_KEY_SYMBOLS.freeze
 
     def initialize
       @pm = PatchMaster.instance

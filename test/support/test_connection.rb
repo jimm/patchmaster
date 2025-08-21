@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A TestConnection records all bytes received and passes them straight
 # through.
 class TestConnection < PM::Connection

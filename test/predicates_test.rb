@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 # Not gonna test everything exhaustively.
 class PredicatesTest < Test::Unit::TestCase
-
   include PM
 
   def test_high_nibble
@@ -51,5 +52,4 @@ class PredicatesTest < Test::Unit::TestCase
     assert [0xf8].realtime?
     assert ![0x100, 1, 2, 3].realtime?
   end
-
 end

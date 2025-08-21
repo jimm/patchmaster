@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class SongListTest < Test::Unit::TestCase
-
   def setup
     @song_info = []
     @song_list = PM::SongList.new('Song List')
-    2.times { |i|
+    2.times do |i|
       @song_info << create_song(i)
       @song_list << @song_info.last[:song]
-    }
+    end
   end
 
   def test_find
@@ -26,8 +27,8 @@ class SongListTest < Test::Unit::TestCase
       song << patch_info.last[:patch]
     end
     {
-      :patch_info => patch_info,
-      :song => song
+      patch_info: patch_info,
+      song: song
     }
   end
 
@@ -36,16 +37,15 @@ class SongListTest < Test::Unit::TestCase
     in_instrument = PM::InputInstrument.new(name.to_sym, name, 0, false)
     name = "test_out_#{n}"
     out_instrument = PM::OutputInstrument.new(name.to_sym, name, 0, false)
-    options = {:pc_prog => n, :zone => (40..60), :xpose => 12}
+    options = { pc_prog: n, zone: (40..60), xpose: 12 }
     conn = PM::Connection.new(in_instrument, nil, out_instrument, 2, nil, options)
     patch = PM::Patch.new("Untitled #{n}")
     patch << conn
     {
-      :in => in_instrument,
-      :out => out_instrument,
-      :patch => patch,
-      :connection => conn
+      in: in_instrument,
+      out: out_instrument,
+      patch: patch,
+      connection: conn
     }
   end
-
 end

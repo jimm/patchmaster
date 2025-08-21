@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ConnectionTest < Test::Unit::TestCase
-
   def setup
     @in_instrument = PM::InputInstrument.new(:tin, 'test_in', 0, false)
     @out_instrument = PM::OutputInstrument.new(:tout, 'test_out', 0, false)
-    @options = {:pc_prog => 3, :zone => (40..60), :xpose => 12}
+    @options = { pc_prog: 3, zone: (40..60), xpose: 12 }
     @conn = PM::Connection.new(@in_instrument, nil, @out_instrument, 2, nil, @options)
   end
 
@@ -25,16 +26,16 @@ class ConnectionTest < Test::Unit::TestCase
   def test_start_sends_start_bytes
     assert_equal [], @out_instrument.port.buffer
     @conn.start([1, 2, 3])
-    assert_equal [1, 2, 3], @out_instrument.port.buffer[0,3]
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[0, 3]
     @conn.stop
-    assert_equal [1, 2, 3], @out_instrument.port.buffer[0,3]
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[0, 3]
   end
 
   def test_stop_sends_stop_bytes
     assert_equal [], @out_instrument.port.buffer
     @conn.start
     @conn.stop([4, 5, 6])
-    assert_equal [4, 5, 6], @out_instrument.port.buffer[-3..-1]
+    assert_equal [4, 5, 6], @out_instrument.port.buffer[-3..]
   end
 
   def test_inside_zone
@@ -70,7 +71,7 @@ class ConnectionTest < Test::Unit::TestCase
   def test_out_of_zone_no_bytes_sent
     @conn.midi_in([PM::NOTE_ON, 3, 127])
     assert @out_instrument.port.buffer.empty?,
-      'output port should be empty because note is out of range'
+           'output port should be empty because note is out of range'
   end
 
   def test_output_sent_to_output_channel
@@ -104,11 +105,11 @@ class ConnectionTest < Test::Unit::TestCase
     @conn.start
     assert_equal [PM::CONTROLLER + @conn.output_chan, PM::CC_BANK_SELECT + 32, 2,
                   PM::PROGRAM_CHANGE + @conn.output_chan, 3],
-      @out_instrument.port.buffer
+                 @out_instrument.port.buffer
   end
 
   def test_filter
-    filter_block = lambda { |conn, bytes| bytes.map(&:succ) }
+    filter_block = ->(_conn, bytes) { bytes.map(&:succ) }
     filter = PM::Filter.new(PM::CodeChunk.new(filter_block))
     conn = PM::Connection.new(@in_instrument, nil, @out_instrument, 2, filter, @options)
     conn.midi_in([1, 2, 3])
@@ -116,10 +117,11 @@ class ConnectionTest < Test::Unit::TestCase
   end
 
   def test_note_num_to_name
-    assert_equal "C4", @conn.note_num_to_name(PM::C4)
+    assert_equal 'C4', @conn.note_num_to_name(PM::C4)
   end
 
   def test_to_s
-    assert_equal "test_in ch all -> test_out ch 2; pc 3; xpose 12; zone #{@conn.note_num_to_name(40)}..#{@conn.note_num_to_name(60)}", @conn.to_s
+    assert_equal "test_in ch all -> test_out ch 2; pc 3; xpose 12; zone #{@conn.note_num_to_name(40)}..#{@conn.note_num_to_name(60)}",
+                 @conn.to_s
   end
 end

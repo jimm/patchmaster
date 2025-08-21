@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test/unit'
 require 'patchmaster'
 require 'support/mock_ports'

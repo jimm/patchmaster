@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class InstrumentTest < Test::Unit::TestCase
-
   def setup
     @data = [1, 2, 3]
     @in_instrument = PM::InputInstrument.new(:tin, 'test_in', 0, false)
@@ -38,13 +39,13 @@ class InstrumentTest < Test::Unit::TestCase
 
   def test_start_starts_thread
     @in_instrument.start
-    assert_not_nil @in_instrument.listener, "instrument listener should be created"
+    assert_not_nil @in_instrument.listener, 'instrument listener should be created'
     @in_instrument.stop
   end
 
   def test_stop_stops_thread
     @in_instrument.start
     @in_instrument.stop
-    assert_nil @in_instrument.listener, "instrument listener should be destroyed"
+    assert_nil @in_instrument.listener, 'instrument listener should be destroyed'
   end
 end

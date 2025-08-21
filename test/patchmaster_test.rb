@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class PatchMasterTest < Test::Unit::TestCase
-
   EXAMPLE_DSL = File.join(File.dirname(__FILE__), 'example_dsl.rb')
 
   def setup
@@ -26,7 +27,7 @@ class PatchMasterTest < Test::Unit::TestCase
   end
 
   def test_running
-    assert @pm.running?, "PatchMaster instance should be running"
+    assert @pm.running?, 'PatchMaster instance should be running'
     assert_only_curr_patch_running
   end
 
@@ -128,15 +129,15 @@ class PatchMasterTest < Test::Unit::TestCase
   end
 
   def test_find_nearest_match
-    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, "Frist Song")
+    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, 'Frist Song')
     assert_not_nil song
     assert_equal 'First Song', song.name
 
-    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, "SECOND SONG")
+    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, 'SECOND SONG')
     assert_not_nil song
     assert_equal 'Second Song', song.name
 
-    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, "Second Sing")
+    song = @pm.send(:find_nearest_match, @pm.all_songs.songs, 'Second Sing')
     assert_not_nil song
     assert_equal 'Second Song', song.name
     assert_only_curr_patch_running
@@ -146,7 +147,7 @@ class PatchMasterTest < Test::Unit::TestCase
     @pm.next_song
     @pm.load(EXAMPLE_DSL)
 
-    assert @pm.running?, "PatchMaster instance should be running"
+    assert @pm.running?, 'PatchMaster instance should be running'
     assert_equal 'All Songs', @pm.song_list.name
     assert_equal 'Second Song', @pm.song.name
     assert_equal 'Second Song, First Patch', @pm.patch.name
@@ -156,7 +157,7 @@ class PatchMasterTest < Test::Unit::TestCase
     # We've started a patch that sends tune request as start_bytes
     assert_equal [PM::TUNE_REQUEST], @pm.outputs[0].port.buffer
 
-    @pm.send_message "Tune Request"
+    @pm.send_message 'Tune Request'
 
     # Make sure the message was sent
     assert_equal [PM::TUNE_REQUEST, PM::TUNE_REQUEST], @pm.outputs[0].port.buffer
@@ -183,7 +184,7 @@ class PatchMasterTest < Test::Unit::TestCase
       assert_equal 16 * 3, expected.length
       # Match expected to end of buffer, since start bytes, program changes,
       # etc. might have been sent already.
-      assert_equal expected, out.port.buffer[-expected.length..-1]
+      assert_equal expected, out.port.buffer[-expected.length..]
     end
   end
 
@@ -194,10 +195,10 @@ class PatchMasterTest < Test::Unit::TestCase
         [PM::CONTROLLER + chan, PM::CM_ALL_NOTES_OFF, 0] +
           (0..127).collect { |note| [PM::NOTE_OFF + chan, note, 0] }.flatten
       end.flatten
-      assert_equal 16 * (3 + 128*3), expected.length
+      assert_equal 16 * (3 + 128 * 3), expected.length
       # Match expected to end of buffer, since start bytes, program changes,
       # etc. might have been sent already.
-      assert_equal expected, out.port.buffer[-expected.length..-1]
+      assert_equal expected, out.port.buffer[-expected.length..]
     end
   end
 end

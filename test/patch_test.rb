@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class PatchTest < Test::Unit::TestCase
-
   def setup
     @pm = PM::PatchMaster.instance
 
@@ -11,7 +12,7 @@ class PatchTest < Test::Unit::TestCase
     @out_instrument = PM::OutputInstrument.new(:tout, 'test_out', 0, false)
     @pm.outputs << @out_instrument
 
-    @options = {:pc_prog => 3, :zone => (40..60), :xpose => 12}
+    @options = { pc_prog: 3, zone: (40..60), xpose: 12 }
     @patch = PM::Patch.new('Untitled')
     @conn = PM::Connection.new(@in_instrument, nil, @out_instrument, 2, nil, @options)
     @patch << @conn
@@ -34,7 +35,7 @@ class PatchTest < Test::Unit::TestCase
     @patch.start_bytes = [1, 2, 3]
     @patch.start
     @patch.stop
-    assert_equal [1, 2, 3], @out_instrument.port.buffer[0,3]
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[0, 3]
   end
 
   def test_stop_sends_stop_bytes
@@ -42,7 +43,7 @@ class PatchTest < Test::Unit::TestCase
     @patch.stop_bytes = [1, 2, 3]
     @patch.start
     @patch.stop
-    assert_equal [1, 2, 3], @out_instrument.port.buffer[-3..-1]
+    assert_equal [1, 2, 3], @out_instrument.port.buffer[-3..]
   end
 
   def test_inputs
@@ -62,7 +63,7 @@ class PatchTest < Test::Unit::TestCase
   end
 
   def test_all_prog_changes_sent
-    conn2 = PM::Connection.new(@in_instrument, nil, @out_instrument, 3, nil, {:pc_prog => 42})
+    conn2 = PM::Connection.new(@in_instrument, nil, @out_instrument, 3, nil, { pc_prog: 42 })
     @patch << conn2
 
     @patch.start
