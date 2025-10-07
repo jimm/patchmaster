@@ -39,13 +39,13 @@ class InstrumentTest < Test::Unit::TestCase
 
   def test_start_starts_thread
     @in_instrument.start
-    assert_not_nil @in_instrument.listener, 'instrument listener should be created'
+    assert_true @in_instrument.running, 'instrument should be running'
     @in_instrument.stop
   end
 
   def test_stop_stops_thread
     @in_instrument.start
     @in_instrument.stop
-    assert_nil @in_instrument.listener, 'instrument listener should be destroyed'
+    assert_false @in_instrument.running, 'instrument callback should not be running'
   end
 end

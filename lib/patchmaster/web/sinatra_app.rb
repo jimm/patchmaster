@@ -59,10 +59,7 @@ end
 
 not_found do
   path = request.env['REQUEST_PATH']
-  unless path == '/favicon.ico'
-    warn "error: not_found called, request = #{request.inspect}" # DEBUG
-    return_status(message: "No such URL: #{path}")
-  end
+  return_status(message: "No such URL: #{path}") unless path == '/favicon.ico'
 end
 
 get '/' do

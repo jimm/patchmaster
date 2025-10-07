@@ -32,13 +32,14 @@ module PM
   # When a connection is started, it adds itself to this InputInstrument's
   # +@connections+. When it ends, it removes itself.
   class InputInstrument < Instrument
-    attr_accessor :connections, :triggers
+    attr_accessor :connections, :triggers, :running
 
     # If +port+ is nil (the normal case), creates either a real or a mock port
     def initialize(sym, name, port_num, use_midi = true)
       super(sym, name, port_num, input_port(port_num, use_midi))
       @connections = []
       @triggers = []
+      @running = false # only used for testing to see if start/stop is working
     end
 
     def add_connection(conn)
@@ -53,18 +54,17 @@ module PM
     def start
       PatchMaster.instance.debug("instrument #{name} start")
       @port.receive_message { |*bytes| midi_in(bytes) }
-      warn 'input start returning' # DEBUG
+      @running = true
     end
 
     def stop
       PatchMaster.instance.debug("instrument #{name} stop")
       @port.stop_receiving
-      warn 'input stop returning' # DEBUG
+      @running = false
     end
 
     # Passes MIDI bytes on to triggers and to each output connection.
     def midi_in(bytes)
-      warn "in midi_in, bytes = #{bytes}" # DEBUG
       @triggers.each { |trigger| trigger.signal(bytes) }
       @connections.each { |conn| conn.midi_in(bytes) }
     end
