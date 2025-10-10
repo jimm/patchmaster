@@ -1,10 +1,10 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    base64 (0.2.0)
-    bigdecimal (3.1.9)
+    base64 (0.3.0)
+    bigdecimal (3.3.1)
     byebug (12.0.0)
-    curses (1.5.0)
+    curses (1.5.3)
     ffi (1.17.2)
     ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-aarch64-linux-musl)
@@ -18,11 +18,11 @@ GEM
     ffi (1.17.2-x86_64-linux-musl)
     logger (1.7.0)
     monitor (0.2.0)
-    multi_json (1.15.0)
-    mustermann (3.0.3)
+    multi_json (1.17.0)
+    mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
-    rack (3.1.18)
-    rack-protection (4.1.1)
+    rack (3.2.3)
+    rack-protection (4.2.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)
@@ -32,20 +32,20 @@ GEM
     rtmidi (0.3)
       ffi (~> 1.9)
     ruby2_keywords (0.0.5)
-    sinatra (4.1.1)
+    sinatra (4.2.1)
       logger (>= 1.6.0)
       mustermann (~> 3.0)
       rack (>= 3.0.0, < 4)
-      rack-protection (= 4.1.1)
+      rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sinatra-contrib (4.1.1)
+    sinatra-contrib (4.2.1)
       multi_json (>= 0.0.2)
       mustermann (~> 3.0)
-      rack-protection (= 4.1.1)
-      sinatra (= 4.1.1)
+      rack-protection (= 4.2.1)
+      sinatra (= 4.2.1)
       tilt (~> 2.0)
-    tilt (2.6.0)
+    tilt (2.6.1)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -70,4 +70,4 @@ DEPENDENCIES
   sinatra-contrib
 
 BUNDLED WITH
-   2.6.8
+   2.7.0
