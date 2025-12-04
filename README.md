@@ -10,7 +10,7 @@ messages, limit controller and velocity values, and much more. At the stomp
 of a foot switch (or any other MIDI event), an entire MIDI system can be
 totally reconfigured.
 
-PatchMaster is totall programmable using Ruby. See the [examples](examples)
+PatchMaster is totally programmable using Ruby. See the [examples](examples)
 for a few ideas.
 
 For more information please see the [documentation](site/index.md).

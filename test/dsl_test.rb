@@ -2,7 +2,6 @@ require 'stringio'
 require 'test_helper'
 
 class DSLTest < Test::Unit::TestCase
-
   EXAMPLE_DSL = File.join(File.dirname(__FILE__), 'example_dsl.rb')
 
   def setup
@@ -37,7 +36,7 @@ class DSLTest < Test::Unit::TestCase
     assert_equal 2, @pm.code_bindings.length
     assert_equal "do\n  $global_code_key_value = 42\nend",
                  @pm.code_bindings.values[0].code_chunk.text
-    assert_equal "{ $global_code_key_value = 99 }",
+    assert_equal '{ $global_code_key_value = 99 }',
                  @pm.code_bindings.values[1].code_chunk.text
   end
 
@@ -47,7 +46,7 @@ class DSLTest < Test::Unit::TestCase
     assert_equal 5, triggers.length
     trigger = triggers[0]
     assert_equal [PM::CONTROLLER, PM::CC_GEN_PURPOSE_5, 0], trigger.bytes
-    assert_equal "{ prev_song }", mb.triggers[3].code_chunk.text
+    assert_equal '{ prev_song }', mb.triggers[3].code_chunk.text
   end
 
   def test_load_songs
@@ -111,9 +110,9 @@ class DSLTest < Test::Unit::TestCase
     f = '/tmp/dsl_test_save.rb'
     begin
       @dsl.save(f)
-      # TODO write more here
-    rescue => ex
-      fail ex.to_s
+      # TODO: write more here
+    rescue StandardError => e
+      raise e.to_s
     ensure
       File.delete(f)
     end
@@ -125,8 +124,8 @@ class DSLTest < Test::Unit::TestCase
       @dsl.save(f)
       @pm.init_data
       @dsl.load(f)
-    rescue => ex
-      fail ex.to_s
+    rescue StandardError => e
+      raise e.to_s
     ensure
       File.delete(f)
     end
@@ -139,12 +138,12 @@ class DSLTest < Test::Unit::TestCase
     assert_match 'output 1, :ws_out, "WaveStation"', str
     assert_match "message \"Tune Request\", [#{PM::TUNE_REQUEST}]", str
     assert_match 'message_key :f1, "Tune Request"', str
-    assert_match "trigger(:mb, [176, 50, 0]) { next_patch }", str
-    assert_match "trigger(:mb, [176, 52, 0]) { next_song }", str
+    assert_match 'trigger(:mb, [176, 50, 0]) { next_patch }', str
+    assert_match 'trigger(:mb, [176, 52, 0]) { next_song }', str
     assert_match 'filter { |c, b| b }       # no-op', str
     assert_match 'filter { |c, b| b[0] += 1; b }', str
-  rescue => ex
-    fail ex.to_s
+  rescue StandardError => e
+    raise e.to_s
   ensure
     File.delete(f)
   end
@@ -174,45 +173,44 @@ class DSLTest < Test::Unit::TestCase
       @pm.init_data
       @dsl = PM::DSL.new
       @dsl.load(file)
-      fail "expected unique symbol error to be raised"
-    rescue => ex
-      assert_match(/can not have the same symbol \(:ws_out\)/, ex.to_s)
+      raise 'expected unique symbol error to be raised'
+    rescue StandardError => e
+      assert_match(/can not have the same symbol \(:ws_out\)/, e.to_s)
     ensure
       File.delete(file)
     end
   end
 
   def test_read_filter_text
-    str = <<EOS
-{ |connection, bytes|
-        if bytes.note_off?
-          bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
-        end
-        bytes
-      }
-EOS
-    str.strip!
-    assert_equal str,
+    str = <<~EOS
+      { |connection, bytes|
+              if bytes.note_off?
+                bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
+              end
+              bytes
+            }
+    EOS
+    assert_equal str.strip,
                  @pm.all_songs
-                   .find('First Song')
-                   .patches[0]
-                   .connections[1]
-                   .filter
-                   .code_chunk
-                   .text
+                    .find('First Song')
+                    .patches[0]
+                    .connections[1]
+                    .filter
+                    .code_chunk
+                    .text
 
-    assert_equal "{ |c, b| b }       # no-op",
+    assert_equal '{ |c, b| b }       # no-op',
                  @pm.all_songs
-                   .find('Second Song')
-                   .patches[0]
-                   .connections[1]
-                   .filter
-                   .code_chunk
-                   .text
+                    .find('Second Song')
+                    .patches[0]
+                    .connections[1]
+                    .filter
+                    .code_chunk
+                    .text
   end
 
   def test_messages
-    assert_equal ["Tune Request", [PM::TUNE_REQUEST]],
-                 @pm.messages["Tune Request".downcase]
+    assert_equal ['Tune Request', [PM::TUNE_REQUEST]],
+                 @pm.messages['Tune Request'.downcase]
   end
 end

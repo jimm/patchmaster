@@ -1,10 +1,10 @@
 # Set IRB prompt
 IRB.conf[:PROMPT][:CUSTOM] = {
-  :PROMPT_I=>"PatchMaster:%03n:%i> ",
-  :PROMPT_N=>"PatchMaster:%03n:%i> ",
-  :PROMPT_S=>"PatchMaster:%03n:%i%l ",
-  :PROMPT_C=>"PatchMaster:%03n:%i* ",
-  :RETURN=>"=> %s\n"
+  PROMPT_I: 'PatchMaster:%03n:%i> ',
+  PROMPT_N: 'PatchMaster:%03n:%i> ',
+  PROMPT_S: 'PatchMaster:%03n:%i%l ',
+  PROMPT_C: 'PatchMaster:%03n:%i* ',
+  RETURN: "=> %s\n"
 }
 IRB.conf[:PROMPT_MODE] = :CUSTOM
 
