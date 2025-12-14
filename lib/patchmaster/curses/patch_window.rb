@@ -27,8 +27,7 @@ module PM
     def draw_headers
       @win.attron(A_REVERSE) do
         str = ' Input          Chan | Output         Chan | Prog | Zone      | Xpose | Filter'
-        str << ' ' * (@win.maxx - 2 - str.length)
-        @win.addstr(str)
+        @win.addstr("#{str} #{' ' * (@win.maxx - 2 - str.length)}")
       end
     end
 

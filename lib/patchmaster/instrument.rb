@@ -119,6 +119,9 @@ module PM
     def poll
       yield gets
     end
+
+    def receive_message(*_bytes)
+    end
   end
 
   class MockOutputPort
