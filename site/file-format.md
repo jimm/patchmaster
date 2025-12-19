@@ -47,8 +47,9 @@ most recently saved. If you have not yet loaded a file or you save the file
 to a different location, PatchMaster will ask you for a file name.
 
 The edit command suspends PatchMaster and starts the editor defined by the
-environment variables `VISUAL` or `EDITOR`. If neither of those are defined
-it tries 'vim', 'vi', and finally 'notepad.exe'.
+environment variables `PATCHMASTER_EDITOR`, `VISUAL` or `EDITOR` in that
+order. If neither of those are defined it tries 'vim', 'vi', and finally
+'notepad.exe'.
 
 After editing a file, PatchMaster attempts to reload that file and continue
 with the same song list, song, and patch that was current when you edited

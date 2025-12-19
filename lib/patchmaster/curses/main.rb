@@ -61,25 +61,9 @@ module PM
               @pm.panic(@prev_cmd == 27)
               message('Panic sent')
             when 'l'
-              file = PromptWindow.new('Load', 'Load file:').gets
-              if file.length.positive?
-                begin
-                  load(file)
-                  message("Loaded #{file}")
-                rescue StandardError => e
-                  message(e.to_s)
-                end
-              end
+              load_file
             when 's'
-              file = PromptWindow.new('Save', 'Save into file:').gets
-              if file.length.positive?
-                begin
-                  save(file)
-                  message("Saved #{file}")
-                rescue StandardError => e
-                  message(e.to_s)
-                end
-              end
+              save_file
             when 'q'
               break
             when Key::RESIZE
@@ -142,8 +126,32 @@ module PM
       @message_win.resize(r[0], r[1])
     end
 
+    def load_file
+      file = PromptWindow.new('Load', 'Load file:').gets
+      return unless file.length.positive?
+
+      begin
+        load(file)
+        message("Loaded #{file}")
+      rescue StandardError => e
+        message(e.to_s)
+      end
+    end
+
     def load(file)
       @pm.load(file)
+    end
+
+    def save_file
+      file = PromptWindow.new('Save', 'Save into file:').gets
+      return unless file.length.positive?
+
+      begin
+        save(file)
+        message("Saved #{file}")
+      rescue StandardError => e
+        message(e.to_s)
+      end
     end
 
     def save(file)
@@ -165,10 +173,14 @@ module PM
       load(file)
     end
 
-    # Return the first legit command from $VISUAL, $EDITOR, vim, vi, and
-    # notepad.exe.
+    # Return the first legit command from $PATCHMASTER_EDITOR, $VISUAL,
+    # $EDITOR, vim, vi, and notepad.exe.
     def find_editor
-      @find_editor ||= [ENV['VISUAL'], ENV['EDITOR'], 'vim', 'vi', 'notepad.exe'].compact.detect do |cmd|
+      @find_editor ||= [ENV['PATCHMASTER_EDITOR'] || ENV['VISUAL'],
+                        ENV['EDITOR'], 'vim', 'vi', 'notepad.exe']
+                       .compact
+                       .detect do |env|
+        cmd = env.split(' ').first
         system('which', cmd) || File.exist?(cmd)
       end
     end

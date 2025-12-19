@@ -56,8 +56,7 @@ def time_based_volume
   t = Time.now.to_f             # to_f gives sub-second accuracy
   unit_offset = Math.sin(t)     # -1 .. 1
   volume = (unit_offset * 64) + 64
-  volume = 127 if volume == 128
-  volume
+  volume == 128 ? 127 : volume
 end
 
 song "LFO Volume" do

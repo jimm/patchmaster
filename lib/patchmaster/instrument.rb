@@ -122,6 +122,8 @@ module PM
 
     def receive_message(*_bytes)
     end
+
+    def stop_receiving; end
   end
 
   class MockOutputPort
