@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './code_chunk'
+require_relative 'code_chunk'
 
 module PM
   # Implements a DSL for describing a PatchMaster setup.
@@ -31,9 +31,10 @@ module PM
       read_filters(contents)
     end
 
-    def input(port_num, sym, name = nil)
+    def input(port_num_or_name, sym, name = nil)
       raise "input: two inputs can not have the same symbol (:#{sym})" if @inputs[sym]
 
+      port_num = port_name_to_number(:input, port_num_or_name)
       input = InputInstrument.new(sym, name, port_num, @pm.use_midi?)
       @inputs[sym] = input
       @pm.inputs << input
@@ -42,9 +43,10 @@ module PM
     end
     alias inp input
 
-    def output(port_num, sym, name = nil)
+    def output(port_num_or_name, sym, name = nil)
       raise "output: two outputs can not have the same symbol (:#{sym})" if @outputs[sym]
 
+      port_num = port_name_to_number(:output, port_num_or_name)
       output = OutputInstrument.new(sym, name, port_num, @pm.use_midi?)
       @outputs[sym] = output
       @pm.outputs << output
@@ -295,6 +297,16 @@ module PM
     # ****************************************************************
 
     private
+
+    # Returns the port number of the input/output port with `name`.
+    # `in_out_sym` must be either `:input` or `:output`. Returns nil if not
+    # found.
+    def port_name_to_number(in_out_sym, name_or_num)
+      return name_or_num.to_i if name_or_num.is_a?(Integer)
+
+      io = in_out_sym == :input ? RtMidi::In.new : RtMidi::Out.new
+      io.port_names.index(name_or_num)
+    end
 
     # Translate symbol like :f1 to the proper function key value.
     def to_binding_key(key_or_sym)

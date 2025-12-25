@@ -2,8 +2,8 @@
 
 require 'singleton'
 require 'delegate'
-require 'patchmaster/sorted_song_list'
-require 'patchmaster/cursor'
+require_relative 'sorted_song_list'
+require_relative 'cursor'
 
 module PM
   # Global behavior: master list of songs, list of song lists, stuff like

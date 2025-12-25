@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'patchmaster/curses/pm_window'
+require_relative 'pm_window'
 
 module PM
   class ListWindow < PmWindow

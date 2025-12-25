@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require_relative 'test_helper'
 
 # Not gonna test everything exhaustively.
 class PredicatesTest < Test::Unit::TestCase

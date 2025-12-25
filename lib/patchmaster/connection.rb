@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'patchmaster/consts'
+require_relative 'consts'
 
 module PM
   # A Connection connects an InputInstrument to an OutputInstrument. Whenever

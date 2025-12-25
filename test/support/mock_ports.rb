@@ -14,12 +14,14 @@ module PM
       old_initialize(arg)
     end
 
+    alias old_receive_message receive_message
     def receive_message(*_bytes)
       retval = @data_to_send || []
       @data_to_send = []
       [{ data: retval, timestamp: (Time.now.to_f * 1000).to_i - @t0 }]
     end
 
+    alias old_stop_receiving stop_receiving
     def stop_receiving; end
   end
 

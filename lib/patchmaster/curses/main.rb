@@ -2,8 +2,8 @@
 
 require 'curses'
 require 'singleton'
-require 'patchmaster/curses/geometry'
-%w[list patch info trigger prompt help].each { |w| require "patchmaster/curses/#{w}_window" }
+require_relative 'geometry'
+%w[list patch info trigger prompt help].each { |w| require_relative "#{w}_window" }
 
 module PM
   class Main
@@ -180,8 +180,8 @@ module PM
                         ENV['EDITOR'], 'vim', 'vi', 'notepad.exe']
                        .compact
                        .detect do |env|
-        cmd = env.split(' ').first
-        system('which', cmd) || File.exist?(cmd)
+                         cmd = env.split(' ').first
+                         system('which', cmd) || File.exist?(cmd)
       end
     end
 

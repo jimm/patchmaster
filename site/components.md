@@ -29,11 +29,8 @@ same symbol can be used for an input and an output, however. You'd usually
 do that if you have an instrument such as a keyboard that can act as both a
 controller (an output instrument) and a sound module (an input instrument).
 
-If you don't give an instrument a name, PatchMaster will display the name
-that RtMidi uses. This isn't always what you want, because if you're using
-a MIDI interface such as the Unitor amt8, RtMidi will use the names of the
-ports themselves, not the instruments plugged in to them (for example,
-"Unitor Port 0", "Unitor Port 1", ...).
+If you don't specify an instrument a name, PatchMaster will display the name
+that RtMidi uses.
 
 ## Example
 
@@ -48,6 +45,9 @@ input  1, :kbd, 'The Keyboard'
 output 1, :kbd, 'The Keyboard'
 output 2, :rack                 # Will use RtMidi name
 {% endhighlight %}
+
+You can use port names instead of numbers. Run `patchmaster --list` to get
+the list of all of the input and output ports numbers and names.
 
 # Songs
 

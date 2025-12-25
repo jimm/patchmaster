@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'patchmaster/consts'
+require_relative 'consts'
 
 class Integer
   def high_nibble

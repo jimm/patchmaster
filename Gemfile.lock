@@ -2,26 +2,16 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.3.0)
-    bigdecimal (3.3.1)
+    bigdecimal (4.0.1)
     byebug (12.0.0)
     curses (1.5.3)
     ffi (1.17.2)
-    ffi (1.17.2-aarch64-linux-gnu)
-    ffi (1.17.2-aarch64-linux-musl)
-    ffi (1.17.2-arm-linux-gnu)
-    ffi (1.17.2-arm-linux-musl)
-    ffi (1.17.2-arm64-darwin)
-    ffi (1.17.2-x86-linux-gnu)
-    ffi (1.17.2-x86-linux-musl)
-    ffi (1.17.2-x86_64-darwin)
-    ffi (1.17.2-x86_64-linux-gnu)
-    ffi (1.17.2-x86_64-linux-musl)
     logger (1.7.0)
     monitor (0.2.0)
-    multi_json (1.17.0)
+    multi_json (1.18.0)
     mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
-    rack (3.2.3)
+    rack (3.2.4)
     rack-protection (4.2.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
@@ -48,17 +38,8 @@ GEM
     tilt (2.6.1)
 
 PLATFORMS
-  aarch64-linux-gnu
-  aarch64-linux-musl
-  arm-linux-gnu
-  arm-linux-musl
-  arm64-darwin
+  arm64-darwin-25
   ruby
-  x86-linux-gnu
-  x86-linux-musl
-  x86_64-darwin
-  x86_64-linux-gnu
-  x86_64-linux-musl
 
 DEPENDENCIES
   bigdecimal
@@ -69,5 +50,24 @@ DEPENDENCIES
   sinatra
   sinatra-contrib
 
+CHECKSUMS
+  base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
+  bigdecimal (4.0.1) sha256=8b07d3d065a9f921c80ceaea7c9d4ae596697295b584c296fe599dd0ad01c4a7
+  byebug (12.0.0) sha256=d4a150d291cca40b66ec9ca31f754e93fed8aa266a17335f71bb0afa7fca1a1e
+  curses (1.5.3) sha256=86d219442e7fe78e68c609e6884f08b439b7508cf3f9d5b914f75c106e77bf7c
+  ffi (1.17.2) sha256=297235842e5947cc3036ebe64077584bff583cd7a4e94e9a02fdec399ef46da6
+  logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
+  monitor (0.2.0) sha256=18698584f161ca6611d73130663990ca7dc439d9d88095226e683035d66f1f0f
+  multi_json (1.18.0) sha256=23f70cf73e2895a33e6d10f0ec955b28ef5627ca4bbad0f292e7d16f4675596f
+  mustermann (3.0.4) sha256=85fadcb6b3c6493a8b511b42426f904b7f27b282835502233dd154daab13aa22
+  rack (3.2.4) sha256=5d74b6f75082a643f43c1e76b419c40f0e5527fcfee1e669ac1e6b73c0ccb6f6
+  rack-protection (4.2.1) sha256=cf6e2842df8c55f5e4d1a4be015e603e19e9bc3a7178bae58949ccbb58558bac
+  rack-session (2.1.1) sha256=0b6dc07dea7e4b583f58a48e8b806d4c9f1c6c9214ebc202ec94562cbea2e4e9
+  rtmidi (0.3) sha256=f8ff6c6c259b7a3448cfa11e203419d710acfe710a217b7d1e661029314a96f5
+  ruby2_keywords (0.0.5) sha256=ffd13740c573b7301cf7a2e61fc857b2a8e3d3aff32545d6f8300d8bae10e3ef
+  sinatra (4.2.1) sha256=b7aeb9b11d046b552972ade834f1f9be98b185fa8444480688e3627625377080
+  sinatra-contrib (4.2.1) sha256=10d091c944d268aa910c618ea40a3c3ebe0533e6e32990d84af92235a3d26b4a
+  tilt (2.6.1) sha256=35a99bba2adf7c1e362f5b48f9b581cce4edfba98117e34696dde6d308d84770
+
 BUNDLED WITH
-   2.7.0
+  4.0.3

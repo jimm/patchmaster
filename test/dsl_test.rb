@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'stringio'
-require 'test_helper'
+require_relative 'test_helper'
 
 class String
   def rm_spaces

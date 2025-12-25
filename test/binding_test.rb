@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'patchmaster/curses/main'
+require_relative '../lib/patchmaster/curses/main'
 
 class BindingTest < Test::Unit::TestCase
   def setup
