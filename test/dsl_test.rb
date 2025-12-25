@@ -1,6 +1,12 @@
 require 'stringio'
 require 'test_helper'
 
+class String
+  def rm_spaces
+    dup.gsub!(/\s+/, '')
+  end
+end
+
 class DSLTest < Test::Unit::TestCase
   EXAMPLE_DSL = File.join(File.dirname(__FILE__), 'example_dsl.rb')
 
@@ -134,14 +140,14 @@ class DSLTest < Test::Unit::TestCase
   def test_save_file_contents
     f = '/tmp/dsl_test_save_file_contents.rb'
     @dsl.save('/tmp/dsl_test_save_file_contents.rb')
-    str = IO.read(f)
-    assert_match 'output 1, :ws_out, "WaveStation"', str
-    assert_match "message \"Tune Request\", [#{PM::TUNE_REQUEST}]", str
-    assert_match 'message_key :f1, "Tune Request"', str
-    assert_match 'trigger(:mb, [176, 50, 0]) { next_patch }', str
-    assert_match 'trigger(:mb, [176, 52, 0]) { next_song }', str
-    assert_match 'filter { |c, b| b }       # no-op', str
-    assert_match 'filter { |c, b| b[0] += 1; b }', str
+    str = IO.read(f).rm_spaces
+    assert_match 'output 1, :ws_out, "WaveStation"'.rm_spaces, str
+    assert_match "message \"Tune Request\", [#{PM::TUNE_REQUEST}]".rm_spaces, str
+    assert_match 'message_key :f1, "Tune Request"'.rm_spaces, str
+    assert_match 'trigger(:mb, [176, 50, 0]) { next_patch }'.rm_spaces, str
+    assert_match 'trigger(:mb, [176, 52, 0]) { next_song }'.rm_spaces, str
+    assert_match 'filter { |c, b| b } # no-op'.rm_spaces, str
+    assert_match 'filter do |c, b| b[0] += 1 b end'.rm_spaces, str
   rescue StandardError => e
     raise e.to_s
   ensure
@@ -183,12 +189,12 @@ class DSLTest < Test::Unit::TestCase
 
   def test_read_filter_text
     str = <<~EOS
-      { |connection, bytes|
-              if bytes.note_off?
-                bytes[2] -= 1 unless bytes[2] == 0 # decrease velocity by 1
+      do |connection, bytes|
+              if bytes.note_off? && !(bytes[2] == 0)
+                bytes[2] -= 1 # decrease velocity by 1
               end
               bytes
-            }
+            end
     EOS
     assert_equal str.strip,
                  @pm.all_songs
@@ -199,7 +205,7 @@ class DSLTest < Test::Unit::TestCase
                     .code_chunk
                     .text
 
-    assert_equal '{ |c, b| b }       # no-op',
+    assert_equal '{ |c, b| b } # no-op',
                  @pm.all_songs
                     .find('Second Song')
                     .patches[0]
