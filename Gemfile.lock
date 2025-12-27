@@ -6,9 +6,17 @@ GEM
     base64 (0.3.0)
     byebug (12.0.0)
     curses (1.5.3)
+    ffi (1.17.2)
+    ffi (1.17.2-aarch64-linux-gnu)
+    ffi (1.17.2-aarch64-linux-musl)
+    ffi (1.17.2-arm-linux-gnu)
+    ffi (1.17.2-arm-linux-musl)
     ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86-linux-gnu)
+    ffi (1.17.2-x86-linux-musl)
     ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.2-x86_64-linux-musl)
     ffi-coremidi (0.5.1)
       ffi (~> 1.15, >= 1.15.5)
     logger (1.7.0)
@@ -22,7 +30,7 @@ GEM
       midi-message (~> 0.4, >= 0.4.4)
     midi-winmm (0.1.10)
       ffi (>= 1.0)
-    multi_json (1.18.0)
+    multi_json (1.19.1)
     mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
     rack (3.2.4)
@@ -55,11 +63,17 @@ GEM
       midi-winmm (~> 0.1, >= 0.1.10)
 
 PLATFORMS
-  arm64-darwin-21
-  arm64-darwin-23
-  arm64-darwin-24
-  x86_64-darwin-18
-  x86_64-linux
+  aarch64-linux-gnu
+  aarch64-linux-musl
+  arm-linux-gnu
+  arm-linux-musl
+  arm64-darwin
+  ruby
+  x86-linux-gnu
+  x86-linux-musl
+  x86_64-darwin
+  x86_64-linux-gnu
+  x86_64-linux-musl
 
 DEPENDENCIES
   alsa-rawmidi
@@ -72,5 +86,39 @@ DEPENDENCIES
   sinatra-contrib
   unimidi
 
+CHECKSUMS
+  alsa-rawmidi (0.4.0) sha256=e2f7f29f3bfd9535ddf12f5339b870b954948ff91c30b5a4ffde814e80a8d44f
+  base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
+  byebug (12.0.0) sha256=d4a150d291cca40b66ec9ca31f754e93fed8aa266a17335f71bb0afa7fca1a1e
+  curses (1.5.3) sha256=86d219442e7fe78e68c609e6884f08b439b7508cf3f9d5b914f75c106e77bf7c
+  ffi (1.17.2) sha256=297235842e5947cc3036ebe64077584bff583cd7a4e94e9a02fdec399ef46da6
+  ffi (1.17.2-aarch64-linux-gnu) sha256=c910bd3cae70b76690418cce4572b7f6c208d271f323d692a067d59116211a1a
+  ffi (1.17.2-aarch64-linux-musl) sha256=69e6556b091d45df83e6c3b19d3c54177c206910965155a6ec98de5e893c7b7c
+  ffi (1.17.2-arm-linux-gnu) sha256=d4a438f2b40224ae42ec72f293b3ebe0ba2159f7d1bd47f8417e6af2f68dbaa5
+  ffi (1.17.2-arm-linux-musl) sha256=977dfb7f3a6381206dbda9bc441d9e1f9366bf189a634559c3b7c182c497aaa3
+  ffi (1.17.2-arm64-darwin) sha256=54dd9789be1d30157782b8de42d8f887a3c3c345293b57ffb6b45b4d1165f813
+  ffi (1.17.2-x86-linux-gnu) sha256=95d8f9ebea23c39888e2ab85a02c98f54acb2f4e79b829250d7267ce741dc7b0
+  ffi (1.17.2-x86-linux-musl) sha256=41741449bab2b9530f42a47baa5c26263925306fad0ac2d60887f51af2e3b24c
+  ffi (1.17.2-x86_64-darwin) sha256=981f2d4e32ea03712beb26e55e972797c2c5a7b0257955d8667ba58f2da6440e
+  ffi (1.17.2-x86_64-linux-gnu) sha256=05d2026fc9dbb7cfd21a5934559f16293815b7ce0314846fee2ac8efbdb823ea
+  ffi (1.17.2-x86_64-linux-musl) sha256=97c0eb3981414309285a64dc4d466bd149e981c279a56371ef811395d68cb95c
+  ffi-coremidi (0.5.1) sha256=1cb4902bd67385c74e0ddd11b5af03620c74a0243d8dd8da76f315904b6fdbaf
+  logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
+  midi-eye (0.3.10) sha256=da9b407dd3833cb10dfd15c2f82414efa4e75b1647ae34d33e231c5084dec246
+  midi-jruby (0.2.0) sha256=e61eec42e88b4fb10591240c5dca2724184c0103901803f3bee8d866b1e7c71d
+  midi-message (0.4.9) sha256=1bde46dfb7ee34ac87e21ec6f557bac5506b8ced9b5c9b45d396d2445ff89a9b
+  midi-nibbler (0.2.4) sha256=b15ca380d6260593388a4d6cce74caba7c24602d8fea8be8980b0a70686048da
+  midi-winmm (0.1.10) sha256=1d39fdc53486dfeeb54c9c89131466d2be757f9630ba640a2656a8d0bc3e5a89
+  multi_json (1.19.1) sha256=7aefeff8f2c854bf739931a238e4aea64592845e0c0395c8a7d2eea7fdd631b7
+  mustermann (3.0.4) sha256=85fadcb6b3c6493a8b511b42426f904b7f27b282835502233dd154daab13aa22
+  rack (3.2.4) sha256=5d74b6f75082a643f43c1e76b419c40f0e5527fcfee1e669ac1e6b73c0ccb6f6
+  rack-protection (4.2.1) sha256=cf6e2842df8c55f5e4d1a4be015e603e19e9bc3a7178bae58949ccbb58558bac
+  rack-session (2.1.1) sha256=0b6dc07dea7e4b583f58a48e8b806d4c9f1c6c9214ebc202ec94562cbea2e4e9
+  ruby2_keywords (0.0.5) sha256=ffd13740c573b7301cf7a2e61fc857b2a8e3d3aff32545d6f8300d8bae10e3ef
+  sinatra (4.2.1) sha256=b7aeb9b11d046b552972ade834f1f9be98b185fa8444480688e3627625377080
+  sinatra-contrib (4.2.1) sha256=10d091c944d268aa910c618ea40a3c3ebe0533e6e32990d84af92235a3d26b4a
+  tilt (2.6.1) sha256=35a99bba2adf7c1e362f5b48f9b581cce4edfba98117e34696dde6d308d84770
+  unimidi (0.5.1) sha256=307cc799463a6ba7ba062931fa3ce97edb7c4de526544c5ea12b117f46230ff9
+
 BUNDLED WITH
-   2.3.11
+  4.0.0
